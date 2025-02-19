@@ -12,6 +12,10 @@ export default {
 				primary: "#212A37",
 				secondary: "#F2F2F2",
 				tertiary: "#000000"
+			},
+			container: {
+				center: true, // 讓 container 預設置中
+				padding: "2rem" // 預設左右 padding
 			}
 		}
 	},

@@ -1,5 +1,5 @@
 <template>
-	<span class="text-[24px] leading-[32px] opacity-50 cursor-pointer hover:opacity-100">{{ label }}</span>
+	<span class="text-[21px] md:text-[24px] opacity-50 cursor-pointer hover:opacity-100">{{ label }}</span>
 </template>
 
 <script setup lang="ts">
