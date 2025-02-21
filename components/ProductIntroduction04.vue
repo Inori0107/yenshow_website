@@ -5,12 +5,12 @@
 			<div class="px-[24px] md:px-[36px] lg:px-[64px] flex flex-col items-center gap-[24px] lg:gap-[48px] text-primary">
 				<div class="w-full flex gap-[32px] lg:gap-[64px]">
 					<span class="bg-[#5E548E] text-secondary h-fit rounded-full text-[12px] md:text-[16px] lg:text-[24px] px-[12px]">04</span>
-					<h3 class="text-[21px] md:text-[32px] lg:text-[48px]">可視對講</h3>
+					<h3 class="text-[21px] md:text-[32px] lg:text-[48px]">安全防護</h3>
 				</div>
 				<div class="text-[12px] md:text-[16px] lg:text-[24px]">
 					人體測溫產品專注於高精度與高效能，採用先進熱成像技術，能快速進行非接觸式體溫篩檢，有效降低交叉感染風險。適用於辦公場所、工廠、醫院、機場等高人流區域，幫助用戶建立完善的體溫監控體系，提升公共健康與安全保障。
 				</div>
-				<ButtonCTA></ButtonCTA>
+				<ButtonCTA to="/products/Security-Solutions"></ButtonCTA>
 			</div>
 			<!-- image -->
 			<div class="h-fit flex flex-col items-center gap-[16px] p-[16px] lg:p-[32px] bg-white rounded-[50px]">

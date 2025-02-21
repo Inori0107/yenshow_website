@@ -1,16 +1,39 @@
 <template>
-	<div class="w-full bg-white pt-[144px]">
-		<!-- 擺閘式 -->
-		<div class="w-full md:w-1/3 flex flex-row md:flex-col gap-[16px] md:gap-[24px]">
-			<h4 class="vertical-text text-[21px] md:text-[24px] lg:text-[36px] text-center">擺閘式</h4>
-			<!-- 預覽圖 -->
-			<div class="hidden md:flex bg-[#F3F5F7] w-[250px] md:w-full aspect-square justify-center items-center">
-				<img class="w-[60%] aspect-square" :src="selectedImage" alt="預覽圖" />
+	<div class="bg-white py-12">
+		<div class="container mx-auto">
+			<!-- 第一行（奇數步驟文字） -->
+			<div class="flex justify-center items-start mb-6">
+				<div v-for="(step, index) in steps" :key="index" class="flex-grow text-center">
+					<div v-if="index % 2 === 1" class="w-fit">
+						<h5 class="md:text-[24px] lg:text-[36px] font-bold">{{ step.title }}</h5>
+						<span class="md:text-[16px] lg:text-[24px] whitespace-pre-line opacity-60">{{ step.text }}</span>
+					</div>
+				</div>
 			</div>
-			<!-- 小圖滾動區 -->
-			<div class="scroll-container w-full flex gap-[24px]">
-				<div v-for="image in images" :key="image" class="scroll-item" :class="{ active: selectedImage === image }" @mouseenter="selectedImage = image">
-					<img class="w-3/5 aspect-square" :src="image" alt="產品圖片" />
+
+			<!-- 第二行（所有步驟圖示） -->
+			<div class="relative flex justify-center items-center">
+				<!-- 中央曲線 -->
+				<!-- <div class="absolute w-[90%] h-[10px] bg-gradient-to-r from-red-500 to-gray-500 rounded-full"></div> -->
+
+				<!-- 圖示 -->
+				<div v-for="(step, index) in steps" :key="index" class="relative w-1/5 flex justify-center">
+					<div
+						class="w-3/4 aspect-square rounded-full border-[16px] flex items-center justify-center"
+						:class="index % 2 === 1 ? 'border-red-500' : 'border-gray-500'"
+					>
+						<img :src="step.icon" alt="Step Icon" class="w-3/5" />
+					</div>
+				</div>
+			</div>
+
+			<!-- 第三行（偶數步驟文字） -->
+			<div class="flex justify-center items-start mt-6">
+				<div v-for="(step, index) in steps" :key="index" class="flex-grow text-center">
+					<div v-if="index % 2 === 0" class="w-fit">
+						<h5 class="md:text-[24px] lg:text-[36px] font-bold">{{ step.title }}</h5>
+						<span class="md:text-[16px] lg:text-[24px] whitespace-pre-line opacity-60">{{ step.text }}</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -18,48 +41,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
-const images = ["/product/YS-K3B501SX.png", "/product/YS-K3G411X.png", "/product/YS-K7R83X.png"];
-
-const selectedImage = ref(images[0]);
+const steps = [
+	{ icon: "/features/visitor01.png", title: "訪客來臨", text: "訪客來到櫃檯" },
+	{ icon: "/features/visitor02.png", title: "訪客登記", text: "前台接待人員上傳照片、\n身份證(ID)和一些關鍵信息" },
+	{ icon: "/features/visitor03.png", title: "權限分配", text: "分配訪客的訪問權限和憑證\n（支持人臉，卡，指紋，和QR code）" },
+	{ icon: "/features/visitor04.png", title: "訪客離開", text: "訪客離開，可在VMS上註銷，\n使該訪客的所有權限立即失效." },
+	{ icon: "/features/visitor05.png", title: "記錄追蹤", text: "系統保存記錄，方便快速搜索。" }
+];
 </script>
-
-<style scoped>
-/* 小圖滾動區 */
-.scroll-container {
-	overflow-x: auto;
-	scroll-behavior: smooth;
-	-webkit-overflow-scrolling: touch;
-	scroll-snap-type: x mandatory;
-}
-
-/* 隱藏滾動軸 */
-.scroll-container::-webkit-scrollbar {
-	display: none;
-}
-
-.scroll-item {
-	width: 50%;
-	aspect-ratio: 1;
-	background: #f4f5f7;
-	flex-shrink: 0;
-	scroll-snap-align: start;
-	cursor: pointer;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.active {
-	border: 4px solid rgba(33, 42, 55, 0.8);
-}
-
-/* 選中圖片的 active 樣式 */
-@media (max-width: 768px) {
-	.scroll-item {
-		width: 250px;
-		height: auto;
-	}
-}
-</style>

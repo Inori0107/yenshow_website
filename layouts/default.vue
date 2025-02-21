@@ -33,7 +33,9 @@
 		</main>
 
 		<!-- Footer -->
-		<footer class="container h-screen bg-black bg-opacity-25 relative flex flex-col md:flex-row justify-center items-center gap-[24px] text-secondary">
+		<footer
+			class="container min-h-screen bg-black bg-opacity-25 relative flex flex-col md:flex-row justify-center items-center gap-[24px] text-secondary py-[48px]"
+		>
 			<!-- 公司資訊 -->
 			<div class="flex items-center flex-col gap-[16px] md:gap-[24px]">
 				<!-- yenshow icon -->
@@ -90,37 +92,30 @@
 					</div>
 				</div>
 				<!-- contact -->
-				<div class="flex flex-col items-center gap-[16px] max-w-[354px] py-[24px] text-center text-primary bg-white rounded-[50px] shadow-lg">
+				<div class="flex flex-col items-center gap-[16px] max-w-[354px] p-[24px] text-center text-primary bg-white rounded-[50px] shadow-lg">
 					<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium text-darkBlue">Contact Us</h3>
 					<p class="text-[12px] lg:text-[16px]">
 						{{ $t("contact us") }}
 					</p>
-					<p class="text-[12px] lg:text-[16px] mx-[12px] md:mx-[24px] text-left">
+					<p class="text-[12px] lg:text-[16px] text-left">
 						{{ $t("tel") }} <br />
 						{{ $t("address") }}
 					</p>
-					<Button-CTA :label="$t('cooperation')"></Button-CTA>
+					<Button-CTA :label="$t('cooperation')" to="/contact"></Button-CTA>
 				</div>
 			</div>
 			<!-- Link CTA -->
 			<div class="w-full flex flex-row justify-center md:justify-evenly gap-[24px] max-w-[1024px]">
-				<div class="flex flex-col gap-[16px] md:gap-[32px]">
-					<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium">Company</h3>
-					<MenuCTA :label="$t('About us')"></MenuCTA>
-					<MenuCTA :label="$t('Success Stories')"></MenuCTA>
-					<MenuCTA :label="$t('Products')"></MenuCTA>
-					<MenuCTA :label="$t('News & Events')"></MenuCTA>
-					<MenuCTA :label="$t('Support & Resources')"></MenuCTA>
-					<div class="text-[8px] md:text-[12px] lg:text-[16px] pt-[4px]">Copyright © 2025 遠岫科技有限公司</div>
-				</div>
-				<div class="flex flex-col gap-[16px] md:gap-[32px]">
-					<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium">Business</h3>
-					<MenuCTA :label="$t('Video Intercom')"></MenuCTA>
-					<MenuCTA :label="$t('Access Control')"></MenuCTA>
-					<MenuCTA :label="$t('Surveillance & Monitoring')"></MenuCTA>
-					<MenuCTA :label="$t('Security Solutions')"></MenuCTA>
-					<MenuCTA :label="$t('Devices & Accessories')"></MenuCTA>
-					<div class="flex items-center gap-[6px] md:gap-[12px]">
+				<div v-for="(section, index) in LinkCTA" :key="index" class="flex flex-col gap-[16px] md:gap-[32px]">
+					<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium">{{ section.title }}</h3>
+					<!-- Link -->
+					<router-link v-for="(item, idx) in section.links" :key="idx" :to="item.to">
+						<MenuCTA :label="$t(item.label)" />
+					</router-link>
+					<!-- Copyright -->
+					<div v-if="section.copyright" class="text-[8px] md:text-[12px] lg:text-[16px] pt-[4px]">Copyright © 2025 遠岫科技有限公司</div>
+					<!-- LanguageSwitcher -->
+					<div v-if="section.extra" class="flex items-center gap-[6px] md:gap-[12px]">
 						<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 512 512">
 							<path
 								fill="#ffffff"
@@ -141,6 +136,32 @@ const isOpen = ref(false);
 const toggleMenu = () => {
 	isOpen.value = !isOpen.value;
 };
+
+// Link CTA
+const LinkCTA = ref([
+	{
+		title: "Company",
+		links: [
+			{ label: "About us", to: "/" },
+			{ label: "Success Stories", to: "/Success-Stories" },
+			{ label: "Products", to: "/" },
+			{ label: "News & Events", to: "/News-Events" },
+			{ label: "Support & Resources", to: "/Support-Resources" }
+		],
+		copyright: true
+	},
+	{
+		title: "Business",
+		links: [
+			{ label: "Video Intercom", to: "/products/Video-Intercom" },
+			{ label: "Access Control", to: "/products/Access-Control" },
+			{ label: "Surveillance & Monitoring", to: "/products/Surveillance-Monitoring" },
+			{ label: "Security Solutions", to: "/products/Security-Solutions" },
+			{ label: "Devices & Accessories", to: "/products/Devices-Accessories" }
+		],
+		extra: true
+	}
+]);
 </script>
 
 <style scoped>

@@ -1,10 +1,10 @@
 <template>
 	<!-- Filter Buttons -->
-	<div class="flex justify-between items-center">
+	<div class="flex flex-col md:flex-row justify-between items-center gap-[12px]">
 		<!-- Class Name -->
 		<h4 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ name }}</h4>
 		<!-- Button -->
-		<div class="flex bg-[#F1F5F9] p-[2px] rounded-[10px] z-50">
+		<div class="flex bg-[#F1F5F9] p-[2px] rounded-[10px] z-30">
 			<button
 				v-for="(option, idx) in options"
 				:key="idx"
@@ -21,6 +21,7 @@
 	<!-- List -->
 	<div class="scroll-container">
 		<div class="scroll-content">
+			<div class="scroll-item"></div>
 			<div class="scroll-item"></div>
 			<div class="scroll-item"></div>
 			<div class="scroll-item"></div>
@@ -77,7 +78,7 @@ const setFilter = (option) => {
 	width: 282px;
 	aspect-ratio: 1;
 	background: #f4f5f7;
-	border-radius: 8px;
+	/* border-radius: 8px; */
 	flex-shrink: 0;
 	scroll-snap-align: start; /* 讓滾動對齊每個卡片 */
 }

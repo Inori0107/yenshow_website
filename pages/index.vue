@@ -6,15 +6,26 @@
 		<!-- Content -->
 		<div class="flex flex-col xl:flex-row gap-[24px] xl:gap-[48px]">
 			<!-- HeroText -->
-			<span class="text-secondary text-[48px] md:text-[36px] lg:text-[48px]">
+			<span class="text-secondary text-[36px] md:text-[48px]">
 				智慧防護，<br />
-				<span class="text-[36px] md:text-[24px] lg:text-[36px] ms-[96px] xl:ms-[48px]">讓安心無所不在</span>
+				<span class="text-[24px] md:text-[36px] ms-[48px]">讓安心無所不在</span>
 			</span>
 			<!-- block CTA -->
-			<div class="md:h-[293px] flex flex-col md:flex-row gap-6">
-				<BlockCTA :number="1" :title="'品牌故事'" :description="'了解我們的品牌歷史與願景'" :activeBlock="activeBlock" @hoverBlock="setActiveBlock" />
-				<BlockCTA :number="2" :title="'合作案例'" :description="'探索我們成功合作的案例'" :activeBlock="activeBlock" @hoverBlock="setActiveBlock" />
-				<BlockCTA :number="3" :title="'產品中心'" :description="'查看我們的產品與解決方案'" :activeBlock="activeBlock" @hoverBlock="setActiveBlock" />
+			<div class="md:h-[293px] grid grid-cols-1 md:grid-cols-3 gap-[24px]">
+				<div
+					v-for="block in blocks"
+					:key="block.number"
+					@mouseenter="setActiveBlock(block.number)"
+					class="bg-primary flex flex-col gap-4 cursor-pointer transition-all duration-300 rounded-lg shadow-lg border border-gray-200"
+					:class="{
+						'w-full h-[168px] md:w-[270px] md:h-[293px] text-secondary': block.number === activeBlock,
+						'w-[0px] h-[168px] md:w-[270px] md:h-[0px] text-primary ': block.number !== activeBlock
+					}"
+				>
+					<h4 class="mt-4 mx-4 md:mt-8 md:mx-8 w-[28px] text-[24px] border-b-2 border-current pb-1">0{{ block.number }}</h4>
+					<p class="mx-4 md:mx-8 w-[96px] text-[24px] font-bold">{{ block.title }}</p>
+					<span class="mx-4 md:mx-8 w-[200px] text-[16px] opacity-70">{{ block.description }}</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -33,7 +44,7 @@
 		</div>
 		<!-- 白雲 -->
 		<div class="h-screen relative">
-			<div class="absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 flex flex-row-reverse gap-[24px] md:gap-[36px] lg:gap-[48px]">
+			<div class="absolute top-1/2 left-1/2 md:left-2/3 -translate-x-1/2 -translate-y-1/2 flex flex-row-reverse gap-[24px] md:gap-[36px] lg:gap-[48px]">
 				<div class="vertical-title text-[36px] md:text-[64px] lg:text-[96px] p-[6px] rounded-lg">白雲</div>
 				<div class="vertical-text text-[21px] md:text-[28px] lg:text-[36px] p-[6px]">以其輕盈靈動的姿態</div>
 				<div class="vertical-text text-[21px] md:text-[28px] lg:text-[36px] p-[6px]">象徵無限的創新力量</div>
@@ -237,13 +248,15 @@ useHead({
 	meta: [{ name: "description", content: "這是我的 Nuxt 網站" }]
 });
 
-// 預設選中 01
 const activeBlock = ref(1);
-
-// 點擊切換區塊並滾動
 const setActiveBlock = (number: any) => {
 	activeBlock.value = number;
 };
+const blocks = ref([
+	{ number: 1, title: "品牌故事", description: "了解我們的品牌歷史與願景" },
+	{ number: 2, title: "合作案例", description: "探索我們成功合作的案例" },
+	{ number: 3, title: "產品中心", description: "查看我們的產品與解決方案" }
+]);
 </script>
 
 <style scoped>

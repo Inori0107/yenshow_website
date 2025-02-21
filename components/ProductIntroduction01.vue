@@ -10,7 +10,7 @@
 				<div class="text-[12px] md:text-[16px] lg:text-[24px]">
 					結合先進的視訊通訊與門禁控制技術，提供高品質的影像與音訊傳輸，確保訪客識別的準確性與安全性。產品設計人性化，操作簡便，適用於住宅、辦公室、工廠等多種場景，滿足不同用戶的需求。透過APP，每個室內機最多可綁定5個家人使用，實現遠端監控與管理，提升生活便利性與安全性。
 				</div>
-				<ButtonCTA></ButtonCTA>
+				<ButtonCTA to="/products/Video-Intercom"></ButtonCTA>
 			</div>
 			<!-- image -->
 			<div class="h-fit flex flex-col items-center gap-[16px] p-[16px] lg:p-[32px] bg-white rounded-[50px]">

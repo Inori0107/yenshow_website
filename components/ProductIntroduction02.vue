@@ -10,7 +10,7 @@
 				<div class="text-[12px] md:text-[16px] lg:text-[24px]">
 					門禁控制產品系列，融合刷卡、指紋識別與人臉識別等多種先進技術，提供高效且安全的出入管理解決方案。產品設計靈活，適用於企業大樓、政府機構、機場、學校等多種場景，滿足不同用戶的需求。透過多樣化的識別方式，提升通行效率，確保場所安全。
 				</div>
-				<ButtonCTA></ButtonCTA>
+				<ButtonCTA to="/products/Access-Control"></ButtonCTA>
 			</div>
 			<!-- image -->
 			<div class="h-fit flex flex-col items-center gap-[16px] p-[16px] lg:p-[32px] bg-white rounded-[50px]">

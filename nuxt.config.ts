@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 			viewport: "width=device-width, initial-scale=1"
 		}
 	},
-	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@pinia/nuxt"],
+	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@pinia/nuxt", "v-gsap-nuxt"],
 	i18n: {
 		locales: [
 			{ code: "zh", iso: "zh-TW", name: "繁體中文", file: "zh.json" },
