@@ -1,51 +1,76 @@
 <template>
-	<div class="bg-white py-12">
-		<div class="container mx-auto">
-			<!-- 第一行（奇數步驟文字） -->
-			<div class="flex justify-center items-start mb-6">
-				<div v-for="(step, index) in steps" :key="index" class="flex-grow text-center">
-					<div v-if="index % 2 === 1" class="w-fit">
-						<h5 class="md:text-[24px] lg:text-[36px] font-bold">{{ step.title }}</h5>
-						<span class="md:text-[16px] lg:text-[24px] whitespace-pre-line opacity-60">{{ step.text }}</span>
-					</div>
-				</div>
+	<div class="h-screen"></div>
+	<!-- Story -->
+	<section id="story" v-if="sections.length" class="my-[128px] md:my-[512px]">
+		<article v-for="(section, index) in sections" :key="index" class="story-container h-screen relative">
+			<div
+				class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px]"
+				:style="{ top: section.position.top, left: section.position.left }"
+			>
+				<!-- 只有當 section.title 存在時才渲染 -->
+				<h2
+					v-show="section.title"
+					class="vertical-title text-[24px] md:text-[48px] lg:text-[96px] p-[6px] rounded-lg opacity-0"
+					v-bind:ref="(el) => setTitleRef(el, index)"
+				>
+					{{ section.title }}
+				</h2>
+				<p
+					v-for="(text, i) in section.texts"
+					:key="i"
+					v-bind:ref="(el) => setTextRef(el, index, i)"
+					class="vertical-text text-[16px] md:text-[24px] lg:text-[36px] p-[6px] opacity-0"
+				>
+					{{ text }}
+				</p>
 			</div>
-
-			<!-- 第二行（所有步驟圖示） -->
-			<div class="relative flex justify-center items-center">
-				<!-- 中央曲線 -->
-				<!-- <div class="absolute w-[90%] h-[10px] bg-gradient-to-r from-red-500 to-gray-500 rounded-full"></div> -->
-
-				<!-- 圖示 -->
-				<div v-for="(step, index) in steps" :key="index" class="relative w-1/5 flex justify-center">
-					<div
-						class="w-3/4 aspect-square rounded-full border-[16px] flex items-center justify-center"
-						:class="index % 2 === 1 ? 'border-red-500' : 'border-gray-500'"
-					>
-						<img :src="step.icon" alt="Step Icon" class="w-3/5" />
-					</div>
-				</div>
-			</div>
-
-			<!-- 第三行（偶數步驟文字） -->
-			<div class="flex justify-center items-start mt-6">
-				<div v-for="(step, index) in steps" :key="index" class="flex-grow text-center">
-					<div v-if="index % 2 === 0" class="w-fit">
-						<h5 class="md:text-[24px] lg:text-[36px] font-bold">{{ step.title }}</h5>
-						<span class="md:text-[16px] lg:text-[24px] whitespace-pre-line opacity-60">{{ step.text }}</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+		</article>
+	</section>
 </template>
 
 <script setup>
-const steps = [
-	{ icon: "/features/visitor01.png", title: "訪客來臨", text: "訪客來到櫃檯" },
-	{ icon: "/features/visitor02.png", title: "訪客登記", text: "前台接待人員上傳照片、\n身份證(ID)和一些關鍵信息" },
-	{ icon: "/features/visitor03.png", title: "權限分配", text: "分配訪客的訪問權限和憑證\n（支持人臉，卡，指紋，和QR code）" },
-	{ icon: "/features/visitor04.png", title: "訪客離開", text: "訪客離開，可在VMS上註銷，\n使該訪客的所有權限立即失效." },
-	{ icon: "/features/visitor05.png", title: "記錄追蹤", text: "系統保存記錄，方便快速搜索。" }
+import { ref, onMounted } from "vue";
+
+// 文字區塊
+const sections = [
+	{
+		title: null,
+		texts: ["白雲升遠岫 搖曳入晴空", "啟發遠岫科技的成立與精神", "描繪了白雲從遠山升起", "飄向晴空的自然景象", "展現和諧之美與深刻人生哲理"],
+		position: { top: "50%", left: "50%" }
+	},
+	{
+		title: "白雲",
+		texts: ["以其輕盈靈動的姿態", "象徵無限的創新力量", "遠岫科技以創新為核心", "提供高效且突破性的方案", "幫助客戶克服挑戰"],
+		position: { top: "50%", left: "66%" }
+	},
+	{
+		title: "遠岫",
+		texts: ["遠山象徵穩重與堅實", "其精神為追求卓越與承諾可靠", "穩健可靠的態度體現對客戶的承諾", "共創長期信賴的夥伴關係"],
+		position: { top: "50%", left: "33%" }
+	},
+	{
+		title: "晴空",
+		texts: ["晴朗無垠的天空", "代表對未來的啟迪與願景", "遠岫科技不僅協助客戶實現目標", "更攜手描繪長遠未來", "在廣闊藍天下實現共同成果"],
+		position: { top: "50%", left: "50%" }
+	}
 ];
+
+const titleRefs = ref([]);
+const textRefs = ref([]);
+
+// 記錄 title DOM
+const setTitleRef = (el, index) => {
+	if (el) titleRefs.value[index] = el;
+};
+
+// 記錄 texts DOM
+const setTextRef = (el, sectionIndex, textIndex) => {
+	if (el) {
+		(textRefs.value[sectionIndex] ||= [])[textIndex] = el;
+	}
+};
+
+onMounted(() => {
+	useTextAnimation(titleRefs, textRefs);
+});
 </script>

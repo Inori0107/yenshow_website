@@ -40,7 +40,7 @@
 		<div class="container bg-white flex flex-col gap-[48px] md:gap-[96px] lg:gap-[144px]">
 			<!-- 人體測溫 -->
 			<div class="flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
-				<h2 class="text-center text-[24px] md:text-[36px] lg:text-[48px] font-bold py-[12px] md:py-[24px] border-b-2 border-black">可視對講機</h2>
+				<h2 class="text-center text-[24px] md:text-[36px] lg:text-[48px] font-bold py-[12px] md:py-[24px] border-b-2 border-black">人體測溫</h2>
 				<!-- 監控平板 -->
 				<div class="flex flex-col md:flex-row justify-evenly items-center gap-[24px]">
 					<!-- image -->
@@ -63,7 +63,7 @@
 				<!-- product -->
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-[16px] md:gap-[36px] lg:gap-[48px]">
 					<div class="flex md:flex-col items-center gap-[24px] md:gap-[36px] lg:gap-[48px]">
-						<h5 class="vertical-text text-[21px] md:text-[28px] lg:text-[36px]">門禁測溫</h5>
+						<h5 class="vertical text-[21px] md:text-[28px] lg:text-[36px]">門禁機</h5>
 						<div class="scroll-container w-full flex gap-[16px] md:gap-[24px]">
 							<div v-for="item in FTC" :key="item.image" class="scroll-item w-[250px] md:w-[50%] aspect-square relative">
 								<img class="w-3/5 aspect-square mb-[12px] md:mb-[16px] lg:mb-[24px]" :src="item.image" alt="產品圖片" />
@@ -74,7 +74,7 @@
 						</div>
 					</div>
 					<div class="flex md:flex-col items-center gap-[24px] md:gap-[36px] lg:gap-[48px]">
-						<h5 class="vertical-text text-[21px] md:text-[28px] lg:text-[36px]">門禁測溫</h5>
+						<h5 class="vertical text-[21px] md:text-[28px] lg:text-[36px]">攝影機</h5>
 						<div class="scroll-container w-full flex gap-[16px] md:gap-[24px]">
 							<div v-for="item in TBC" :key="item.image" class="scroll-item w-[250px] md:w-[50%] aspect-square relative">
 								<img class="w-3/5 aspect-square mb-[12px] md:mb-[16px] lg:mb-[24px]" :src="item.image" alt="產品圖片" />
@@ -163,7 +163,7 @@ const securityCategories = [
 	{
 		id: "second",
 		title: "無線警報",
-		items: ["主機、中繼器", "佈防裝置", "輸入裝置", "輸出裝置"]
+		items: ["主機、中繼器", "警報裝置"]
 	},
 	{
 		id: "third",
@@ -201,101 +201,9 @@ const TBC = [
 
 // 設定篩選分類
 const filters_01 = [{ name: "警報設備", options: ["ALL", "佈防裝置", "輸入裝置(感測器)", "輸入裝置(可攜式)", "輸出裝置"] }];
-const filters_02 = [{ name: "標準款", options: ["ALL", "槍型", "球機)", "立方"] }];
+const filters_02 = [{ name: "標準款", options: ["ALL", "槍型", "球機", "立方"] }];
 const filters_03 = [{ name: null, options: null }];
 
 // 記錄當前選擇的篩選條件
 const activeFilters = ref("ALL");
 </script>
-
-<style scoped>
-.trapezoid-short {
-	width: 300px;
-	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-	font-size: 24px;
-	padding-left: 24px;
-}
-.trapezoid-long {
-	width: 500px;
-	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-	font-size: 36px;
-	padding-left: 48px;
-}
-
-/* 1024px 以下的 RWD 調整 */
-@media (max-width: 1024px) {
-	.trapezoid-short {
-		width: 210px;
-		font-size: 18px;
-		padding-left: 12px;
-	}
-	.trapezoid-long {
-		width: 350px; /* 確保長版比短版大 */
-		font-size: 28px;
-		padding-left: 24px;
-	}
-}
-
-/* 768px 以下的 RWD 調整 */
-@media (max-width: 768px) {
-	.trapezoid-short {
-		width: 150px;
-		font-size: 16px;
-		padding-left: 8px;
-	}
-	.trapezoid-long {
-		width: 250px; /* 確保長版比短版大 */
-		font-size: 24px;
-		padding-left: 16px;
-	}
-	.vertical-text {
-		writing-mode: vertical-lr;
-		letter-spacing: 10px;
-	}
-}
-
-/* SVG 圖形設定 */
-.circles {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-/* 基礎圓弧 */
-.circle-inline {
-	fill: none;
-	stroke: #66bab7;
-	stroke-width: 2;
-	stroke-dasharray: 150 50; /* 產生圓弧的破折線 */
-}
-
-.circle-outline {
-	fill: none;
-	stroke: #3a8fb7;
-	stroke-width: 2;
-	stroke-dasharray: 150 50; /* 產生圓弧的破折線 */
-}
-
-/* 小圖滾動區 */
-.scroll-container {
-	overflow-x: auto;
-	scroll-behavior: smooth;
-	-webkit-overflow-scrolling: touch;
-	scroll-snap-type: x mandatory;
-}
-
-/* 隱藏滾動軸 */
-.scroll-container::-webkit-scrollbar {
-	display: none;
-}
-
-.scroll-item {
-	background: #f4f5f7;
-	flex-shrink: 0;
-	scroll-snap-align: start;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: end;
-}
-</style>

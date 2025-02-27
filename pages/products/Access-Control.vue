@@ -11,7 +11,7 @@
 			</svg>
 		</div>
 		<!-- content -->
-		<div class="h-screen flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
+		<div class="min-h-screen flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
 			<!-- title -->
 			<h1 class="text-[48px] md:text-[64px] lg:text-[96px] xl:text-[128px] opacity-50 mt-[96px] md:mt-[48px] ms-[32px] md:ms-[48px] lg:ms-[64px] font-bold">
 				門禁管理
@@ -78,7 +78,7 @@
 				<div class="w-full flex flex-col md:flex-row gap-[16px] md:gap-[24px] justify-center">
 					<!-- 擺閘式 -->
 					<div class="w-full md:w-1/3 flex flex-row md:flex-col gap-[16px] md:gap-[24px]">
-						<h4 class="vertical-text text-[21px] md:text-[24px] lg:text-[36px] text-center">擺閘式</h4>
+						<h4 class="vertical text-[21px] md:text-[24px] lg:text-[36px] text-center">擺閘式</h4>
 						<!-- 預覽圖 -->
 						<div class="hidden md:flex bg-[#F3F5F7] w-[250px] md:w-full aspect-square justify-center items-center">
 							<img class="w-[60%] aspect-square" :src="selectedImage01" alt="預覽圖" />
@@ -103,7 +103,7 @@
 					</div>
 					<!-- 選配裝置 -->
 					<div class="w-full md:w-1/3 flex flex-row md:flex-col gap-[16px] md:gap-[24px] overflow-auto">
-						<h4 class="vertical-text text-[21px] md:text-[24px] lg:text-[36px] text-center">選配裝置</h4>
+						<h4 class="vertical text-[21px] md:text-[24px] lg:text-[36px] text-center">選配裝置</h4>
 						<div class="scroll-container w-full h-[70%] flex md:flex-col gap-[24px] md:justify-center">
 							<div v-for="item in images03" :key="item.image" class="scroll-item w-[250px] aspect-square md:w-full relative">
 								<img class="w-[50%] aspect-square" :src="item.image" alt="產品圖片" />
@@ -117,7 +117,7 @@
 					</div>
 					<!-- 旋轉式 -->
 					<div class="w-full md:w-1/3 flex flex-row md:flex-col gap-[16px] md:gap-[24px]">
-						<h4 class="vertical-text text-[21px] md:text-[24px] lg:text-[36px] text-center">旋轉式</h4>
+						<h4 class="vertical text-[21px] md:text-[24px] lg:text-[36px] text-center">旋轉式</h4>
 						<!-- 小圖滾動區 -->
 						<div class="scroll-container w-full flex gap-[24px]">
 							<div
@@ -304,7 +304,7 @@ const accessControl = [
 	{
 		id: "first",
 		title: "門禁控制",
-		items: ["人臉識別機", "多門控制器"]
+		items: ["人臉識別機", "配件＆設備", "多門控制器"]
 	},
 	{
 		id: "second",
@@ -370,102 +370,3 @@ const steps = [
 	{ icon: "/features/visitor05.png", title: "記錄追蹤", text: "系統保存記錄，方便快速搜索。" }
 ];
 </script>
-
-<style scoped>
-.trapezoid-short {
-	width: 300px;
-	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-	font-size: 24px;
-	padding-left: 24px;
-}
-.trapezoid-long {
-	width: 500px;
-	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-	font-size: 36px;
-	padding-left: 48px;
-}
-
-/* 1024px 以下的 RWD 調整 */
-@media (max-width: 1024px) {
-	.trapezoid-short {
-		width: 210px;
-		font-size: 18px;
-		padding-left: 12px;
-	}
-	.trapezoid-long {
-		width: 350px; /* 確保長版比短版大 */
-		font-size: 28px;
-		padding-left: 24px;
-	}
-}
-
-/* 768px 以下的 RWD 調整 */
-@media (max-width: 768px) {
-	.trapezoid-short {
-		width: 150px;
-		font-size: 16px;
-		padding-left: 8px;
-	}
-	.trapezoid-long {
-		width: 250px; /* 確保長版比短版大 */
-		font-size: 24px;
-		padding-left: 16px;
-	}
-	.vertical-text {
-		writing-mode: vertical-lr;
-		letter-spacing: 10px;
-	}
-}
-
-/* SVG 圖形設定 */
-.circles {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-/* 基礎圓弧 */
-.circle-inline {
-	fill: none;
-	stroke: #66bab7;
-	stroke-width: 2;
-	stroke-dasharray: 150 50; /* 產生圓弧的破折線 */
-}
-
-.circle-outline {
-	fill: none;
-	stroke: #3a8fb7;
-	stroke-width: 2;
-	stroke-dasharray: 150 50; /* 產生圓弧的破折線 */
-}
-
-/* 小圖滾動區 */
-.scroll-container {
-	overflow-x: auto;
-	scroll-behavior: smooth;
-	-webkit-overflow-scrolling: touch;
-	scroll-snap-type: x mandatory;
-}
-
-/* 隱藏滾動軸 */
-.scroll-container::-webkit-scrollbar {
-	display: none;
-}
-
-.scroll-item {
-	background: #f4f5f7;
-	flex-shrink: 0;
-	scroll-snap-align: start;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-/* 選中圖片的 active 樣式 */
-@media (min-width: 768px) {
-	.active {
-		border: 4px solid rgba(33, 42, 55, 0.8);
-	}
-}
-</style>

@@ -101,7 +101,7 @@ const toggleActive = (id) => {
 // 設定篩選分類
 const filters = [
 	{ name: "大門口機", options: ["ALL", "大樓用", "別墅用", "模組化", "雨遮"] },
-	{ name: "室內機", options: ["ALL", "無影像", "4.3吋", "7吋", "10吋"] },
+	{ name: "室內機", options: ["ALL", "4.3吋", "7吋", "10吋", "無影像"] },
 	{ name: "二線式", options: ["ALL", "大門口機", "室內機", "分佈器"] }
 ];
 
@@ -114,68 +114,3 @@ const features = [
 	{ icon: "/features/ys-9503-03.png", text: "採用 Android 系統，支持多種智慧管理應用" }
 ];
 </script>
-
-<style scoped>
-.trapezoid-short {
-	width: 300px;
-	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-	font-size: 24px;
-	padding-left: 24px;
-}
-.trapezoid-long {
-	width: 500px;
-	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
-	font-size: 36px;
-	padding-left: 48px;
-}
-
-/* 1024px 以下的 RWD 調整 */
-@media (max-width: 1024px) {
-	.trapezoid-short {
-		width: 210px;
-		font-size: 18px;
-		padding-left: 12px;
-	}
-	.trapezoid-long {
-		width: 350px; /* 確保長版比短版大 */
-		font-size: 28px;
-		padding-left: 24px;
-	}
-}
-
-/* 768px 以下的 RWD 調整 */
-@media (max-width: 768px) {
-	.trapezoid-short {
-		width: 150px;
-		font-size: 16px;
-		padding-left: 8px;
-	}
-	.trapezoid-long {
-		width: 250px; /* 確保長版比短版大 */
-		font-size: 24px;
-		padding-left: 16px;
-	}
-}
-
-/* SVG 圖形設定 */
-.circles {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-/* 基礎圓弧 */
-.circle-inline {
-	fill: none;
-	stroke: #66bab7;
-	stroke-width: 2;
-	stroke-dasharray: 150 50; /* 產生圓弧的破折線 */
-}
-
-.circle-outline {
-	fill: none;
-	stroke: #3a8fb7;
-	stroke-width: 2;
-	stroke-dasharray: 150 50; /* 產生圓弧的破折線 */
-}
-</style>
