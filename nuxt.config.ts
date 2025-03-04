@@ -5,7 +5,11 @@ export default defineNuxtConfig({
 	app: {
 		head: {
 			charset: "utf-8",
-			viewport: "width=device-width, initial-scale=1"
+			viewport: "width=device-width, initial-scale=1",
+			// 添加平滑滾動效果
+			htmlAttrs: {
+				style: "scroll-behavior: smooth"
+			}
 		}
 	},
 	css: ["~/assets/css/global.css"],

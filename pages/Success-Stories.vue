@@ -39,9 +39,9 @@
 			<article v-for="(example, index) in examples" :key="index" class="w-full grid grid-cols-1 md:grid-cols-2 gap-[32px] md:gap-[48px]">
 				<!-- 左側內容 -->
 				<div class="flex flex-col justify-center gap-[12px] md:gap-[24px]">
-					<h3 class="text-[24px] md:text-[36px] lg:text-[48px] font-bold">
+					<!-- <h3 class="text-[24px] md:text-[36px] lg:text-[48px] font-bold">
 						{{ example.title }}
-					</h3>
+					</h3> -->
 					<h4 class="text-[21px] md:text-[28px] lg:text-[36px] font-bold">
 						{{ example.subtitle }}
 					</h4>
@@ -126,7 +126,7 @@ const examples = ref([
 		title: "合總君悅",
 		subtitle: "集合式住宅建築",
 		details: [
-			{ label: "基地位置", value: "雲林縣斗南鎮延平路二段455號旁" },
+			{ label: "基地位置", value: "雲林縣" },
 			{ label: "基地面積", value: "541坪" },
 			{ label: "產品類型", value: "電梯大樓" },
 			{ label: "戶數", value: "91戶、2戶店鋪" }

@@ -144,14 +144,14 @@ const LinkCTA = ref([
 		links: [
 			{ label: "About us", to: "/" },
 			{ label: "Success Stories", to: "/Success-Stories" },
-			{ label: "Products", to: "/" },
+			{ label: "Products", to: "/products/" },
 			{ label: "News & Events", to: "/News-Events" },
 			{ label: "Support & Resources", to: "/Support-Resources" }
 		],
 		copyright: true
 	},
 	{
-		title: "Business",
+		title: "Products",
 		links: [
 			{ label: "Video Intercom", to: "/products/Video-Intercom" },
 			{ label: "Access Control", to: "/products/Access-Control" },

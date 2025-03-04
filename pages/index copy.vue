@@ -1,9 +1,63 @@
 <template>
-	<!-- 替換原本的 HeroPic section -->
-	<HeroPic />
+	<!-- HeroPic -->
+	<section class="container min-h-screen flex flex-col justify-center items-center gap-[24px] xl:gap-[128px]">
+		<!-- Logo -->
+		<img ref="logo" class="hidden md:block w-[500px] h-[200px] mt-[128px] opacity-0" src="/public/yenshow.png" alt="Hero Pic" />
+		<!-- Content -->
+		<div class="flex flex-col xl:flex-row gap-[24px] xl:gap-[48px] mt-[96px]">
+			<!-- HeroText -->
+			<section ref="heroText" class="text-secondary opacity-0 transform -translate-x-10">
+				<p class="text-[36px] md:text-[48px]">智慧防護</p>
+				<p class="text-[24px] md:text-[36px] ms-[48px]">讓安心無所不在</p>
+			</section>
+			<!-- block CTA -->
+			<nav class="md:h-[293px] grid grid-cols-1 md:grid-cols-3 gap-[24px]">
+				<article
+					v-for="(block, index) in blocks"
+					:key="block.number"
+					ref="blocksRef"
+					@mouseenter="setActiveBlock(block.number)"
+					@click="scrollToSection(block.id)"
+					class="bg-primary flex flex-col gap-4 cursor-pointer transition-all duration-300 rounded-lg shadow-lg border border-gray-200 opacity-0 transform scale-75"
+					:class="{
+						'w-full h-[168px] md:w-[270px] md:h-[293px] text-secondary': block.number === activeBlock,
+						'w-[0px] h-[168px] md:w-[270px] md:h-[0px] text-primary ': block.number !== activeBlock
+					}"
+				>
+					<h4 class="mt-4 mx-4 md:mt-8 md:mx-8 w-[28px] text-[24px] border-b-2 border-current pb-1">0{{ block.number }}</h4>
+					<p class="mx-4 md:mx-8 w-[96px] text-[24px] font-bold">{{ block.title }}</p>
+					<span class="mx-4 md:mx-8 w-[200px] text-[16px] opacity-70">{{ block.description }}</span>
+				</article>
+			</nav>
+		</div>
+	</section>
 
 	<!-- Story -->
-	<Story />
+	<section id="story" v-if="sections.length" class="my-[128px] md:my-[512px]">
+		<article v-for="(section, index) in sections" :key="index" class="story-container h-screen relative">
+			<div
+				class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px]"
+				:style="{ top: section.position.top, left: section.position.left }"
+			>
+				<!-- 只有當 section.title 存在時才渲染 -->
+				<h2
+					v-show="section.title"
+					class="vertical-title text-[24px] md:text-[48px] lg:text-[96px] p-[6px] rounded-lg opacity-0"
+					v-bind:ref="(el) => setTitleRef(el, index)"
+				>
+					{{ section.title }}
+				</h2>
+				<p
+					v-for="(text, i) in section.texts"
+					:key="i"
+					v-bind:ref="(el) => setTextRef(el, index, i)"
+					class="vertical-text text-[16px] md:text-[24px] lg:text-[36px] p-[6px] opacity-0"
+				>
+					{{ text }}
+				</p>
+			</div>
+		</article>
+	</section>
 
 	<!-- Intro -->
 	<section class="intro-animation bg-secondary py-[48px] flex flex-col gap-[48px] lg:gap-[144px]">
@@ -177,21 +231,82 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import HeroPic from "~/components/Home/HeroPic.vue";
-import Story from "~/components/Home/Story.vue";
-gsap.registerPlugin(ScrollTrigger);
+import ScrollToPlugin from "gsap/ScrollToPlugin";
+gsap.registerPlugin(ScrollToPlugin);
 
 useHead({
 	title: "遠岫科技",
 	meta: [{ name: "description", content: "這是我的 Nuxt 網站" }]
 });
 
+const blocks = ref([
+	{ number: 1, title: "品牌故事", description: "了解我們的品牌歷史與願景", id: "story" },
+	{ number: 2, title: "合作案例", description: "探索我們成功合作的案例", id: "cases" },
+	{ number: 3, title: "產品中心", description: "查看我們的產品與解決方案", id: "products" }
+]);
+const activeBlock = ref(1);
+const setActiveBlock = (number) => {
+	activeBlock.value = number;
+};
+const scrollToSection = (id) => {
+	const target = document.getElementById(id);
+	if (target) {
+		gsap.to(window, {
+			scrollTo: { y: target },
+			ease: "power2.out"
+		});
+	}
+};
+
+const logo = ref(null);
+const heroText = ref(null);
+const blocksRef = ref([]);
+
+// 文字區塊
+const sections = [
+	{
+		title: null,
+		texts: ["白雲升遠岫 搖曳入晴空", "啟發遠岫科技的成立與精神", "描繪了白雲從遠山升起", "飄向晴空的自然景象", "展現和諧之美與深刻人生哲理"],
+		position: { top: "50%", left: "50%" }
+	},
+	{
+		title: "白雲",
+		texts: ["以其輕盈靈動的姿態", "象徵無限的創新力量", "遠岫科技以創新為核心", "提供高效且突破性的方案", "幫助客戶克服挑戰"],
+		position: { top: "50%", left: "66%" }
+	},
+	{
+		title: "遠岫",
+		texts: ["遠山象徵穩重與堅實", "其精神為追求卓越與承諾可靠", "穩健可靠的態度體現對客戶的承諾", "共創長期信賴的夥伴關係"],
+		position: { top: "50%", left: "33%" }
+	},
+	{
+		title: "晴空",
+		texts: ["晴朗無垠的天空", "代表對未來的啟迪與願景", "遠岫科技不僅協助客戶實現目標", "更攜手描繪長遠未來", "在廣闊藍天下實現共同成果"],
+		position: { top: "50%", left: "50%" }
+	}
+];
+
+const titleRefs = ref([]);
+const textRefs = ref([]);
+
+// 記錄 title DOM
+const setTitleRef = (el, index) => {
+	if (el) titleRefs.value[index] = el;
+};
+
+// 記錄 texts DOM
+const setTextRef = (el, sectionIndex, textIndex) => {
+	if (el) {
+		(textRefs.value[sectionIndex] ||= [])[textIndex] = el;
+	}
+};
+
 const sentences = ref(["遠岫科技，既是一段故事，也是一份使命。", "我們期待與每一位客戶攜手，如白雲般靈活，如遠岫般穩固，", "共創晴空般廣闊的願景。"]);
 
 onMounted(() => {
+	useEntranceAnimation(logo, heroText, blocksRef);
+	useTextAnimation(titleRefs, textRefs);
 	animateMarquee();
 	animateSection();
 	animateFeatures();
