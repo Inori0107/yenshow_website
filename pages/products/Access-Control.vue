@@ -330,7 +330,7 @@ const toggleActive = (id) => {
 
 // 設定篩選分類
 const filters = [
-	{ name: "人臉辨識機", options: ["ALL", "4.3吋", "7吋", "模組化", "雨遮"] },
+	{ name: "人臉識別機", options: ["ALL", "4.3吋", "7吋", "模組化", "雨遮"] },
 	{ name: "配件＆設備", options: ["ALL", "導入機", "指紋", "刷卡"] }
 ];
 const activeFilters = ref("ALL");
