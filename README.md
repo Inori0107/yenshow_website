@@ -1,75 +1,41 @@
-# Nuxt Minimal Starter
+# YenShow Website
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+這是一個使用 Nuxt.js 框架開發的 YenShow 網站項目。
 
-## Setup
+## 安裝與設定
 
-Make sure to install dependencies:
+請確保安裝所有依賴：
 
 ```bash
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+## 開發環境
 
-Start the development server on `http://localhost:3000`:
+在 `http://localhost:3000` 啟動開發伺服器：
 
 ```bash
 # npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## 生產環境
 
-Build the application for production:
+為生產環境建構應用程式：
 
 ```bash
 # npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+在本地預覽生產環境建構：
 
 ```bash
 # npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 部署
+
+請參閱 [Nuxt 部署文檔](https://nuxt.com/docs/getting-started/deployment) 以獲取更多信息。
