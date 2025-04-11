@@ -8,22 +8,29 @@ const initScrollTrigger = async () => {
 	try {
 		// 檢查是否在瀏覽器環境中
 		if (typeof window !== "undefined") {
-			const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+			const ScrollTriggerModule = await import("gsap/ScrollTrigger");
+			// 處理不同模塊格式的導入
+			const ScrollTrigger = ScrollTriggerModule.default || ScrollTriggerModule.ScrollTrigger;
 			gsap.registerPlugin(ScrollTrigger);
 			scrollTriggerInitialized = true;
+			return ScrollTrigger; // 返回插件以便後續使用
 		}
 	} catch (error) {
 		console.error("Error initializing ScrollTrigger:", error);
 	}
+	return null;
 };
 
 export async function animateQuoteText() {
-	await initScrollTrigger();
-	if (!scrollTriggerInitialized) return;
+	// 初始化並獲取 ScrollTrigger
+	const ScrollTrigger = await initScrollTrigger();
+	if (!ScrollTrigger) return;
 
-	const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+	// 確保在瀏覽器環境中執行
+	if (typeof document === "undefined") return;
 
 	const sentences = document.querySelectorAll(".quote-sentence");
+	if (!sentences || sentences.length === 0) return;
 
 	let tl = gsap.timeline({
 		scrollTrigger: {
@@ -36,17 +43,18 @@ export async function animateQuoteText() {
 
 	sentences.forEach((sentence, index) => {
 		let chars = sentence.querySelectorAll(".quote-char");
-
-		tl.to(
-			chars,
-			{
-				opacity: 1,
-				y: 0,
-				duration: 0.5,
-				stagger: 0.1,
-				ease: "power2.out"
-			},
-			`+=0.2`
-		);
+		if (chars && chars.length > 0) {
+			tl.to(
+				chars,
+				{
+					opacity: 1,
+					y: 0,
+					duration: 0.5,
+					stagger: 0.1,
+					ease: "power2.out"
+				},
+				`+=0.2`
+			);
+		}
 	});
 }
