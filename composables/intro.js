@@ -1,9 +1,28 @@
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+// 動態初始化 ScrollTrigger
+let scrollTriggerInitialized = false;
+const initScrollTrigger = async () => {
+	if (scrollTriggerInitialized) return;
 
-export function animateSection() {
+	try {
+		// 檢查是否在瀏覽器環境中
+		if (typeof window !== "undefined") {
+			const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+			gsap.registerPlugin(ScrollTrigger);
+			scrollTriggerInitialized = true;
+		}
+	} catch (error) {
+		console.error("Error initializing ScrollTrigger:", error);
+	}
+};
+
+export async function animateSection() {
+	await initScrollTrigger();
+	if (!scrollTriggerInitialized) return;
+
+	const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+
 	gsap.fromTo(
 		".intro-animation",
 		{
@@ -29,7 +48,12 @@ export function animateSection() {
 	);
 }
 
-export function animateFeatures() {
+export async function animateFeatures() {
+	await initScrollTrigger();
+	if (!scrollTriggerInitialized) return;
+
+	const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+
 	// 背景圖片淡入
 	gsap.from(".intro-background", {
 		opacity: 0,
@@ -83,7 +107,12 @@ export function animateFeatures() {
 	});
 }
 
-export function animateYSCPText() {
+export async function animateYSCPText() {
+	await initScrollTrigger();
+	if (!scrollTriggerInitialized) return;
+
+	const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+
 	gsap.from(".yscp-text", {
 		opacity: 0,
 		y: 50,
@@ -97,7 +126,12 @@ export function animateYSCPText() {
 	});
 }
 
-export function animateFeaturesFadeIn() {
+export async function animateFeaturesFadeIn() {
+	await initScrollTrigger();
+	if (!scrollTriggerInitialized) return;
+
+	const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+
 	gsap.from(".YSCP-circle", {
 		opacity: 0,
 		duration: 1.5,
@@ -112,7 +146,12 @@ export function animateFeaturesFadeIn() {
 	});
 }
 
-export function animateCircle() {
+export async function animateCircle() {
+	await initScrollTrigger();
+	if (!scrollTriggerInitialized) return;
+
+	const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+
 	const Circles = document.querySelectorAll(".animateCircle");
 
 	gsap.to(Circles, {

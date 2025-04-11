@@ -29,9 +29,6 @@
 <script setup>
 import { ref, onMounted, nextTick, onUnmounted } from "vue";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // 將 storyContainers 提到外面作為共用變數
 const storyContainers = ["intro", "cloud", "mountain", "sky"];
@@ -75,8 +72,32 @@ const setTextRef = (el, sectionIndex, textIndex) => {
 	}
 };
 
-// 更新文字動畫邏輯
+// 更新 setupPinEffects 和 setupTextAnimation 以確保它們在 ScrollTrigger 註冊後執行
+const setupPinEffects = () => {
+	if (!gsap.plugins || !gsap.plugins.scrollTrigger) return;
+
+	storyContainers.forEach((section, index) => {
+		ScrollTrigger.create({
+			trigger: `#story-${section}`,
+			pin: true,
+			start: "top top",
+			end: () => `+=${window.innerHeight}`,
+			markers: true,
+			pinSpacing: true,
+			anticipatePin: 1,
+			scrub: 1,
+			snap: {
+				snapTo: 1,
+				duration: 0.8,
+				ease: "power2.out"
+			}
+		});
+	});
+};
+
 const setupTextAnimation = () => {
+	if (!gsap.plugins || !gsap.plugins.scrollTrigger) return;
+
 	sections.forEach((section, index) => {
 		const tl = gsap.timeline({
 			scrollTrigger: {
@@ -109,35 +130,24 @@ const setupTextAnimation = () => {
 	});
 };
 
-// 更新 pin 效果設置
-const setupPinEffects = () => {
-	storyContainers.forEach((section, index) => {
-		ScrollTrigger.create({
-			trigger: `#story-${section}`,
-			pin: true,
-			start: "top top",
-			end: () => `+=${window.innerHeight}`,
-			markers: true,
-			pinSpacing: true,
-			anticipatePin: 1,
-			scrub: 1,
-			snap: {
-				snapTo: 1,
-				duration: 0.8,
-				ease: "power2.out"
-			}
-		});
-	});
-};
-
 onMounted(() => {
-	setupPinEffects();
-	setupTextAnimation();
+	// 動態導入和註冊 ScrollTrigger
+	import("gsap/ScrollTrigger").then((module) => {
+		const ScrollTrigger = module.default || module.ScrollTrigger;
+		gsap.registerPlugin(ScrollTrigger);
+
+		// 註冊完成後設置動畫效果
+		setupPinEffects();
+		setupTextAnimation();
+	});
 });
 
 // 清理動畫
 onUnmounted(() => {
-	ScrollTrigger.getAll().forEach((st) => st.kill());
+	if (gsap.plugins && gsap.plugins.scrollTrigger) {
+		const ScrollTrigger = gsap.plugins.scrollTrigger.ScrollTrigger || gsap.plugins.scrollTrigger;
+		ScrollTrigger.getAll().forEach((st) => st.kill());
+	}
 });
 </script>
 

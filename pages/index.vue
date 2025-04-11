@@ -179,10 +179,8 @@
 <script setup>
 import { onMounted } from "vue";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import HeroPic from "~/components/Home/HeroPic.vue";
 import Story from "~/components/Home/Story.vue";
-gsap.registerPlugin(ScrollTrigger);
 
 useHead({
 	title: "遠岫科技",
@@ -191,14 +189,28 @@ useHead({
 
 const sentences = ref(["遠岫科技，既是一段故事，也是一份使命。", "我們期待與每一位客戶攜手，如白雲般靈活，如遠岫般穩固，", "共創晴空般廣闊的願景。"]);
 
-onMounted(() => {
-	animateMarquee();
-	animateSection();
-	animateFeatures();
-	animateCircle();
-	animateYSCPText();
-	animateFeaturesFadeIn();
-	animateQuoteText();
+onMounted(async () => {
+	// 動態導入 ScrollTrigger
+	try {
+		const { default: ScrollTrigger } = await import("gsap/ScrollTrigger");
+		gsap.registerPlugin(ScrollTrigger);
+
+		// 導入動畫函數
+		const { animateMarquee } = await import("~/composables/marquee");
+		const { animateSection, animateFeatures, animateCircle, animateYSCPText, animateFeaturesFadeIn } = await import("~/composables/intro");
+		const { animateQuoteText } = await import("~/composables/quote");
+
+		// 執行動畫
+		await animateMarquee();
+		await animateSection();
+		await animateFeatures();
+		await animateCircle();
+		await animateYSCPText();
+		await animateFeaturesFadeIn();
+		await animateQuoteText();
+	} catch (error) {
+		console.error("Error initializing animations:", error);
+	}
 });
 </script>
 

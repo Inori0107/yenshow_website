@@ -35,8 +35,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import gsap from "gsap";
-import ScrollToPlugin from "gsap/ScrollToPlugin";
-gsap.registerPlugin(ScrollToPlugin);
 
 const blocks = ref([
 	{ number: 1, title: "品牌故事", description: "了解我們的品牌歷史與願景", id: "story" },
@@ -52,10 +50,19 @@ const setActiveBlock = (number) => {
 const scrollToSection = (id) => {
 	const target = document.getElementById(id);
 	if (target) {
-		gsap.to(window, {
-			scrollTo: { y: target },
-			ease: "power2.out"
-		});
+		// 確保 ScrollToPlugin 已被加載
+		if (gsap.plugins && gsap.plugins.scrollTo) {
+			gsap.to(window, {
+				scrollTo: { y: target },
+				ease: "power2.out"
+			});
+		} else {
+			// 插件未加載時的備用方案
+			window.scrollTo({
+				top: target.offsetTop,
+				behavior: "smooth"
+			});
+		}
 	}
 };
 
@@ -85,6 +92,11 @@ const setupEntranceAnimation = () => {
 };
 
 onMounted(() => {
+	// 動態導入和註冊 ScrollToPlugin
+	import("gsap/ScrollToPlugin").then((ScrollToPlugin) => {
+		gsap.registerPlugin(ScrollToPlugin.default);
+	});
+
 	setupEntranceAnimation();
 });
 </script>

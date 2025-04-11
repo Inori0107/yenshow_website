@@ -71,9 +71,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const business_feature = ref([
 	{
@@ -137,69 +134,82 @@ const examples = ref([
 	}
 ]);
 
-onMounted(() => {
-	// 檢查螢幕寬度是否大於 md 斷點 (768px)
-	const isMdScreen = window.matchMedia("(min-width: 768px)").matches;
+onMounted(async () => {
+	// 檢查是否在瀏覽器環境中
+	if (typeof window === "undefined") return;
 
-	if (isMdScreen) {
-		const tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: sectionRef.value,
-				start: "top top",
-				end: "+=200%",
-				pin: true,
-				scrub: 1,
-				markers: true
+	// 動態導入 ScrollTrigger
+	try {
+		const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+		gsap.registerPlugin(ScrollTrigger);
+
+		// 檢查螢幕寬度是否大於 md 斷點 (768px)
+		const isMdScreen = window.matchMedia("(min-width: 768px)").matches;
+
+		if (isMdScreen) {
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: sectionRef.value,
+					start: "top top",
+					end: "+=200%",
+					pin: true,
+					scrub: 1,
+					markers: true
+				}
+			});
+
+			// 第一部分動畫
+			const businessTl = gsap.timeline().fromTo(businessRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }).fromTo(
+				businessRef.value.querySelectorAll(".feature"),
+				{ opacity: 0, y: 30 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.2,
+					duration: 0.8
+				},
+				"-=0.5"
+			);
+
+			// 第二部分動畫
+			const publicTl = gsap.timeline().fromTo(publicRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }).fromTo(
+				publicRef.value.querySelectorAll(".feature"),
+				{ opacity: 0, y: 30 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.2,
+					duration: 0.8
+				},
+				"-=0.5"
+			);
+
+			// 主時間軸編排
+			tl.add(businessTl)
+				.to(businessRef.value, {
+					opacity: 0,
+					y: -50,
+					duration: 1
+				})
+				.add(publicTl);
+		} else {
+			// 手機版直接顯示所有內容，不使用動畫
+			gsap.set([businessRef.value, publicRef.value], { opacity: 1 });
+			gsap.set([...businessRef.value.querySelectorAll(".feature"), ...publicRef.value.querySelectorAll(".feature")], { opacity: 1 });
+		}
+
+		// 監聽螢幕寬度變化
+		window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
+			if (e.matches) {
+				// 重新整理頁面以重新初始化動畫
+				window.location.reload();
 			}
 		});
-
-		// 第一部分動畫
-		const businessTl = gsap.timeline().fromTo(businessRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }).fromTo(
-			businessRef.value.querySelectorAll(".feature"),
-			{ opacity: 0, y: 30 },
-			{
-				opacity: 1,
-				y: 0,
-				stagger: 0.2,
-				duration: 0.8
-			},
-			"-=0.5"
-		);
-
-		// 第二部分動畫
-		const publicTl = gsap.timeline().fromTo(publicRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }).fromTo(
-			publicRef.value.querySelectorAll(".feature"),
-			{ opacity: 0, y: 30 },
-			{
-				opacity: 1,
-				y: 0,
-				stagger: 0.2,
-				duration: 0.8
-			},
-			"-=0.5"
-		);
-
-		// 主時間軸編排
-		tl.add(businessTl)
-			.to(businessRef.value, {
-				opacity: 0,
-				y: -50,
-				duration: 1
-			})
-			.add(publicTl);
-	} else {
-		// 手機版直接顯示所有內容，不使用動畫
+	} catch (error) {
+		console.error("Error initializing animations:", error);
+		// 確保內容顯示，即使動畫失敗
 		gsap.set([businessRef.value, publicRef.value], { opacity: 1 });
-		gsap.set([...businessRef.value.querySelectorAll(".feature"), ...publicRef.value.querySelectorAll(".feature")], { opacity: 1 });
 	}
-
-	// 監聽螢幕寬度變化
-	window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
-		if (e.matches) {
-			// 重新整理頁面以重新初始化動畫
-			window.location.reload();
-		}
-	});
 });
 </script>
 
