@@ -116,7 +116,7 @@ const setupMarqueeAnimation = async () => {
 			end: "top 0%",
 			toggleActions: "play none none reverse",
 			scrub: 1, // 平滑過渡效果
-			markers: true
+			markers: false
 		}
 	});
 
