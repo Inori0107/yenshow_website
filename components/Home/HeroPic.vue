@@ -1,0 +1,450 @@
+<template>
+	<section class="relative min-h-screen overflow-hidden flex flex-col justify-center items-center">
+		<!-- Three.js 背景 -->
+		<canvas ref="threeCanvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
+
+		<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
+		<div ref="logoContainer" class="hidden md:flex justify-center items-center opacity-0 z-10 mt-16">
+			<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px]" src="/public/yenshow.png" alt="遠岫科技" />
+		</div>
+
+		<!-- 主標語 -->
+		<div ref="heroText" class="text-center text-secondary mt-[30px] sm:mt-[50px] md:mt-[80px] opacity-0 transform translate-y-10 z-10 px-4">
+			<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold leading-tight">
+				智慧防護
+				<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] mt-2">讓安心無所不在</span>
+			</h1>
+		</div>
+
+		<!-- 互動導航區塊 -->
+		<div
+			ref="navContainer"
+			class="flex flex-col lg:flex-row justify-center items-center gap-5 sm:gap-8 md:gap-10 mt-10 sm:mt-16 md:mt-20 w-full max-w-6xl opacity-0 z-10 px-4"
+		>
+			<div
+				v-for="(block, index) in blocks"
+				:key="block.id"
+				class="nav-block relative cursor-pointer"
+				@mouseenter="activateBlock(index)"
+				@mouseleave="resetBlocks"
+				@click="navigateToSection(block.id)"
+			>
+				<!-- 區塊背景 -->
+				<div
+					class="block-bg w-[280px] h-[200px] sm:h-[230px] md:w-[300px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-xl transition-all duration-500"
+					:class="{
+						'scale-105 sm:scale-110 shadow-2xl': activeIndex === index,
+						'scale-100 opacity-80': activeIndex !== index
+					}"
+				>
+					<div class="absolute inset-0 rounded-xl overflow-hidden">
+						<div class="block-pattern" :class="`pattern-${index + 1}`"></div>
+					</div>
+
+					<div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 sm:p-6 z-10">
+						<div class="text-[16px] sm:text-[18px] md:text-[20px] font-bold opacity-60 mb-1 sm:mb-2">0{{ block.number }}</div>
+						<h3 class="text-[22px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-4">{{ block.title }}</h3>
+						<p class="text-[14px] sm:text-[15px] md:text-[16px] text-center opacity-80 line-clamp-3">{{ block.description }}</p>
+						<div
+							class="mt-4 sm:mt-6 md:mt-8 inline-block px-4 sm:px-5 py-1.5 sm:py-2 border border-white rounded-full text-xs sm:text-sm transition-all duration-300 nav-button"
+							:class="{
+								'bg-white text-primary': activeIndex === index,
+								'bg-transparent text-white': activeIndex !== index
+							}"
+						>
+							<span class="flex items-center">
+								<span>探索更多</span>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- 新增：過渡提示元素 -->
+				<div v-if="activeIndex === index" class="transition-hint absolute bottom-[-24px] left-1/2 transform -translate-x-1/2 opacity-0">
+					<div class="text-white text-xs animate-pulse">點擊跳轉</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</template>
+
+<script setup>
+import { ref, onMounted, onUnmounted, inject } from "vue";
+import * as THREE from "three";
+import gsap from "gsap";
+
+// 導航資料
+const blocks = ref([
+	{ number: 1, title: "品牌故事", description: "探索遠岫科技的起源與願景，了解我們的品牌精神", id: "story" },
+	{ number: 2, title: "合作案例", description: "查看我們與客戶共同創建的成功案例與解決方案", id: "cases" },
+	{ number: 3, title: "產品中心", description: "發現我們的創新產品與技術，幫助企業實現數位轉型", id: "products" }
+]);
+
+const activeIndex = ref(null);
+const activateBlock = (index) => (activeIndex.value = index);
+const resetBlocks = () => (activeIndex.value = null);
+
+// DOM
+const threeCanvas = ref(null);
+const logoContainer = ref(null);
+const logo = ref(null);
+const heroText = ref(null);
+const navContainer = ref(null);
+
+// Three.js vars
+let scene, camera, renderer;
+let networkSphere;
+let animationId;
+
+// 注入滾動動畫控制器
+const scrollAnimation = inject("scrollAnimation");
+
+// Hero animation - 使用 timeline 統一控制
+const setupEntranceAnimation = () => {
+	const tl = gsap.timeline({
+		delay: 1 // 減少延遲時間
+	});
+
+	tl.to(logoContainer.value, { opacity: 1, duration: 1, ease: "power2.out" })
+		.to(heroText.value, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5")
+		.to(navContainer.value, { opacity: 1, duration: 1, ease: "power2.out" }, "-=0.3")
+		.fromTo(
+			".nav-block",
+			{ y: 20, opacity: 0 },
+			{
+				y: 0,
+				opacity: 1,
+				stagger: 0.2,
+				duration: 0.8,
+				ease: "back.out(1.7)"
+			},
+			"-=0.8"
+		);
+};
+
+// Three.js init
+const initThree = () => {
+	scene = new THREE.Scene();
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+
+	camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+	camera.position.z = getCameraDistance(); // 根據螢幕尺寸調整相機位置
+
+	renderer = new THREE.WebGLRenderer({ canvas: threeCanvas.value, alpha: true });
+	renderer.setSize(width, height);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 限制最大像素比，優化移動裝置效能
+
+	// 創建網絡球
+	createNetworkSphere();
+
+	// 設定網絡球和連線的初始透明度為 0
+	if (networkSphere) {
+		networkSphere.material.opacity = 0;
+		if (networkSphere.userData.lines) {
+			networkSphere.userData.lines.material.opacity = 0;
+		}
+	}
+
+	// 執行淡入動畫
+	fadeInNetworkSphere();
+
+	// 啟動動畫
+	animate();
+
+	// 相機動畫效果
+	animateCamera();
+};
+
+// 根據螢幕尺寸獲取相機距離
+const getCameraDistance = () => {
+	const width = window.innerWidth;
+	if (width < 640) return 20; // sm
+	if (width < 768) return 18; // md
+	if (width < 1024) return 16; // lg
+	return 15; // xl 及以上
+};
+
+const createNetworkSphere = () => {
+	// 根據裝置調整粒子數量
+	const width = window.innerWidth;
+	let particleCount;
+
+	if (width < 640) particleCount = 600; // sm
+	else if (width < 768) particleCount = 800; // md
+	else if (width < 1024) particleCount = 1200; // lg
+	else particleCount = 1500; // xl 及以上
+
+	const particles = new THREE.BufferGeometry();
+	const positions = new Float32Array(particleCount * 3);
+	const colors = new Float32Array(particleCount * 3);
+
+	// 創建連接線的材質
+	const lineMaterial = new THREE.LineBasicMaterial({
+		color: 0x00d4ff,
+		transparent: true,
+		opacity: 0 // 初始透明度設為 0
+	});
+
+	// 生成球體上的粒子位置
+	const radius = 10;
+	for (let i = 0; i < particleCount; i++) {
+		// 使用球坐標系統來均勻分布點
+		const theta = Math.random() * Math.PI * 2;
+		const phi = Math.acos(2 * Math.random() - 1);
+
+		const x = radius * Math.sin(phi) * Math.cos(theta);
+		const y = radius * Math.sin(phi) * Math.sin(theta);
+		const z = radius * Math.cos(phi);
+
+		positions[i * 3] = x;
+		positions[i * 3 + 1] = y;
+		positions[i * 3 + 2] = z;
+
+		// 根據位置設定顏色
+		colors[i * 3] = 0.2 + Math.random() * 0.8; // R
+		colors[i * 3 + 1] = 0.8 + Math.random() * 0.2; // G
+		colors[i * 3 + 2] = 0.8 + Math.random() * 0.2; // B
+	}
+
+	// 設置粒子幾何體
+	particles.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+	particles.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+	// 粒子材質 - 根據裝置調整大小
+	const particleSize = width < 640 ? 0.18 : width < 768 ? 0.15 : 0.1;
+	const particleMaterial = new THREE.PointsMaterial({
+		size: particleSize,
+		vertexColors: true,
+		transparent: true,
+		opacity: 0 // 初始透明度設為 0
+	});
+
+	// 創建粒子系統
+	networkSphere = new THREE.Points(particles, particleMaterial);
+	scene.add(networkSphere);
+
+	// 生成連線 - 根據螢幕尺寸調整連線數量
+	const lineGeometry = new THREE.BufferGeometry();
+	const linePositions = [];
+
+	// 為每個粒子尋找最近的幾個粒子並連線
+	const connectionsPerParticle = width < 768 ? 2 : width < 1024 ? 3 : 4;
+	for (let i = 0; i < particleCount; i++) {
+		const x1 = positions[i * 3];
+		const y1 = positions[i * 3 + 1];
+		const z1 = positions[i * 3 + 2];
+
+		// 根據裝置類型調整連線數量
+		const connectionsCount = connectionsPerParticle + Math.floor(Math.random() * (width < 768 ? 1 : 2));
+
+		for (let j = 0; j < connectionsCount; j++) {
+			// 隨機選擇另一個粒子
+			const particleIndex = Math.floor(Math.random() * particleCount);
+			const x2 = positions[particleIndex * 3];
+			const y2 = positions[particleIndex * 3 + 1];
+			const z2 = positions[particleIndex * 3 + 2];
+
+			// 計算兩點距離
+			const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
+
+			// 只連接一定距離內的粒子
+			if (distance < 5) {
+				linePositions.push(x1, y1, z1);
+				linePositions.push(x2, y2, z2);
+			}
+		}
+	}
+
+	lineGeometry.setAttribute("position", new THREE.Float32BufferAttribute(linePositions, 3));
+
+	const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+	scene.add(lines);
+
+	// 將lines也添加到networkSphere下，便於一起操作
+	networkSphere.userData.lines = lines;
+};
+
+// 淡入動畫效果
+const fadeInNetworkSphere = () => {
+	if (networkSphere) {
+		// 為球體設置淡入動畫
+		gsap.to(networkSphere.material, {
+			opacity: 0.8,
+			duration: 2,
+			ease: "power2.inOut"
+		});
+
+		// 為連線設置淡入動畫
+		if (networkSphere.userData.lines) {
+			gsap.to(networkSphere.userData.lines.material, {
+				opacity: 0.3,
+				duration: 2.5,
+				ease: "power2.inOut"
+			});
+		}
+	}
+};
+
+// 相機動畫效果 - 直接設定最終位置，不使用動畫
+const animateCamera = () => {
+	// 直接設定相機位置，不使用動畫
+	camera.position.z = getCameraDistance();
+};
+
+const animate = () => {
+	animationId = requestAnimationFrame(animate);
+
+	if (networkSphere) {
+		// 讓網絡球自轉
+		networkSphere.rotation.y += 0.002;
+		networkSphere.rotation.x += 0.001;
+
+		// 同時旋轉連線
+		if (networkSphere.userData.lines) {
+			networkSphere.userData.lines.rotation.y += 0.002;
+			networkSphere.userData.lines.rotation.x += 0.001;
+		}
+	}
+
+	renderer.render(scene, camera);
+};
+
+// 處理窗口大小變化
+const handleResize = () => {
+	if (camera && renderer) {
+		const width = window.innerWidth;
+		const height = window.innerHeight;
+
+		camera.aspect = width / height;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize(width, height);
+
+		// 根據螢幕尺寸重新調整相機位置
+		camera.position.z = getCameraDistance();
+	}
+};
+
+// Scroll to - 使用 composable 的方法
+const navigateToSection = (id) => {
+	// 先淡出導航區塊
+	gsap.to(".nav-block", {
+		opacity: 0,
+		y: 10,
+		stagger: 0.1,
+		duration: 0.5,
+		ease: "power2.inOut",
+		onComplete: () => {
+			// 使用較長的動畫時間和更平滑的緩動效果
+			scrollAnimation.scrollToSection(id, 0);
+
+			// 滾動完成後淡入導航區塊
+			gsap.to(".nav-block", {
+				opacity: 1,
+				y: 0,
+				stagger: 0.1,
+				duration: 0.8,
+				delay: 0.5,
+				ease: "power2.out"
+			});
+		}
+	});
+};
+
+onMounted(async () => {
+	// 確保 ScrollTrigger 已初始化
+	await scrollAnimation.initScrollPlugins();
+
+	// 初始化三維背景
+	initThree();
+
+	// 設置進場動畫
+	setupEntranceAnimation();
+
+	// 添加窗口大小變化監聽器
+	window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+	cancelAnimationFrame(animationId);
+	window.removeEventListener("resize", handleResize);
+
+	// 釋放Three.js資源
+	if (scene) {
+		scene.clear();
+	}
+
+	if (renderer) {
+		renderer.dispose();
+	}
+});
+</script>
+
+<style scoped>
+.block-bg {
+	background-color: rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+	transition: all 0.5s ease;
+}
+
+.block-pattern {
+	width: 100%;
+	height: 100%;
+	opacity: 0.2;
+}
+
+.pattern-1 {
+	background: radial-gradient(circle at 30% 50%, #4facfe 0%, #00f2fe 100%);
+}
+
+.pattern-2 {
+	background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+}
+
+.pattern-3 {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.nav-block:hover .block-bg {
+	transform: translateY(-10px);
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.nav-block:hover .transition-hint {
+	opacity: 1;
+	animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translate(-50%, 10px);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, 0);
+	}
+}
+
+/* 限制導航區塊描述文字的行數 */
+.line-clamp-3 {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+@media (max-width: 768px) {
+	.nav-block {
+		margin-bottom: 16px;
+	}
+}
+
+@media (max-width: 640px) {
+	.nav-block {
+		margin-bottom: 12px;
+	}
+}
+</style>
