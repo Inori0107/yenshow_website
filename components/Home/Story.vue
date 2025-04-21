@@ -11,7 +11,7 @@
 					:ref="(el) => setTitleRef(el, index)"
 					class="vertical-title text-[24px] md:text-[48px] lg:text-[96px] p-[6px] rounded-lg opacity-0"
 				>
-					{{ section.title }}
+					{{ $t(section.title) }}
 				</h2>
 				<p
 					v-for="(text, i) in section.texts"
@@ -19,7 +19,7 @@
 					v-bind:ref="(el) => setTextRef(el, index, i)"
 					class="vertical-text text-[16px] md:text-[24px] lg:text-[36px] p-[6px] opacity-0"
 				>
-					{{ text }}
+					{{ $t(text) }}
 				</p>
 			</div>
 		</article>
@@ -36,22 +36,22 @@ const storyContainers = ["intro", "cloud", "mountain", "sky"];
 const sections = [
 	{
 		title: null,
-		texts: ["白雲升遠岫 搖曳入晴空", "啟發遠岫科技的成立與精神", "描繪了白雲從遠山升起", "飄向晴空的自然景象", "展現和諧之美與深刻人生哲理"],
+		texts: ["poem intro", "story inspiration", "cloud mountain description", "natural scenery", "harmony philosophy"],
 		position: { top: "50%", left: "50%" }
 	},
 	{
-		title: "白雲",
-		texts: ["以其輕盈靈動的姿態", "象徵無限的創新力量", "遠岫科技以創新為核心", "提供高效且突破性的方案", "幫助客戶克服挑戰"],
+		title: "cloud title",
+		texts: ["cloud agile", "symbolizes innovation", "innovation core", "breakthrough solutions", "overcoming challenges"],
 		position: { top: "50%", left: "66%" }
 	},
 	{
-		title: "遠岫",
-		texts: ["遠山象徵穩重與堅實", "其精神為追求卓越與承諾可靠", "穩健可靠的態度體現對客戶的承諾", "共創長期信賴的夥伴關係"],
+		title: "mountain title",
+		texts: ["mountain symbolizes", "excellence commitment", "reliable attitude", "long term partnership"],
 		position: { top: "50%", left: "33%" }
 	},
 	{
-		title: "晴空",
-		texts: ["晴朗無垠的天空", "代表對未來的啟迪與願景", "遠岫科技不僅協助客戶實現目標", "更攜手描繪長遠未來", "在廣闊藍天下實現共同成果"],
+		title: "sky title",
+		texts: ["clear sky", "future vision", "helping clients", "shaping future", "achieving results"],
 		position: { top: "50%", left: "50%" }
 	}
 ];

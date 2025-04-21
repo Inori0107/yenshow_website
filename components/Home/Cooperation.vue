@@ -4,13 +4,13 @@
 		<article
 			class="bg-overlay absolute inset-0 z-50 flex flex-col justify-center items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary text-center"
 		>
-			<h3 class="cooperation-title text-[24px] md:text-[48px] lg:text-[64px] font-bold">合作案例</h3>
-			<h5 class="cooperation-subtitle text-[16px] md:text-[24px] lg:text-[36px] font-bold">打造科技便捷的生活</h5>
+			<h3 class="cooperation-title text-[24px] md:text-[48px] lg:text-[64px] font-bold">{{ $t("Success Stories") }}</h3>
+			<h5 class="cooperation-subtitle text-[16px] md:text-[24px] lg:text-[36px] font-bold">{{ $t("building tech life") }}</h5>
 			<span class="cooperation-desc text-[12px] md:text-[16px] lg:text-[24px] font-light"
-				>各類產品系統整合，提供多種優質的安全產品和服務，<br />
-				不用複雜的管理軟體，便可創造無限的價值</span
+				>{{ $t("cooperation description line1") }}<br />
+				{{ $t("cooperation description line2") }}</span
 			>
-			<Button-CTA class="cooperation-btn" label="View More" color="white" to="/cooperation"></Button-CTA>
+			<Button-CTA class="cooperation-btn" :label="$t('view more')" color="white" to="/cooperation"></Button-CTA>
 		</article>
 		<aside class="flex flex-col justify-center items-center -rotate-6">
 			<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-full">
@@ -44,7 +44,7 @@
 	</section>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, nextTick, onUnmounted } from "vue";
 import ButtonCTA from "~/components/common/Button-CTA.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
@@ -66,7 +66,7 @@ const baseImages = ref([
 const rows = ref(5);
 
 // 為不同的行生成不同順序的圖片陣列，增加視覺多樣性
-const getRowImages = (rowIndex: number) => {
+const getRowImages = (rowIndex) => {
 	// 根據行號創建一個獨特的排序
 	const shuffled = [...baseImages.value];
 

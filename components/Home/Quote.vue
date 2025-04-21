@@ -13,27 +13,36 @@
 		<!-- 引用內容 -->
 		<div class="quote-container relative z-10 max-w-4xl text-center text-[24px] md:text-[36px] text-secondary px-8" style="font-family: 'LXGW WenKai Mono TC'">
 			<div v-for="(sentence, index) in sentences" :key="index" class="quote-sentence mb-6">
-				<span v-for="(char, i) in sentence" :key="i" class="quote-char">{{ char }}</span>
+				<span v-for="(char, i) in localizedSentence(sentence)" :key="i" class="quote-char">{{ char }}</span>
 			</div>
 
 			<!-- 署名 -->
 			<div class="quote-signature text-right mt-12 opacity-0">
-				<div class="text-[16px] md:text-[24px] font-light italic">—— 遠岫科技</div>
+				<div class="text-[16px] md:text-[24px] font-light italic">{{ $t("quote signature") }}</div>
 			</div>
 		</div>
 	</section>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
+import { useI18n } from "vue-i18n";
+
+// 使用 i18n
+const { t } = useI18n();
 
 // 使用滾動動畫控制器
 const scrollAnimation = useScrollAnimation();
 const { gsap, ScrollTrigger } = scrollAnimation;
 
-// 引用語句
-const sentences = ref(["遠岫科技，既是一段故事，也是一份使命。", "我們期待與每一位客戶攜手，如白雲般靈活，如遠岫般穩固，", "共創晴空般廣闊的願景。"]);
+// 引用語句鍵名
+const sentences = ref(["quote sentence 1", "quote sentence 2", "quote sentence 3"]);
+
+// 將本地化的句子轉為字符數組，用於逐字動畫
+const localizedSentence = (key) => {
+	return t(key).split("");
+};
 
 // 設置引用動畫
 const setupQuoteAnimation = async () => {
