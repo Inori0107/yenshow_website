@@ -58,12 +58,7 @@ export default defineNuxtConfig({
 			"/api": {
 				target: process.env.API_BASE_URL || "http://localhost:4000",
 				changeOrigin: true,
-				prependPath: true,
-				headers: {
-					"Access-Control-Allow-Origin": "*",
-					"Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-					"Access-Control-Allow-Headers": "Content-Type, Authorization"
-				}
+				prependPath: true
 			},
 			"/storage": {
 				target: process.env.API_BASE_URL || "http://localhost:4000",
