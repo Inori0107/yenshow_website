@@ -9,13 +9,14 @@
 	<Intro />
 
 	<!-- Quote -->
-	<!-- <Quote /> -->
+	<Quote />
 
 	<!-- Cooperation -->
 	<Cooperation id="cases" />
 
 	<!-- Product -->
 	<!-- <ProductIntroduction /> -->
+	<VideoIntercom />
 
 	<!-- News & Events -->
 	<NewsEvents id="products" />
@@ -27,10 +28,10 @@ import HeroPic from "~/components/Home/HeroPic.vue";
 import Story from "~/components/Home/Story.vue";
 import Intro from "~/components/Home/Intro.vue";
 import Cooperation from "~/components/Home/Cooperation.vue";
-// import Quote from "~/components/Home/Quote.vue";
+import Quote from "~/components/Home/Quote.vue";
 import NewsEvents from "~/components/Home/NewsEvents.vue";
-// 匯入產品介紹元件
 import ProductIntroduction from "~/components/Home/ProductIntroduction.vue";
+import VideoIntercom from "~/components/ProductIntroduction/videoIntercom.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 useHead({

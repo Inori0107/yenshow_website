@@ -1,7 +1,7 @@
 <template>
-	<section id="intro-section" ref="introSection" class="bg-secondary py-[144px] flex flex-col gap-[48px] lg:gap-[144px] opacity-0">
+	<section id="intro-section" ref="introSection" class="bg-secondary my-[128px] md:my-[512px] opacity-0">
 		<!-- 服務特點區 -->
-		<article class="relative flex flex-col items-center feature-section">
+		<article class="relative min-h-screen flex flex-col justify-center items-center feature-section">
 			<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
 			<!-- 頂部功能列 -->
 			<div ref="hexagonRow1" class="flex gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
@@ -35,7 +35,7 @@
 		<article
 			id="yscp-article"
 			ref="yscpSection"
-			class="container relative py-[144px] flex flex-col lg:flex-row justify-center items-center gap-[48px] yscp-section opacity-0"
+			class="relative container min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[48px] yscp-section opacity-0"
 		>
 			<!-- 左側內容說明 -->
 			<div ref="yscpText" class="flex flex-col gap-[24px] lg:gap-[48px] z-10 yscp-text">
@@ -221,11 +221,10 @@ const onWindowResize = () => {
 
 // 設置 section 背景轉場動畫
 const setupSectionBgAnimation = () => {
-	// 整個 Intro section 的背景轉場效果 - 調整觸發位置為區域一半
 	scrollAnimation.createBasicAnimation({
 		elements: introSection.value,
 		trigger: "#intro-section",
-		start: "top 50%", // 調整為滾動到區域一半時觸發
+		start: "top 60%",
 		fromProps: {
 			opacity: 0,
 			y: 30
@@ -242,11 +241,10 @@ const setupSectionBgAnimation = () => {
 
 // 設置 Hexagon 行的滾動觸發動畫 - 調整為section出現後再觸發
 const setupHexagonRowAnimations = async () => {
-	// 標題動畫 - 在section出現後延遲觸發
 	scrollAnimation.createBasicAnimation({
 		elements: ".feature-title",
 		trigger: ".feature-section",
-		start: "top 50%", // 調整為同樣的觸發位置
+		start: "top 60%",
 		fromProps: {
 			opacity: 0,
 			y: 20
@@ -264,7 +262,7 @@ const setupHexagonRowAnimations = async () => {
 		scrollAnimation.createBasicAnimation({
 			elements: row,
 			trigger: ".feature-section",
-			start: "top 50%", // 保持同樣的觸發位置
+			start: "top 60%",
 			fromProps: {
 				opacity: 0,
 				y: 50
@@ -283,7 +281,7 @@ const setupHexagonRowAnimations = async () => {
 	scrollAnimation.createBasicAnimation({
 		elements: hexagonElements,
 		trigger: ".feature-section",
-		start: "top 50%", // 保持同樣的觸發位置
+		start: "top 60%", // 保持同樣的觸發位置
 		fromProps: {
 			opacity: 0,
 			y: 30
@@ -372,7 +370,7 @@ const setupYSCPAnimations = async () => {
 	// 建立時間軸動畫來替代組合動畫
 	const tl = scrollAnimation.createTimelineAnimation({
 		trigger: "#yscp-article",
-		start: "top 80%"
+		start: "top 60%"
 	});
 
 	// 1. 整個區塊淡入
@@ -405,7 +403,7 @@ const setupYSCPAnimations = async () => {
 	scrollAnimation.createBasicAnimation({
 		elements: ".decorative-lines",
 		trigger: ".feature-circles",
-		start: "top 80%",
+		start: "top 60%",
 		fromProps: {
 			opacity: 0,
 			scale: 0.8
@@ -425,7 +423,7 @@ const setupYSCPAnimations = async () => {
 	const masterTimeline = gsap.timeline({
 		scrollTrigger: {
 			trigger: ".feature-circles",
-			start: "top 80%",
+			start: "top 60%",
 			toggleActions: "play none none reverse"
 		},
 		delay: 0.5 // 縮短延遲時間，加快第一次出現時間
@@ -460,12 +458,11 @@ const setupHexGridAnimation = () => {
 	if (hexagons.length > 0) {
 		hexagons.sort((a, b) => a.distance - b.distance);
 
-		// 創建一個帶有 ScrollTrigger 的時間軸
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: "#intro-section",
-				start: "top 50%",
-				end: "bottom top",
+				start: "top 60%",
+				end: "top 20%",
 				toggleActions: "play none none reverse", // 確保反覆滾動時動畫會重置
 				onEnter: () => {
 					// 當進入觸發區域時播放動畫

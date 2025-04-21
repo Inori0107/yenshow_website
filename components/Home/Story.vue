@@ -1,6 +1,5 @@
 <template>
 	<section id="story" class="my-[128px] md:my-[512px]">
-		<!-- 使用 v-for 來減少重複的 article 結構 -->
 		<article v-for="(section, index) in sections" :key="index" :id="`story-${storyContainers[index]}`" class="story-container h-screen relative">
 			<div
 				class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px]"
@@ -28,7 +27,6 @@
 
 <script setup>
 import { ref, onMounted, nextTick, onUnmounted, inject } from "vue";
-import gsap from "gsap";
 
 // 將 storyContainers 提到外面作為共用變數
 const storyContainers = ["intro", "cloud", "mountain", "sky"];

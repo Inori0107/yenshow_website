@@ -5,11 +5,10 @@ import { useNuxtApp } from "#app";
 
 export const useUserStore = defineStore("user", () => {
 	// 在 setup store 頂層調用 useAPI 一次
-	const { auth, apiAuth } = useAPI(); // 解構出需要的方法集合
-	const { $cookies } = useNuxtApp();
+	const { auth, apiAuth } = useAPI(); // 假設 useAPI 在此處是安全的
 
 	// === 狀態 (State) ===
-	const token = ref($cookies.get("auth_token") || ""); // 嘗試從 cookie 初始化 token
+	const token = ref(null); // 初始化 token 為 null，稍後從 cookie 讀取
 	const user = ref(null); // 用戶資料對象
 	const loading = ref(false);
 	const error = ref(null);
@@ -20,18 +19,36 @@ export const useUserStore = defineStore("user", () => {
 
 	// === 函數 (Actions) ===
 
+	// 安全地獲取 cookies 的輔助函數
+	function getCookies() {
+		try {
+			// 只有在可以調用 useNuxtApp 時才獲取
+			const { $cookies } = useNuxtApp();
+			return $cookies;
+		} catch (e) {
+			// 在無法獲取上下文時 (例如 SSR 早期階段)，記錄警告並返回 null
+			console.warn("無法在當前上下文中獲取 $cookies:", e);
+			return null;
+		}
+	}
+
 	// 設置 token (用於登入和持久化)
 	function setToken(newToken) {
 		token.value = newToken || "";
+		const $cookies = getCookies();
+		// 如果無法獲取 cookies (例如在伺服器端)，則跳過 cookie 操作
+		if (!$cookies) {
+			console.warn("無法設置 cookie，因為 $cookies 不可用。");
+			return;
+		}
+
 		if (newToken) {
 			$cookies.set("auth_token", newToken, {
 				path: "/",
 				maxAge: 60 * 60 * 24 * 7 // 7 days (或者根據需要調整)
-				// secure: process.env.NODE_ENV === 'production', // 建議生產環境使用 secure
-				// sameSite: 'lax'
 			});
 		} else {
-			$cookies.remove("auth_token");
+			$cookies.remove("auth_token", { path: "/" }); // 確保提供 path
 		}
 	}
 
@@ -70,7 +87,8 @@ export const useUserStore = defineStore("user", () => {
 
 	// 獲取個人資料
 	async function fetchProfile() {
-		if (!isAuthenticated.value) return null; // 如果沒有 token，不執行
+		// 檢查 token ref 的值，而不是依賴 isAuthenticated (它也依賴 token ref)
+		if (!token.value) return null;
 
 		loading.value = true;
 		try {
@@ -100,12 +118,13 @@ export const useUserStore = defineStore("user", () => {
 		loading.value = true;
 		try {
 			// 調用 API 登出 (即使失敗也要清除本地狀態)
+			// 確保在清除本地狀態之前調用 API
 			await auth.logout();
 		} catch (err) {
 			// 登出 API 失敗通常不影響客戶端登出流程
 			console.error("登出 API 請求失敗:", err);
 		} finally {
-			clearUser();
+			clearUser(); // 清除本地 token 和 user data
 			loading.value = false;
 			// 可以導航到首頁或登入頁
 			// navigateTo('/');
@@ -132,10 +151,34 @@ export const useUserStore = defineStore("user", () => {
 		}
 	}
 
-	// 初始化時嘗試獲取用戶資料 (如果已有 token)
-	if (token.value) {
-		fetchProfile();
+	// 初始化函數: 嘗試從 cookie 讀取 token 並獲取資料
+	// 這個函數應該在 store setup 結束時，或者更安全地在 Nuxt plugin 中調用
+	async function initializeAuth() {
+		// 只有在客戶端執行，或者在可以安全獲取 cookie 的伺服器端環境
+		if (process.server && !process.env.NITRO_PRESET) {
+			// 在某些 SSR 環境下可能無法安全獲取 cookie，可以選擇跳過
+			console.log("在伺服器端初始化期間跳過 cookie 讀取。");
+			return;
+		}
+
+		const $cookies = getCookies();
+		if ($cookies) {
+			const initialToken = $cookies.get("auth_token");
+			if (initialToken && !token.value) {
+				// 檢查 token 是否已被設置
+				console.log("從 cookie 初始化 token");
+				token.value = initialToken; // 直接設置 ref 的值
+				// token 設置後，isAuthenticated 計算屬性會更新
+				await fetchProfile(); // 嘗試獲取用戶資料
+			}
+		} else {
+			console.log("初始化時 $cookies 不可用。");
+		}
 	}
+
+	// 在 store setup 的最後階段調用初始化邏輯
+	// 注意：如果 `useNuxtApp` 在這裡仍然失敗，需要將 initializeAuth 的調用移至 Nuxt plugin
+	initializeAuth();
 
 	// 返回所有需要從 store 外部訪問的內容
 	return {
@@ -152,6 +195,7 @@ export const useUserStore = defineStore("user", () => {
 		fetchProfile,
 		logout,
 		changePassword,
-		setToken // 可能需要外部調用（例如 OAuth 回調）
+		setToken, // 暴露 setToken 以便外部（如 OAuth 回調）使用
+		initializeAuth // 暴露初始化函數，可能用於插件
 	};
 });
