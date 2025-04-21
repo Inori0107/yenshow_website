@@ -62,7 +62,7 @@
 						</div>
 						<!-- 切換圖片 -->
 						<div class="w-[300px] h-[225px] lg:w-[400px] lg:h-[300px] flex justify-center items-center rounded-[25px]">
-							<img class="max-h-full w-auto object-contain" :src="getSelectedImage(product, index)" alt="選擇的圖片" />
+							<!-- <img class="max-h-full w-auto object-contain" :src="getSelectedImage(product, index)" alt="選擇的圖片" /> -->
 						</div>
 					</div>
 				</div>
@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick, watch, inject, onUnmounted } from "vue";
+import { ref, onMounted, nextTick, inject, onUnmounted } from "vue";
 import ButtonCTA from "~/components/common/Button-CTA.vue";
 import gsap from "gsap";
 

@@ -17,10 +17,7 @@
 		</div>
 
 		<!-- 互動導航區塊 -->
-		<div
-			ref="navContainer"
-			class="flex flex-col lg:flex-row justify-center items-center gap-5 sm:gap-8 md:gap-10 mt-10 sm:mt-16 md:mt-20 w-full max-w-6xl opacity-0 z-10 px-4"
-		>
+		<div ref="navContainer" class="flex flex-col lg:flex-row justify-center mt-[12px] md:mt-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4">
 			<div
 				v-for="(block, index) in blocks"
 				:key="block.id"

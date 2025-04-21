@@ -1,15 +1,54 @@
+/* 統一的 CSS 變量 */
+:root {
+	/* 主要斷點 */
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
+
+	/* 間距系統 */
+	--spacing-xs: 8px;
+	--spacing-sm: 16px;
+	--spacing-md: 24px;
+	--spacing-lg: 48px;
+	--spacing-xl: 64px;
+	--spacing-2xl: 96px;
+	--spacing-3xl: 128px;
+	--spacing-4xl: 256px;
+	--spacing-5xl: 512px;
+
+	/* 字體大小 */
+	--font-size-xs: 10px;
+	--font-size-sm: 12px;
+	--font-size-base: 16px;
+	--font-size-md: 24px;
+	--font-size-lg: 36px;
+	--font-size-xl: 48px;
+	--font-size-2xl: 64px;
+	--font-size-3xl: 96px;
+
+	/* 元素圓角 */
+	--border-radius-sm: 12px;
+	--border-radius-md: 25px;
+	--border-radius-lg: 50px;
+	--border-radius-xl: 100px;
+}
+
+/* 基本設定 */
 html {
 	scroll-behavior: smooth;
 }
-.vertical-text {
-	writing-mode: vertical-lr;
-	height: fit-content;
-	letter-spacing: 10px;
-	text-orientation: upright;
-	background: linear-gradient(45deg, transparent, #f2f2f2);
-	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-	font-family: "LXGW WenKai Mono TC";
+
+/* 響應式容器 */
+.responsive-container {
+	width: 100%;
+	padding-left: var(--spacing-md);
+	padding-right: var(--spacing-md);
+	margin: 0 auto;
 }
+
+/* 垂直文本 */
+.vertical-text,
 .vertical-title {
 	writing-mode: vertical-lr;
 	height: fit-content;
@@ -19,6 +58,53 @@ html {
 	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 	font-family: "LXGW WenKai Mono TC";
 }
+
+/* 響應式間距類 */
+.section-spacing {
+	margin-top: var(--spacing-3xl);
+	margin-bottom: var(--spacing-3xl);
+}
+
+/* 響應式動畫持續時間調整 */
+.animation-duration {
+	--duration-mobile: 0.6s;
+	--duration-tablet: 0.8s;
+	--duration-desktop: 1.2s;
+}
+
+/* 響應式媒體查詢 */
+@media (max-width: 640px) {
+	:root {
+		/* 小螢幕調整間距 */
+		--spacing-3xl: 64px;
+		--spacing-4xl: 128px;
+		--spacing-5xl: 256px;
+	}
+
+	.vertical-text,
+	.vertical-title {
+		letter-spacing: 5px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+	:root {
+		/* 平板間距 */
+		--spacing-3xl: 96px;
+		--spacing-4xl: 192px;
+		--spacing-5xl: 384px;
+	}
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+	:root {
+		/* 小桌面間距 */
+		--spacing-3xl: 112px;
+		--spacing-4xl: 224px;
+		--spacing-5xl: 448px;
+	}
+}
+
 .marquee-container {
 	display: flex;
 	flex-direction: column;

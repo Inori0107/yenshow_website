@@ -1,10 +1,10 @@
 <template>
-	<section id="intro-section" ref="introSection" class="bg-secondary my-[128px] md:my-[512px] opacity-0">
+	<section id="intro-section" ref="introSection" class="bg-secondary my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
 		<!-- 服務特點區 -->
-		<article class="relative min-h-screen flex flex-col justify-center items-center feature-section">
+		<article class="relative min-h-[80vh] sm:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
 			<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
 			<!-- 頂部功能列 -->
-			<div ref="hexagonRow1" class="flex gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
+			<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
 				<Hexagon imageSrc="/YSCP/board-game.png" title="數位看板" />
 				<Hexagon imageSrc="/YSCP/intelligent-analytics.png" title="智能分析" />
 				<Hexagon imageSrc="/YSCP/vehicle.png" title="車輛" />
@@ -12,18 +12,18 @@
 			</div>
 
 			<!-- 中間功能列 -->
-			<div ref="hexagonRow2" class="flex gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0">
+			<div ref="hexagonRow2" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]">
 				<Hexagon imageSrc="/YSCP/image.png" title="影像" />
-				<div class="hexagon-title h-[96px] md:h-[169px] lg:h-[225px] text-[12px] md:text-[24px]">數據與監控</div>
+				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
 				<div class="brand-icon w-full flex flex-col gap-[4px] items-center">
-					<span class="text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</span>
+					<span class="text-[10px] sm:text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</span>
 				</div>
-				<div class="hexagon-title h-[96px] md:h-[169px] lg:h-[225px] text-[12px] md:text-[24px]">安全與管理</div>
+				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
 				<Hexagon imageSrc="/YSCP/guarded-entrance.png" title="門禁" />
 			</div>
 
 			<!-- 底部功能列 -->
-			<div ref="hexagonRow3" class="flex gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-3 z-10 opacity-0">
+			<div ref="hexagonRow3" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-3 z-10 opacity-0">
 				<Hexagon imageSrc="/YSCP/route.png" title="路線管理" />
 				<Hexagon imageSrc="/YSCP/attendance.png" title="考勤管理" />
 				<Hexagon imageSrc="/YSCP/alarm.png" title="警報" />
@@ -35,12 +35,12 @@
 		<article
 			id="yscp-article"
 			ref="yscpSection"
-			class="relative container min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[48px] yscp-section opacity-0"
+			class="relative container min-h-[90vh] sm:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
 		>
 			<!-- 左側內容說明 -->
-			<div ref="yscpText" class="flex flex-col gap-[24px] lg:gap-[48px] z-10 yscp-text">
+			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text w-full lg:w-1/2">
 				<div class="relative">
-					<h3 class="text-[24px] md:text-[36px] lg:text-[48px] section-title product-title">YSCentral Professional</h3>
+					<h3 class="text-[20px] sm:text-[24px] md:text-[36px] lg:text-[48px] section-title product-title">YSCentral Professional</h3>
 					<div class="title-decoration absolute bottom-[-5px] left-[-5px] w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
 				</div>
 
@@ -51,14 +51,14 @@
 					<span class="feature-tag">易用性</span>
 				</div>
 
-				<h5 class="text-[12px] md:text-[18px] lg:text-[24px] opacity-80">
+				<h5 class="text-[10px] sm:text-[12px] md:text-[18px] lg:text-[24px] opacity-80">
 					一款整合式安全性軟體，<br />
 					旨在透過一個「直覺」的平台來應對多種安全挑戰。
 				</h5>
 
 				<div class="relative benefit-section">
 					<div class="benefit-decorative-line"></div>
-					<h4 class="text-[16px] md:text-[24px] lg:text-[36px]">
+					<h4 class="text-[14px] sm:text-[16px] md:text-[24px] lg:text-[36px]">
 						在保護人員和財產安全的同時，<br />
 						讓日常營運更有效率，<br />
 						幫助使用者做出更明智的決策。
@@ -67,35 +67,35 @@
 			</div>
 
 			<!-- 右側功能圓圈 -->
-			<div ref="featureCircles" class="grid grid-cols-2 relative feature-circles">
+			<div ref="featureCircles" class="grid grid-cols-2 relative feature-circles w-full lg:w-1/2">
 				<!-- 背景幾何裝飾 -->
 				<div class="decorative-lines"></div>
 
 				<!-- 功能特點 1 -->
 				<div
 					ref="circleOne"
-					class="w-[200px] h-[200px] md:w-[300px] md:h-[300px] ml-[-25px] md:ml-0 YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] ml-[-15px] sm:ml-[-25px] md:ml-0 YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
 				>
-					<h4 class="text-[24px] md:text-[36px] opacity-80">01</h4>
-					<h4 class="text-[16px] md:text-[24px]">中央管理平台</h4>
+					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">01</h4>
+					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">中央管理平台</h4>
 				</div>
 
 				<!-- 功能特點 2 -->
 				<div
 					ref="circleTwo"
-					class="w-[200px] h-[200px] md:w-[300px] md:h-[300px] mt-[-100px] ml-[5px] md:mt-[-150px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
+					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] sm:ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
 				>
-					<h4 class="text-[24px] md:text-[36px] opacity-80">02</h4>
-					<h4 class="text-[16px] md:text-[24px]">軟體與硬體整合</h4>
+					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">02</h4>
+					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">軟體與硬體整合</h4>
 				</div>
 
 				<!-- 功能特點 3 -->
 				<div
 					ref="circleThree"
-					class="w-[200px] h-[200px] md:w-[300px] md:h-[300px] mt-[-125px] ml-[-25px] md:mt-[-175px] md:ml-[-25px] YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-95px] sm:mt-[-125px] md:mt-[-175px] ml-[-15px] sm:ml-[-25px] md:ml-[-25px] YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
 				>
-					<h4 class="text-[24px] md:text-[36px] opacity-80">03</h4>
-					<h4 class="text-[16px] md:text-[24px]">完整的解決方案</h4>
+					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">03</h4>
+					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">完整的解決方案</h4>
 				</div>
 			</div>
 		</article>
@@ -149,6 +149,7 @@ const initThree = () => {
 	renderer.setSize(width, height);
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+	// 調整移動設備上的六角形網格密度
 	createHexagonGrid();
 	animate();
 
@@ -217,6 +218,15 @@ const onWindowResize = () => {
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	renderer.setSize(width, height);
+
+	// 重新創建六角形網格以適應新的螢幕尺寸
+	createHexagonGrid();
+	resetHexagons();
+
+	// 重設動畫觸發器
+	if (scrollAnimation && scrollAnimation.ScrollTrigger) {
+		scrollAnimation.ScrollTrigger.value.refresh();
+	}
 };
 
 // 設置 section 背景轉場動畫
@@ -367,20 +377,24 @@ const createWaveAnimation = (container) => {
 
 // 設置 YSCP 部分的滾動觸發動畫
 const setupYSCPAnimations = async () => {
+	// 檢測是否為移動設備
+	const isMobile = window.innerWidth < 768;
+	const animationDelay = isMobile ? 0.3 : 0.5; // 移動設備上使用更短的延遲
+
 	// 建立時間軸動畫來替代組合動畫
 	const tl = scrollAnimation.createTimelineAnimation({
 		trigger: "#yscp-article",
-		start: "top 60%"
+		start: "top 70%" // 提前觸發以提高移動設備上的可見性
 	});
 
 	// 1. 整個區塊淡入
-	tl.fromTo(yscpSection.value, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" });
+	tl.fromTo(yscpSection.value, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: isMobile ? 0.8 : 1.2, ease: "power2.out" });
 
 	// 2. 標題與裝飾線條
 	tl.fromTo(
 		".product-title",
 		{ opacity: 0, scale: 0.9, textShadow: "0 0 0px rgba(221, 28, 28, 0)", color: "#770f0f" },
-		{ opacity: 1, scale: 1, textShadow: "0 0 5px rgba(221, 28, 28, 0.3)", color: "#dd1c1c", duration: 1.2, ease: "power3.out" },
+		{ opacity: 1, scale: 1, textShadow: "0 0 5px rgba(221, 28, 28, 0.3)", color: "#dd1c1c", duration: isMobile ? 0.8 : 1.2, ease: "power3.out" },
 		"-=0.9"
 	);
 
@@ -403,7 +417,7 @@ const setupYSCPAnimations = async () => {
 	scrollAnimation.createBasicAnimation({
 		elements: ".decorative-lines",
 		trigger: ".feature-circles",
-		start: "top 60%",
+		start: "top 70%", // 提前觸發
 		fromProps: {
 			opacity: 0,
 			scale: 0.8
@@ -412,8 +426,8 @@ const setupYSCPAnimations = async () => {
 			opacity: 1,
 			scale: 1
 		},
-		delay: 0.5,
-		duration: 1,
+		delay: animationDelay,
+		duration: isMobile ? 0.8 : 1,
 		ease: "power2.out"
 	});
 
@@ -423,18 +437,18 @@ const setupYSCPAnimations = async () => {
 	const masterTimeline = gsap.timeline({
 		scrollTrigger: {
 			trigger: ".feature-circles",
-			start: "top 60%",
+			start: "top 70%", // 提前觸發
 			toggleActions: "play none none reverse"
 		},
-		delay: 0.5 // 縮短延遲時間，加快第一次出現時間
+		delay: animationDelay // 根據設備調整延遲時間
 	});
 
 	circlesArray.forEach((circle, index) => {
 		masterTimeline.fromTo(
 			circle,
 			{ scale: 0.7, opacity: 0, y: 30 },
-			{ scale: 1, opacity: 1, y: 0, duration: 0.8, ease: "elastic.out(1, 0.75)" }, // 縮短持續時間
-			index * 0.3 // 減少時差，讓圓圈出現更快
+			{ scale: 1, opacity: 1, y: 0, duration: isMobile ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" }, // 縮短持續時間
+			index * (isMobile ? 0.2 : 0.3) // 根據設備調整時差
 		);
 	});
 
@@ -516,9 +530,11 @@ const createHexagonGrid = () => {
 	// 設置初始位置
 	hexGrid.position.y = -4;
 
-	const hexRadius = 1.5;
-	const rows = 15;
-	const cols = 20;
+	// 根據螢幕寬度調整網格密度
+	const isMobile = window.innerWidth < 768;
+	const hexRadius = isMobile ? 1.2 : 1.5;
+	const rows = isMobile ? 10 : 15;
+	const cols = isMobile ? 15 : 20;
 	const vertDist = hexRadius * Math.sqrt(3);
 	const horizDist = hexRadius * 1.5;
 
@@ -601,6 +617,21 @@ onMounted(async () => {
 
 		// 設置產品介紹動畫
 		await setupYSCPAnimations();
+
+		// 初始刷新 ScrollTrigger，確保所有動畫在正確位置觸發
+		if (scrollAnimation && scrollAnimation.ScrollTrigger) {
+			scrollAnimation.ScrollTrigger.value.refresh();
+		}
+
+		// 監聽窗口大小變化事件，確保動畫在不同尺寸下正確顯示
+		window.addEventListener("resize", () => {
+			if (scrollAnimation && scrollAnimation.ScrollTrigger) {
+				// 延遲更新以避免滾動觸發器在窗口調整大小時重複觸發
+				setTimeout(() => {
+					scrollAnimation.ScrollTrigger.value.refresh();
+				}, 200);
+			}
+		});
 	}
 });
 
@@ -714,9 +745,9 @@ canvas {
 .feature-tag {
 	background: linear-gradient(135deg, #dd1c1c 0%, #9e0e0e 100%);
 	color: white;
-	padding: 6px 12px;
+	padding: 4px 10px;
 	border-radius: 20px;
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: 600;
 	box-shadow: 0 2px 4px rgba(221, 28, 28, 0.3);
 }
@@ -788,14 +819,43 @@ canvas {
 	transform: scale(1.1);
 }
 
+/* 添加較小螢幕的特定樣式 */
+@media (max-width: 639px) {
+	.feature-tag {
+		font-size: 10px;
+		padding: 3px 8px;
+	}
+
+	.benefit-decorative-line {
+		left: -10px;
+		width: 3px;
+	}
+
+	.YSCP-circle {
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+	}
+}
+
 @media (max-width: 768px) {
 	.feature-section {
 		padding: 0 12px;
 	}
 
 	.yscp-section {
-		padding-top: 72px;
-		padding-bottom: 72px;
+		padding-top: 48px;
+		padding-bottom: 48px;
+	}
+
+	.decorative-lines {
+		background-size: 30px 30px;
+	}
+}
+
+/* 添加平板樣式 */
+@media (min-width: 768px) and (max-width: 1023px) {
+	.yscp-section {
+		padding-top: 64px;
+		padding-bottom: 64px;
 	}
 }
 </style>
