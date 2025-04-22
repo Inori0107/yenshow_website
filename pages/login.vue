@@ -38,8 +38,23 @@
 				</div>
 
 				<!-- 登入按鈕 -->
-				<button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-200" :disabled="loading">
-					<span v-if="loading">{{ $t("login.logging_in") }}</span>
+				<button
+					type="submit"
+					class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition duration-200"
+					:disabled="loading"
+					:class="{ 'opacity-70 cursor-not-allowed': loading }"
+				>
+					<span v-if="loading" class="flex items-center justify-center">
+						<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+							<path
+								class="opacity-75"
+								fill="currentColor"
+								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+							></path>
+						</svg>
+						{{ $t("login.logging_in") }}
+					</span>
 					<span v-else>{{ $t("login.submit") }}</span>
 				</button>
 			</form>
@@ -80,19 +95,33 @@ const handleLogin = async () => {
 	error.value = "";
 
 	try {
-		const result = await userStore.login({
+		console.log("準備登入...", { account: form.account, passwordLength: form.password.length });
+
+		// 創建登入憑證
+		const credentials = {
 			account: form.account,
 			password: form.password
-		});
+		};
+
+		// 發送登入請求
+		const result = await userStore.login(credentials);
+		console.log("登入結果:", result);
 
 		if (result.success) {
-			// 登入成功，檢查是否有重定向路徑
-			const redirectPath = route.query.redirect || "/";
-			router.push(redirectPath);
+			console.log("登入成功，準備重定向...");
+
+			// 短暫延遲以確保狀態更新
+			setTimeout(() => {
+				// 登入成功，檢查是否有重定向路徑
+				const redirectPath = route.query.redirect || "/";
+				router.push(redirectPath);
+			}, 500);
 		} else {
-			error.value = result.message;
+			error.value = result.message || t("login.error_unknown");
+			console.error("登入失敗:", error.value);
 		}
 	} catch (err) {
+		console.error("登入過程錯誤:", err);
 		error.value = err.message || t("login.error_unknown");
 	} finally {
 		loading.value = false;
@@ -102,6 +131,7 @@ const handleLogin = async () => {
 // 如果已登入，重定向到首頁或之前的頁面
 onMounted(() => {
 	if (userStore.isAuthenticated) {
+		console.log("用戶已登入，重定向...");
 		const redirectPath = route.query.redirect || "/";
 		router.push(redirectPath);
 	}

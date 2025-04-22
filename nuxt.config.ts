@@ -57,11 +57,14 @@ export default defineNuxtConfig({
 		devProxy: {
 			"/api": {
 				target: process.env.API_BASE_URL || "http://localhost:4000",
-				changeOrigin: true,
-				prependPath: true
+				changeOrigin: true
+			},
+			"/users": {
+				target: (process.env.API_BASE_URL || "http://localhost:4000") + "/users",
+				changeOrigin: true
 			},
 			"/storage": {
-				target: process.env.API_BASE_URL || "http://localhost:4000",
+				target: (process.env.API_BASE_URL || "http://localhost:4000") + "/storage",
 				changeOrigin: true
 			}
 		}

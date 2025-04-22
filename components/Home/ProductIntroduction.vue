@@ -137,9 +137,9 @@ const productCategories = ref<Product[]>([
 		colorClass: "bg-[#4DB6AC]",
 		link: "/products/Video-Intercom",
 		imageOptions: [
-			{ label: "管理中心主機", src: "/product/YS-9503.png" },
-			{ label: "門口機", src: "/product/YS-FTC-06.png" },
-			{ label: "室內機", src: "/product/YS-9510-WTE1.jpg" }
+			// { label: "管理中心主機", src: "/product/YS-9503.png" },
+			// { label: "門口機", src: "/product/YS-FTC-06.png" },
+			// { label: "室內機", src: "/product/YS-9510-WTE1.jpg" }
 		]
 	},
 	{
@@ -150,9 +150,9 @@ const productCategories = ref<Product[]>([
 		colorClass: "bg-[#FFC857]",
 		link: "/products/Access-Control",
 		imageOptions: [
-			{ label: "門禁控制", src: "/product/YS-AC-02F.jpg" },
-			{ label: "通關柵欄", src: "/product/YS-K3Y501SX.png" },
-			{ label: "訪客管理", src: "/product/YS-V50.jpg" }
+			// { label: "門禁控制", src: "/product/YS-AC-02F.jpg" },
+			// { label: "通關柵欄", src: "/product/YS-K3Y501SX.png" },
+			// { label: "訪客管理", src: "/product/YS-V50.jpg" }
 		]
 	},
 	{
@@ -163,8 +163,8 @@ const productCategories = ref<Product[]>([
 		colorClass: "bg-[#4DB6AC]", // Note: Same color as 01, consider changing if needed
 		link: "/products/Surveillance-Monitoring",
 		imageOptions: [
-			{ label: "IPC", src: "/product/iYS-2CD7A46G2_P.png" },
-			{ label: "NVR", src: "/product/iYS-BA04.jpg" }
+			// { label: "IPC", src: "/product/iYS-2CD7A46G2_P.png" },
+			// { label: "NVR", src: "/product/iYS-BA04.jpg" }
 		]
 	},
 	{
@@ -175,9 +175,9 @@ const productCategories = ref<Product[]>([
 		colorClass: "bg-[#5E548E] text-secondary",
 		link: "/products/Security-Solutions",
 		imageOptions: [
-			{ label: "人體測溫", src: "/product/YS-TTC-01.png" },
-			{ label: "無線警報", src: "/product/YS-PWA-YXPRO.jpg" },
-			{ label: "火災預警", src: "/product/YS-TBC-03.png" }
+			// { label: "人體測溫", src: "/product/YS-TTC-01.png" },
+			// { label: "無線警報", src: "/product/YS-PWA-YXPRO.jpg" },
+			// { label: "火災預警", src: "/product/YS-TBC-03.png" }
 		]
 	}
 ]);

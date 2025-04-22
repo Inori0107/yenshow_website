@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { useAPI } from "../composables/useAPI";
 import { useNuxtApp } from "#app";
+import UserRole from "../enums/UserRole";
 
 export const useUserStore = defineStore("user", () => {
 	// 在 setup store 頂層調用 useAPI 一次
@@ -15,7 +16,10 @@ export const useUserStore = defineStore("user", () => {
 
 	// === 計算屬性 (Getters) ===
 	const isAuthenticated = computed(() => !!token.value);
-	const isAdmin = computed(() => user.value?.role === "ADMIN"); // 假設 role 存在 user 對象中
+	const isAdmin = computed(() => user.value?.role === UserRole.ADMIN); // 保留 isAdmin 判斷本身
+	const account = computed(() => user.value?.account || "");
+	const email = computed(() => user.value?.email || "");
+	const role = computed(() => user.value?.role || UserRole.USER);
 
 	// === 函數 (Actions) ===
 
@@ -56,98 +60,118 @@ export const useUserStore = defineStore("user", () => {
 	function clearUser() {
 		setToken("");
 		user.value = null;
+		error.value = null; // 同時清除錯誤狀態
 	}
 
-	// 登入
+	// 登入 - 手動處理，確保 loading 和 error 狀態
 	async function login(credentials) {
 		loading.value = true;
 		error.value = null;
 		try {
-			// 使用頂層獲取的 auth.login
+			console.log(
+				"開始登入流程，發送憑證:",
+				JSON.stringify({
+					account: credentials.account,
+					passwordProvided: !!credentials.password
+				})
+			);
+
 			const response = await auth.login(credentials);
-			// 假設成功響應包含 token 和 user 對象
-			if (response && response.token) {
-				setToken(response.token);
-				// 登入成功後嘗試獲取用戶資料
-				await fetchProfile();
-				// 返回成功狀態和消息
-				return { success: true, message: response.message || "登入成功" };
-			} else {
-				// 處理登入失敗，即使 API 調用本身沒拋錯
-				throw new Error(response?.message || "登入失敗：無效的回應");
+			console.log("登入API回應:", response);
+
+			let tokenValue = null;
+			let userData = null;
+
+			if (response && typeof response === "object") {
+				if (response.token) {
+					tokenValue = response.token;
+					userData = response.user;
+				} else if (response.result?.token) {
+					tokenValue = response.result.token;
+					userData = response.result.user;
+				}
 			}
+
+			if (!tokenValue) {
+				console.error("回應中找不到有效的token:", response);
+				throw new Error(response?.message || "登入失敗: 無法獲取認證信息");
+			}
+
+			console.log("登入成功，取得 token:", { tokenLength: tokenValue.length });
+			setToken(tokenValue);
+
+			if (userData) {
+				user.value = userData;
+				console.log("已從登入回應設置用戶資料");
+			} else {
+				console.log("登入回應未包含用戶資料，嘗試獲取個人資料");
+				await fetchProfile();
+			}
+
+			return {
+				success: true,
+				message: response.message || "登入成功"
+			};
 		} catch (err) {
-			error.value = err.message || "登入失敗";
+			console.error("登入錯誤:", err);
+			error.value = err.message || "登入失敗"; // 設置錯誤狀態
 			clearUser();
 			return { success: false, message: error.value };
 		} finally {
-			loading.value = false;
+			loading.value = false; // 確保 loading 狀態被重置
 		}
 	}
 
-	// 獲取個人資料
+	// 獲取個人資料 - 手動處理，確保 loading 和 error 狀態
 	async function fetchProfile() {
-		// 檢查 token ref 的值，而不是依賴 isAuthenticated (它也依賴 token ref)
-		if (!token.value) return null;
+		if (!token.value) {
+			console.log("無法獲取個人資料：未設置 token");
+			return null;
+		}
 
 		loading.value = true;
+		error.value = null;
 		try {
-			// 使用頂層獲取的 auth.getProfile (需要 token，apiAuth 實例會處理)
-			const profileData = await auth.getProfile();
-			// 假設成功時 profileData 包含 user 對象
-			if (profileData) {
-				user.value = profileData.user || profileData; // 處理可能的嵌套 user
-				error.value = null;
-				return user.value;
+			console.log("開始獲取個人資料...");
+			const profileData = await auth.getProfile(); // 假設 auth.getProfile 內部會處理 401 並觸發 clearUser
+			console.log("獲取個人資料回應:", profileData);
+
+			const userData = profileData?.result?.user || profileData?.result;
+
+			if (userData && (userData.account || userData._id)) {
+				console.log("成功獲取用戶資料:", { id: userData._id, account: userData.account });
+				user.value = userData;
+				return userData;
 			} else {
-				throw new Error("獲取個人資料失敗：無效的回應");
+				console.error("獲取資料失敗: 無法從回應中提取有效的用戶資料", profileData);
+				// 不主動 clearUser，讓 API 攔截器處理 401
+				throw new Error(profileData?.message || "獲取個人資料失敗：無效的回應格式");
 			}
 		} catch (err) {
-			console.error("獲取個人資料錯誤:", err);
-			error.value = err.message || "獲取資料失敗";
-			// 如果獲取失敗 (例如 token 失效導致 401)，清除本地狀態
-			clearUser();
+			console.error("獲取個人資料處理錯誤:", err);
+			error.value = err.message || "獲取資料失敗"; // 設置錯誤狀態
+			// 不主動 clearUser，讓 API 攔截器處理 401
 			return null;
 		} finally {
-			loading.value = false;
+			loading.value = false; // 確保 loading 狀態被重置
 		}
 	}
 
-	// 登出
+	// 登出 - 手動處理，確保 loading 狀態
 	async function logout() {
 		loading.value = true;
 		try {
-			// 調用 API 登出 (即使失敗也要清除本地狀態)
-			// 確保在清除本地狀態之前調用 API
-			await auth.logout();
+			// 只有在登入狀態下才嘗試調用 API 登出
+			if (token.value) {
+				await auth.logout();
+			}
 		} catch (err) {
-			// 登出 API 失敗通常不影響客戶端登出流程
 			console.error("登出 API 請求失敗:", err);
 		} finally {
 			clearUser(); // 清除本地 token 和 user data
 			loading.value = false;
 			// 可以導航到首頁或登入頁
 			// navigateTo('/');
-		}
-	}
-
-	// 變更密碼
-	async function changePassword(currentPassword, newPassword) {
-		loading.value = true;
-		error.value = null;
-		try {
-			const response = await auth.changePassword({ currentPassword, newPassword });
-			// 假設成功響應包含 success: true
-			if (response && response.success) {
-				return { success: true, message: response.message || "密碼已更新" };
-			} else {
-				throw new Error(response?.message || "變更密碼失敗：無效的回應");
-			}
-		} catch (err) {
-			error.value = err.message || "變更密碼失敗";
-			return { success: false, message: error.value };
-		} finally {
-			loading.value = false;
 		}
 	}
 
@@ -178,7 +202,11 @@ export const useUserStore = defineStore("user", () => {
 
 	// 在 store setup 的最後階段調用初始化邏輯
 	// 注意：如果 `useNuxtApp` 在這裡仍然失敗，需要將 initializeAuth 的調用移至 Nuxt plugin
-	initializeAuth();
+	if (process.client) {
+		initializeAuth().catch((err) => {
+			console.error("初始化認證失敗:", err);
+		});
+	}
 
 	// 返回所有需要從 store 外部訪問的內容
 	return {
@@ -190,12 +218,15 @@ export const useUserStore = defineStore("user", () => {
 		// Getters
 		isAuthenticated,
 		isAdmin,
+		account,
+		email,
+		role,
 		// Actions
 		login,
 		fetchProfile,
 		logout,
-		changePassword,
-		setToken, // 暴露 setToken 以便外部（如 OAuth 回調）使用
-		initializeAuth // 暴露初始化函數，可能用於插件
+		setToken,
+		clearUser,
+		initializeAuth
 	};
 });

@@ -16,7 +16,6 @@
 
 	<!-- Product -->
 	<!-- <ProductIntroduction /> -->
-	<VideoIntercom />
 
 	<!-- News & Events -->
 	<NewsEvents id="products" />
@@ -31,7 +30,6 @@ import Cooperation from "~/components/Home/Cooperation.vue";
 import Quote from "~/components/Home/Quote.vue";
 import NewsEvents from "~/components/Home/NewsEvents.vue";
 import ProductIntroduction from "~/components/Home/ProductIntroduction.vue";
-import VideoIntercom from "~/components/ProductIntroduction/videoIntercom.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 useHead({

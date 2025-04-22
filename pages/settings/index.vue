@@ -70,6 +70,48 @@
 					{{ $t("settings.login") }}
 				</NuxtLink>
 			</div>
+
+			<!-- 新增：產品和層級測試區塊 -->
+			<div class="card p-6 border rounded-lg shadow-sm col-span-1 md:col-span-2">
+				<h2 class="text-xl font-medium mb-4">資料測試</h2>
+				<div class="flex space-x-4 mb-4">
+					<button
+						@click="testFetchHierarchy"
+						class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
+						:disabled="hierarchyStore.isLoading || productsStore.isLoading"
+					>
+						{{ hierarchyStore.isLoading ? "讀取層級中..." : "讀取完整層級" }}
+					</button>
+					<button
+						@click="testFetchProducts"
+						class="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition"
+						:disabled="hierarchyStore.isLoading || productsStore.isLoading"
+					>
+						{{ productsStore.isLoading ? "讀取產品中..." : "讀取產品列表" }}
+					</button>
+				</div>
+
+				<!-- 顯示錯誤 -->
+				<div v-if="hierarchyStore.error || productsStore.error" class="my-4 p-4 bg-red-100 text-red-700 border border-red-300 rounded">
+					<p v-if="hierarchyStore.error">層級錯誤: {{ hierarchyStore.error }}</p>
+					<p v-if="productsStore.error">產品錯誤: {{ productsStore.error }}</p>
+				</div>
+
+				<!-- 顯示層級數據 (簡化) -->
+				<div v-if="hierarchyData.length > 0" class="mt-4">
+					<h3 class="font-medium mb-2">層級數據 (系列數量: {{ hierarchyData.length }})</h3>
+					<pre class="bg-gray-100 p-2 rounded text-xs overflow-auto max-h-60">{{ JSON.stringify(hierarchyData.slice(0, 1), null, 2) }}</pre>
+					<p class="text-xs text-gray-500 mt-1">（僅顯示第一個系列的部分內容）</p>
+				</div>
+
+				<!-- 顯示產品數據 (簡化) -->
+				<div v-if="products.length > 0" class="mt-4">
+					<h3 class="font-medium mb-2">產品數據 (數量: {{ products.length }})</h3>
+					<p class="text-xs mb-1">分頁: {{ productsStore.pagination.page }}/{{ productsStore.pagination.pages }}, 總數: {{ productsStore.pagination.total }}</p>
+					<pre class="bg-gray-100 p-2 rounded text-xs overflow-auto max-h-60">{{ JSON.stringify(products.slice(0, 5), null, 2) }}</pre>
+					<p class="text-xs text-gray-500 mt-1">（僅顯示前 5 個產品的部分內容）</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -77,6 +119,9 @@
 <script setup>
 // 引入 composables 和 stores
 import { useUserStore } from "~/stores/user";
+import { useProductsStore } from "~/stores/models/product";
+import { useHierarchyStore } from "~/stores/hierarchyStore";
+import { useAPI } from "~/composables/useAPI";
 
 const config = useRuntimeConfig();
 const { locale, setLocale, t } = useI18n();
@@ -85,8 +130,10 @@ const router = useRouter();
 // 初始化 API
 const { api } = useAPI();
 
-// 用戶 store
+// Stores
 const userStore = useUserStore();
+const productsStore = useProductsStore();
+const hierarchyStore = useHierarchyStore();
 
 // 計算屬性與狀態
 const isAuthenticated = computed(() => userStore.isAuthenticated);
@@ -102,6 +149,10 @@ const apiStatus = reactive({
 
 const isLoading = ref(false);
 
+// 新增：來自 Store 的計算屬性
+const hierarchyData = computed(() => hierarchyStore.hierarchyData);
+const products = computed(() => productsStore.items);
+
 // 測試 API 連接
 const testConnection = async () => {
 	isLoading.value = true;
@@ -114,8 +165,7 @@ const testConnection = async () => {
 		if (response.status === 200) {
 			apiStatus.connected = true;
 			apiStatus.lastChecked = new Date().toLocaleString();
-			apiStatus.latency = `${endTime - startTime}ms`;
-			alert(t("settings.connection_success", { latency: apiStatus.latency }));
+			alert(t("settings.connection_success_simple"));
 		} else {
 			apiStatus.connected = false;
 			alert(t("settings.connection_failed"));
@@ -137,7 +187,32 @@ const changeLanguage = async () => {
 // 登出
 const logout = async () => {
 	await userStore.logout();
+	hierarchyStore.clearHierarchy();
+	productsStore.$reset();
 	router.push("/");
+};
+
+// 新增：測試函數
+const testFetchHierarchy = async () => {
+	console.log("開始讀取層級數據...");
+	try {
+		await hierarchyStore.fetchFullHierarchy();
+		console.log("層級數據讀取完成.");
+	} catch (e) {
+		console.error("讀取層級數據失敗:", e);
+		alert(`讀取層級數據失敗: ${e.message}`);
+	}
+};
+
+const testFetchProducts = async () => {
+	console.log("開始讀取產品數據...");
+	try {
+		await productsStore.search({ page: 1, limit: 10 });
+		console.log("產品數據讀取完成.");
+	} catch (e) {
+		console.error("讀取產品數據失敗:", e);
+		alert(`讀取產品數據失敗: ${e.message}`);
+	}
 };
 
 // 頁面載入時測試連接
