@@ -1,5 +1,5 @@
 <template>
-	<section id="intro-section" ref="introSection" class="bg-secondary my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
+	<section id="intro-section" ref="introSection" class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
 		<!-- 服務特點區 -->
 		<article class="relative min-h-[80vh] sm:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
 			<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
@@ -15,7 +15,7 @@
 			<div ref="hexagonRow2" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]">
 				<Hexagon imageSrc="/YSCP/image.png" title="影像" />
 				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
-				<div class="brand-icon w-full flex flex-col gap-[4px] items-center">
+				<div class="w-full flex flex-col gap-[4px] items-center">
 					<span class="text-[10px] sm:text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</span>
 				</div>
 				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
@@ -38,7 +38,7 @@
 			class="relative container min-h-[90vh] sm:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
 		>
 			<!-- 左側內容說明 -->
-			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text w-full lg:w-1/2">
+			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
 				<div class="relative">
 					<h3 class="text-[20px] sm:text-[24px] md:text-[36px] lg:text-[48px] section-title product-title">YSCentral Professional</h3>
 					<div class="title-decoration absolute bottom-[-5px] left-[-5px] w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
@@ -67,10 +67,7 @@
 			</div>
 
 			<!-- 右側功能圓圈 -->
-			<div ref="featureCircles" class="grid grid-cols-2 relative feature-circles w-full lg:w-1/2">
-				<!-- 背景幾何裝飾 -->
-				<div class="decorative-lines"></div>
-
+			<div ref="featureCircles" class="grid grid-cols-2 relative feature-circles">
 				<!-- 功能特點 1 -->
 				<div
 					ref="circleOne"
@@ -83,7 +80,7 @@
 				<!-- 功能特點 2 -->
 				<div
 					ref="circleTwo"
-					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] sm:ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
+					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
 				>
 					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">02</h4>
 					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">軟體與硬體整合</h4>
@@ -104,7 +101,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, inject } from "vue";
-import Hexagon from "~/components/Hexagon.vue";
+import Hexagon from "~/components/common/Hexagon.vue";
 import * as THREE from "three";
 import gsap from "gsap";
 
@@ -249,62 +246,48 @@ const setupSectionBgAnimation = () => {
 	});
 };
 
-// 設置 Hexagon 行的滾動觸發動畫 - 調整為section出現後再觸發
+// 設置 Hexagon 行的滾動觸發動畫 - 結構優化
 const setupHexagonRowAnimations = async () => {
-	scrollAnimation.createBasicAnimation({
-		elements: ".feature-title",
-		trigger: ".feature-section",
-		start: "top 60%",
-		fromProps: {
-			opacity: 0,
-			y: 20
-		},
-		toProps: {
-			opacity: 1,
-			y: 0
-		},
-		delay: 0.6 // 增加延遲，確保在section出現後再顯示
-	});
-
-	// 行動畫 - 在標題出現後觸發
 	const rows = [hexagonRow1.value, hexagonRow2.value, hexagonRow3.value];
-	rows.forEach((row, index) => {
-		scrollAnimation.createBasicAnimation({
-			elements: row,
+	const hexagonElements = document.querySelectorAll(".hexagon");
+
+	// 確保元素存在
+	if (!rows.every(Boolean) || !hexagonElements.length) {
+		console.warn("服務特點區部分元素未找到，動畫可能無法執行");
+		return;
+	}
+
+	// 強制設定初始狀態
+	gsap.set(rows, { opacity: 0, y: 50 });
+	gsap.set(hexagonElements, { opacity: 0, y: 30 });
+
+	// 創建單一時間軸
+	const featureTl = gsap.timeline({
+		scrollTrigger: {
 			trigger: ".feature-section",
 			start: "top 60%",
-			fromProps: {
-				opacity: 0,
-				y: 50
-			},
-			toProps: {
-				opacity: 1,
-				y: 0
-			},
-			delay: 1.0 + index * 0.3, // 增加延遲，確保section和標題都出現後再顯示
-			duration: 1.2
-		});
+			toggleActions: "play none none reverse" // 統一設置
+		}
 	});
 
-	// 六角形元素動畫 - 最後顯示
-	const hexagonElements = document.querySelectorAll(".hexagon");
-	scrollAnimation.createBasicAnimation({
-		elements: hexagonElements,
-		trigger: ".feature-section",
-		start: "top 60%", // 保持同樣的觸發位置
-		fromProps: {
-			opacity: 0,
-			y: 30
-		},
-		toProps: {
+	// 1. 行動畫 - 按原延遲加入時間軸
+	featureTl
+		.to(rows[0], { opacity: 1, y: 0, duration: 1.2 }, 1.0) // 在 1.0s 時開始
+		.to(rows[1], { opacity: 1, y: 0, duration: 1.2 }, 1.3) // 在 1.3s 時開始
+		.to(rows[2], { opacity: 1, y: 0, duration: 1.2 }, 1.6); // 在 1.6s 時開始
+
+	// 2. 六角形元素動畫 - 按原延遲和 stagger 加入時間軸
+	featureTl.to(
+		hexagonElements,
+		{
 			opacity: 1,
-			y: 0
+			y: 0,
+			duration: 0.6,
+			stagger: 0.1, // 保留原 stagger
+			ease: "back.out(1.7)" // 保留原 ease
 		},
-		delay: 2.0, // 增加更多延遲，確保在rows出現後再顯示
-		duration: 0.6,
-		stagger: 0.1,
-		ease: "back.out(1.7)"
-	});
+		2.0 // 在 2.0s 時開始 stagger 動畫
+	);
 };
 
 // 創建波紋動畫 - 從容器中心發散
@@ -321,8 +304,8 @@ const createWaveAnimation = (container) => {
 
 	const waveCount = 4;
 	const containerRect = container.getBoundingClientRect();
-	const maxSize = Math.sqrt(Math.pow(containerRect.width, 2) + Math.pow(containerRect.height, 2)) * 1.1;
-	const totalDuration = 4; // 縮短總持續時間
+	const maxSize = containerRect.width * 1.2;
+	const totalDuration = 5; // 縮短總持續時間
 	const visibleDuration = 3; // 縮短可見持續時間
 
 	// 創建波紋元素陣列以便追蹤
@@ -379,83 +362,73 @@ const createWaveAnimation = (container) => {
 const setupYSCPAnimations = async () => {
 	// 檢測是否為移動設備
 	const isMobile = window.innerWidth < 768;
-	const animationDelay = isMobile ? 0.3 : 0.5; // 移動設備上使用更短的延遲
+	const animationDelay = isMobile ? 0.3 : 0.5;
 
-	// 建立時間軸動畫來替代組合動畫
+	// --- 添加 gsap.set 設定初始狀態 ---
+	gsap.set(yscpSection.value, { opacity: 0, y: 40 });
+	gsap.set(".product-title", { opacity: 0, scale: 0.9, textShadow: "0 0 0px rgba(221, 28, 28, 0)", color: "#770f0f" });
+	gsap.set(".title-decoration", { scaleX: 0, opacity: 0 });
+	gsap.set(".feature-tag", { y: 20, opacity: 0 });
+	gsap.set("h5", { y: 20, opacity: 0 });
+	gsap.set(".benefit-decorative-line", { height: 0 });
+	gsap.set(".benefit-section h4", { y: 30, opacity: 0 });
+	// ---------------------------------
+
+	// 建立左側文字時間軸動畫
 	const tl = scrollAnimation.createTimelineAnimation({
 		trigger: "#yscp-article",
-		start: "top 70%" // 提前觸發以提高移動設備上的可見性
+		start: "top 70%",
+		toggleActions: "play none none reverse"
 	});
 
-	// 1. 整個區塊淡入
-	tl.fromTo(yscpSection.value, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: isMobile ? 0.8 : 1.2, ease: "power2.out" });
+	// 1. 整個區塊淡入 (使用 to，因為 gsap.set 已設 from)
+	tl.to(yscpSection.value, { opacity: 1, y: 0, duration: isMobile ? 0.8 : 1.2, ease: "power2.out" });
 
-	// 2. 標題與裝飾線條
-	tl.fromTo(
+	// 2. 標題與裝飾線條 (使用 to)
+	tl.to(
 		".product-title",
-		{ opacity: 0, scale: 0.9, textShadow: "0 0 0px rgba(221, 28, 28, 0)", color: "#770f0f" },
 		{ opacity: 1, scale: 1, textShadow: "0 0 5px rgba(221, 28, 28, 0.3)", color: "#dd1c1c", duration: isMobile ? 0.8 : 1.2, ease: "power3.out" },
 		"-=0.9"
 	);
 
-	// 3. 標題裝飾線
-	tl.fromTo(".title-decoration", { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.8");
+	// 3. 標題裝飾線 (使用 to)
+	tl.to(".title-decoration", { scaleX: 1, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.8");
 
-	// 4. 特性標籤
-	tl.fromTo(".feature-tag", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.5)" }, "-=0.5");
+	// 4. 特性標籤 (使用 to)
+	tl.to(".feature-tag", { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.5)" }, "-=0.5"); // 注意 ease 保持原樣
 
-	// 5. 描述文字
-	tl.fromTo("h5", { y: 20, opacity: 0 }, { y: 0, opacity: 0.8, duration: 0.8, ease: "power2.out" }, "-=0.3");
+	// 5. 描述文字 (使用 to)
+	tl.to("h5", { y: 0, opacity: 0.8, duration: 0.8, ease: "power2.out" }, "-=0.3");
 
-	// 6. 裝飾線
-	tl.fromTo(".benefit-decorative-line", { height: 0 }, { height: "80%", duration: 1.2, ease: "power2.inOut" }, "-=0.5");
+	// 6. 裝飾線 (使用 to)
+	tl.to(".benefit-decorative-line", { height: "80%", duration: 1.2, ease: "power2.inOut" }, "-=0.5");
 
-	// 7. 主要描述文字
-	tl.fromTo(".benefit-section h4", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, "-=0.8");
+	// 7. 主要描述文字 (使用 to)
+	tl.to(".benefit-section h4", { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, "-=0.8");
 
-	// 裝飾線背景
-	scrollAnimation.createBasicAnimation({
-		elements: ".decorative-lines",
-		trigger: ".feature-circles",
-		start: "top 70%", // 提前觸發
-		fromProps: {
-			opacity: 0,
-			scale: 0.8
-		},
-		toProps: {
-			opacity: 1,
-			scale: 1
-		},
-		delay: animationDelay,
-		duration: isMobile ? 0.8 : 1,
-		ease: "power2.out"
-	});
-
-	// 功能圓圈動畫 - 使用序列風格，確保在滾動到時觸發
+	// --- 為右側圓圈添加 gsap.set ---
 	const circlesArray = [circleOne.value, circleTwo.value, circleThree.value];
+	gsap.set(circlesArray, { scale: 0.7, opacity: 0, y: 30 });
+	// -----------------------------
 
+	// 功能圓圈動畫 - 使用序列風格
 	const masterTimeline = gsap.timeline({
 		scrollTrigger: {
 			trigger: ".feature-circles",
-			start: "top 70%", // 提前觸發
-			toggleActions: "play none none reverse"
+			start: "top 70%",
+			toggleActions: "play none none reverse" // 確保設置
 		},
-		delay: animationDelay // 根據設備調整延遲時間
+		delay: animationDelay
 	});
 
+	// 使用 to，因為 gsap.set 已設 from
 	circlesArray.forEach((circle, index) => {
-		masterTimeline.fromTo(
-			circle,
-			{ scale: 0.7, opacity: 0, y: 30 },
-			{ scale: 1, opacity: 1, y: 0, duration: isMobile ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" }, // 縮短持續時間
-			index * (isMobile ? 0.2 : 0.3) // 根據設備調整時差
-		);
+		masterTimeline.to(circle, { scale: 1, opacity: 1, y: 0, duration: isMobile ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" }, index * (isMobile ? 0.2 : 0.3));
 	});
 
-	// 波紋動畫添加在最後，作為最終效果，但更早出現
+	// 波紋動畫添加在最後
 	masterTimeline.call(
 		() => {
-			// 確保元素仍存在於DOM中
 			if (featureCircles.value && document.body.contains(featureCircles.value)) {
 				waveElements = createWaveAnimation(featureCircles.value);
 			} else {
@@ -463,7 +436,7 @@ const setupYSCPAnimations = async () => {
 			}
 		},
 		null,
-		"+=0.1" // 縮短等待時間
+		"+=0.2"
 	);
 };
 
@@ -619,16 +592,19 @@ onMounted(async () => {
 		await setupYSCPAnimations();
 
 		// 初始刷新 ScrollTrigger，確保所有動畫在正確位置觸發
-		if (scrollAnimation && scrollAnimation.ScrollTrigger) {
-			scrollAnimation.ScrollTrigger.value.refresh();
+		if (scrollAnimation && scrollAnimation.ScrollTrigger && scrollAnimation.ScrollTrigger.value) {
+			scrollAnimation.ScrollTrigger.value.refresh(); // 移除 setTimeout，立即執行
 		}
 
 		// 監聽窗口大小變化事件，確保動畫在不同尺寸下正確顯示
 		window.addEventListener("resize", () => {
 			if (scrollAnimation && scrollAnimation.ScrollTrigger) {
-				// 延遲更新以避免滾動觸發器在窗口調整大小時重複觸發
+				// 延遲更新以避免滾動觸發器在窗口調整大小時重複觸發 (保留此處延遲)
 				setTimeout(() => {
-					scrollAnimation.ScrollTrigger.value.refresh();
+					if (scrollAnimation.ScrollTrigger.value) {
+						// 再次檢查確保存在
+						scrollAnimation.ScrollTrigger.value.refresh();
+					}
 				}, 200);
 			}
 		});
@@ -766,41 +742,6 @@ canvas {
 	margin-top: 15px;
 }
 
-.decorative-lines {
-	position: absolute;
-	top: -10%;
-	right: -20%;
-	width: 90%;
-	height: 120%;
-	opacity: 0.3 !important;
-	background-image: linear-gradient(
-			0deg,
-			transparent 24%,
-			rgba(221, 28, 28, 0.5) 25%,
-			rgba(221, 28, 28, 0.5) 26%,
-			transparent 27%,
-			transparent 74%,
-			rgba(221, 28, 28, 0.5) 75%,
-			rgba(221, 28, 28, 0.5) 76%,
-			transparent 77%,
-			transparent
-		),
-		linear-gradient(
-			90deg,
-			transparent 24%,
-			rgba(221, 28, 28, 0.5) 25%,
-			rgba(221, 28, 28, 0.5) 26%,
-			transparent 27%,
-			transparent 74%,
-			rgba(221, 28, 28, 0.5) 75%,
-			rgba(221, 28, 28, 0.5) 76%,
-			transparent 77%,
-			transparent
-		);
-	background-size: 50px 50px;
-	z-index: 0;
-}
-
 .feature-circles {
 	position: relative;
 	overflow: visible;
@@ -809,14 +750,6 @@ canvas {
 .wave-circle {
 	pointer-events: none;
 	box-shadow: 0 0 8px rgba(221, 28, 28, 0.4);
-}
-
-.brand-icon {
-	transition: transform 0.3s ease;
-}
-
-.brand-icon:hover {
-	transform: scale(1.1);
 }
 
 /* 添加較小螢幕的特定樣式 */
@@ -845,10 +778,6 @@ canvas {
 		padding-top: 48px;
 		padding-bottom: 48px;
 	}
-
-	.decorative-lines {
-		background-size: 30px 30px;
-	}
 }
 
 /* 添加平板樣式 */
@@ -857,5 +786,10 @@ canvas {
 		padding-top: 64px;
 		padding-bottom: 64px;
 	}
+}
+
+/* 添加 transform-origin */
+.title-decoration {
+	transform-origin: left;
 }
 </style>

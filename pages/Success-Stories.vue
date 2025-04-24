@@ -1,10 +1,60 @@
 <template>
 	<!-- Entrance -->
-	<nav class="h-screen container flex flex-col justify-center">
-		<h1 class="text-[36px] md:text-[96px] text-secondary">Success Stories</h1>
-		<h3 class="text-[24px] md:text-[64px] text-secondary">合作案例</h3>
+	<nav class="h-screen container flex flex-col justify-center relative">
+		<!-- 標題 -->
+		<div class="z-10 mb-12" ref="titleRef">
+			<h1 class="text-[36px] md:text-[96px] text-secondary">Success Stories</h1>
+			<h3 class="text-[24px] md:text-[64px] text-secondary">合作案例</h3>
+		</div>
+
+		<!-- 標語區塊 -->
+		<div class="flex flex-col md:flex-row gap-8 md:gap-6 z-10" ref="heroBlocks">
+			<!-- 主標語區塊 -->
+			<div class="block-bg w-full md:w-1/2 rounded-xl p-6 md:p-8 transition-all duration-500">
+				<div class="absolute inset-0 rounded-xl overflow-hidden">
+					<div class="block-pattern pattern-1"></div>
+				</div>
+				<div class="relative z-10">
+					<div class="text-[16px] md:text-[18px] text-white/70 mb-2">OUR MISSION</div>
+					<h4 class="text-[20px] md:text-[28px] text-white font-medium mb-4">見證我們如何為各行各業提供安全可靠的解決方案</h4>
+					<p class="text-[14px] md:text-[16px] text-white/80">我們致力於打造高度安全可靠的門禁系統與監控設備，為您的空間提供全方位的保護，讓安心無所不在。</p>
+				</div>
+			</div>
+
+			<!-- 數據統計區塊 -->
+			<div class="flex flex-col gap-4 md:w-1/2">
+				<!-- 成功案例 -->
+				<div class="block-bg rounded-xl p-6 transition-all duration-500">
+					<div class="absolute inset-0 rounded-xl overflow-hidden">
+						<div class="block-pattern pattern-2"></div>
+					</div>
+					<div class="relative z-10 flex items-center">
+						<div class="mr-4">
+							<div class="text-[32px] md:text-[48px] text-white font-bold">50+</div>
+							<div class="text-[14px] md:text-[16px] text-white/70">成功案例</div>
+						</div>
+						<p class="text-[14px] text-white/80 max-w-[200px]">橫跨不同行業的成功實例，每個案例都是我們實力的見證</p>
+					</div>
+				</div>
+
+				<!-- 服務經驗 -->
+				<div class="block-bg rounded-xl p-6 transition-all duration-500">
+					<div class="absolute inset-0 rounded-xl overflow-hidden">
+						<div class="block-pattern pattern-3"></div>
+					</div>
+					<div class="relative z-10 flex items-center">
+						<div class="mr-4">
+							<div class="text-[32px] md:text-[48px] text-white font-bold">10+</div>
+							<div class="text-[14px] md:text-[16px] text-white/70">服務年資</div>
+						</div>
+						<p class="text-[14px] text-white/80 max-w-[200px]">十餘年專業經驗，為客戶提供最穩定可靠的解決方案</p>
+					</div>
+				</div>
+			</div>
+		</div>
 	</nav>
 
+	<!-- 合作夥伴 -->
 	<div class="bg-primary rounded-[100px] p-12">
 		<section ref="sectionRef" class="relative min-h-screen">
 			<!-- 企業與商業合作 -->
@@ -70,7 +120,11 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { useScrollAnimation } from "~/composables/useScrollAnimation";
 import gsap from "gsap";
+
+// 使用自定義滾動動畫
+const scrollAnimation = useScrollAnimation();
 
 const business_feature = ref([
 	{
@@ -117,6 +171,10 @@ const sectionRef = ref(null);
 const businessRef = ref(null);
 const publicRef = ref(null);
 
+// 添加入口動畫相關引用
+const heroBlocks = ref(null);
+const titleRef = ref(null);
+
 // 新增案例資料
 const examples = ref([
 	{
@@ -135,81 +193,111 @@ const examples = ref([
 ]);
 
 onMounted(async () => {
-	// 檢查是否在瀏覽器環境中
-	if (typeof window === "undefined") return;
+	// 初始化滾動插件
+	await scrollAnimation.initScrollPlugins();
 
-	// 動態導入 ScrollTrigger
-	try {
-		const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-		gsap.registerPlugin(ScrollTrigger);
+	// 入口動畫
+	const entranceTl = scrollAnimation.gsap.timeline({ delay: 0.5 });
+	entranceTl
+		.fromTo(titleRef.value, { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 1 })
+		.fromTo(heroBlocks.value.querySelectorAll(".block-bg"), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }, "-=0.5");
 
-		// 檢查螢幕寬度是否大於 md 斷點 (768px)
-		const isMdScreen = window.matchMedia("(min-width: 768px)").matches;
+	// 檢查是否為桌面版
+	const isMdScreen = window.matchMedia("(min-width: 768px)").matches;
 
-		if (isMdScreen) {
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: sectionRef.value,
-					start: "top top",
-					end: "+=200%",
-					pin: true,
-					scrub: 1,
-					markers: true
-				}
-			});
+	if (isMdScreen) {
+		// 創建固定區塊動畫
+		const pinnedSection = scrollAnimation.createPinnedSection({
+			trigger: sectionRef.value,
+			start: "top top",
+			end: "+=200%",
+			scrub: 1.5, // 增加滾動的平滑度
+			markers: false
+		});
 
-			// 第一部分動畫
-			const businessTl = gsap.timeline().fromTo(businessRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }).fromTo(
-				businessRef.value.querySelectorAll(".feature"),
-				{ opacity: 0, y: 30 },
-				{
-					opacity: 1,
-					y: 0,
-					stagger: 0.2,
-					duration: 0.8
-				},
-				"-=0.5"
-			);
+		// 創建內容過渡時間軸
+		const contentTimeline = scrollAnimation.createTimelineAnimation({
+			trigger: sectionRef.value,
+			start: "top top",
+			end: "+=200%",
+			scrub: 1.5, // 和固定區塊保持一致
+			toggleActions: "play none none reverse"
+		});
 
-			// 第二部分動畫
-			const publicTl = gsap.timeline().fromTo(publicRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 }).fromTo(
-				publicRef.value.querySelectorAll(".feature"),
-				{ opacity: 0, y: 30 },
-				{
-					opacity: 1,
-					y: 0,
-					stagger: 0.2,
-					duration: 0.8
-				},
-				"-=0.5"
-			);
-
-			// 主時間軸編排
-			tl.add(businessTl)
-				.to(businessRef.value, {
-					opacity: 0,
-					y: -50,
-					duration: 1
-				})
-				.add(publicTl);
-		} else {
-			// 手機版直接顯示所有內容，不使用動畫
-			gsap.set([businessRef.value, publicRef.value], { opacity: 1 });
-			gsap.set([...businessRef.value.querySelectorAll(".feature"), ...publicRef.value.querySelectorAll(".feature")], { opacity: 1 });
+		if (contentTimeline) {
+			// 第一部分動畫 - 企業合作
+			contentTimeline
+				.fromTo(businessRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
+				.fromTo(
+					businessRef.value.querySelectorAll(".feature"),
+					{ opacity: 0, y: 30 },
+					{
+						opacity: 1,
+						y: 0,
+						stagger: 0.2,
+						duration: 0.8,
+						ease: "back.out(1.7)"
+					},
+					"-=0.5"
+				)
+				// 滾動到中間位置
+				.to(
+					businessRef.value,
+					{
+						opacity: 0,
+						y: -50,
+						duration: 2,
+						ease: "power2.inOut"
+					},
+					"+=1" // 稍微延遲，讓第一部分有更多顯示時間
+				)
+				// 第二部分動畫 - 公共支援
+				.fromTo(publicRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
+				.fromTo(
+					publicRef.value.querySelectorAll(".feature"),
+					{ opacity: 0, y: 30 },
+					{
+						opacity: 1,
+						y: 0,
+						stagger: 0.2,
+						duration: 0.8,
+						ease: "back.out(1.7)"
+					},
+					"-=0.5"
+				);
 		}
 
-		// 監聽螢幕寬度變化
-		window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
-			if (e.matches) {
-				// 重新整理頁面以重新初始化動畫
-				window.location.reload();
-			}
+		// 為案例區塊添加入場動畫
+		scrollAnimation.createElementEntrance({
+			elements: ".flex.flex-col.w-full.max-w-7xl > article",
+			trigger: ".bg-[#F2F2F2]",
+			start: "top 70%",
+			fromY: 50,
+			fromOpacity: 0,
+			duration: 1,
+			staggerAmount: 0.3
 		});
-	} catch (error) {
-		console.error("Error initializing animations:", error);
-		// 確保內容顯示，即使動畫失敗
-		gsap.set([businessRef.value, publicRef.value], { opacity: 1 });
+	} else {
+		// 手機版直接顯示所有內容
+		scrollAnimation.gsap.set([businessRef.value, publicRef.value], { opacity: 1 });
+		scrollAnimation.gsap.set([...businessRef.value.querySelectorAll(".feature"), ...publicRef.value.querySelectorAll(".feature")], { opacity: 1 });
+
+		// 為案例區塊添加簡單的淡入效果
+		scrollAnimation.createElementEntrance({
+			elements: ".flex.flex-col.w-full.max-w-7xl > article",
+			trigger: ".bg-[#F2F2F2]",
+			start: "top 90%",
+			fromY: 30,
+			fromOpacity: 0,
+			duration: 0.8
+		});
 	}
+
+	// 監聽螢幕變化
+	window.matchMedia("(min-width: 768px)").addEventListener("change", () => {
+		// 重新整理頁面以重新初始化動畫
+		window.location.reload();
+	});
 });
 </script>
 
@@ -235,5 +323,34 @@ onMounted(async () => {
 	box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5);
 	will-change: transform, opacity;
 	transform: translateZ(0);
+}
+
+/* 入口區塊樣式 */
+.block-bg {
+	position: relative;
+	background-color: rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block-pattern {
+	width: 100%;
+	height: 100%;
+	opacity: 0.15;
+}
+
+.pattern-1 {
+	background: radial-gradient(circle at 30% 50%, #4facfe 0%, #00f2fe 100%);
+}
+
+.pattern-2 {
+	background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
+}
+
+.pattern-3 {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 </style>

@@ -1,7 +1,5 @@
 <template>
 	<section class="quote-section h-screen flex flex-col justify-center items-center relative my-[128px] md:my-[512px] overflow-hidden">
-		<!-- 背景裝飾 - 降低不透明度讓原背景透出 -->
-		<div class="absolute inset-0 backdrop-blur-sm bg-gradient-nature"></div>
 		<div class="quote-frame"></div>
 
 		<!-- 科技線條裝飾 -->
@@ -20,18 +18,6 @@
 			<div class="circuit-ring middle"></div>
 			<div class="circuit-ring inner"></div>
 			<div class="circuit-pulse"></div>
-		</div>
-
-		<!-- 引號裝飾 - 使用更現代的設計 -->
-		<div class="quote-marks left">
-			<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M12 36H24L18 24H30V12H12V36Z" fill="rgba(58, 209, 152, 0.2)" />
-			</svg>
-		</div>
-		<div class="quote-marks right">
-			<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M48 24H36L42 36H30V48H48V24Z" fill="rgba(58, 209, 152, 0.2)" />
-			</svg>
 		</div>
 
 		<!-- 引用內容 -->
@@ -111,18 +97,6 @@ const setupQuoteAnimation = async () => {
 		scale: 0.6
 	});
 
-	// 設置引號初始狀態
-	gsap.set(".quote-marks", {
-		opacity: 0,
-		scale: 0,
-		filter: "blur(10px)"
-	});
-
-	// 設置背景初始狀態
-	gsap.set(".bg-gradient-nature", {
-		opacity: 0
-	});
-
 	// 設置引用容器初始狀態
 	gsap.set(".quote-container", {
 		opacity: 0,
@@ -138,13 +112,6 @@ const setupQuoteAnimation = async () => {
 			toggleActions: "play none none reverse",
 			markers: false
 		}
-	});
-
-	// 先顯示背景效果 - 降低不透明度使背景圖更明顯
-	tl.to(".bg-gradient-nature", {
-		opacity: 0.7, // 降低不透明度
-		duration: 1.2,
-		ease: "power2.out"
 	});
 
 	// 顯示引用容器
@@ -229,20 +196,6 @@ const setupQuoteAnimation = async () => {
 		"-=0.8"
 	);
 
-	// 顯示引號
-	tl.to(
-		".quote-marks",
-		{
-			opacity: 0.8,
-			scale: 1,
-			filter: "blur(0px)",
-			stagger: 0.3,
-			duration: 0.8,
-			ease: "back.out(1.7)"
-		},
-		"-=1"
-	);
-
 	// 為每個句子中的每個字符添加更柔和的動畫效果
 	sentences.value.forEach((sentence, sentenceIndex) => {
 		const chars = document.querySelectorAll(`.quote-sentence:nth-child(${sentenceIndex + 1}) .quote-char`);
@@ -263,9 +216,9 @@ const setupQuoteAnimation = async () => {
 				stagger: {
 					each: 0.08, // 增加字符之間的延遲
 					from: "start",
-					ease: "power1.inOut" // 使用更柔和的緩動函數
+					ease: "none"
 				},
-				ease: "power1.out" // 更柔和的緩動
+				ease: "none"
 			},
 			sentenceIndex === 0 ? "-=0.5" : ">=0.3" // 增加句子之間的間隔
 		);
@@ -396,12 +349,6 @@ onUnmounted(() => {
 .quote-section {
 	position: relative;
 	padding: 4rem 0;
-}
-
-.bg-gradient-nature {
-	background: radial-gradient(circle at 50% 50%, rgba(16, 48, 39, 0.3) 0%, rgba(17, 48, 39, 0.5) 100%);
-	backdrop-filter: blur(6px); /* 減少模糊效果，讓背景更清晰 */
-	transition: opacity 0.8s ease-in-out;
 }
 
 .quote-frame {
@@ -536,24 +483,6 @@ onUnmounted(() => {
 	left: 20%;
 }
 
-.quote-marks {
-	position: absolute;
-	z-index: 4;
-	opacity: 0.8;
-}
-
-.quote-marks.left {
-	top: 25%;
-	left: 5%;
-	transform: scale(1.5);
-}
-
-.quote-marks.right {
-	bottom: 25%;
-	right: 5%;
-	transform: scale(1.5);
-}
-
 .quote-container {
 	display: flex;
 	flex-direction: column;
@@ -594,16 +523,6 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-	.quote-marks.left {
-		left: 5%;
-		transform: scale(1.2);
-	}
-
-	.quote-marks.right {
-		right: 5%;
-		transform: scale(1.2);
-	}
-
 	.tech-line.left {
 		left: 8%;
 	}
@@ -623,11 +542,6 @@ onUnmounted(() => {
 }
 
 @media (max-width: 640px) {
-	.quote-marks.left,
-	.quote-marks.right {
-		transform: scale(1);
-	}
-
 	.quote-frame {
 		width: 95% !important;
 		height: 85% !important;

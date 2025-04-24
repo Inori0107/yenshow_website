@@ -4,7 +4,7 @@
 		<canvas ref="threeCanvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
 
 		<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
-		<div ref="logoContainer" class="hidden md:flex justify-center items-center opacity-0 z-10 mt-16">
+		<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10 mt-16">
 			<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px]" src="/public/yenshow.png" alt="遠岫科技" />
 		</div>
 
@@ -17,7 +17,10 @@
 		</div>
 
 		<!-- 互動導航區塊 -->
-		<div ref="navContainer" class="flex flex-col lg:flex-row justify-center mt-[12px] md:mt-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4">
+		<div
+			ref="navContainer"
+			class="flex flex-col lg:flex-row justify-center mt-[12px] md:mt-[24px] gap-[12px] md:gap-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4"
+		>
 			<div
 				v-for="(block, index) in blocks"
 				:key="block.id"
@@ -30,7 +33,7 @@
 				<div
 					class="block-bg w-[280px] h-[200px] sm:h-[230px] md:w-[300px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-xl transition-all duration-500"
 					:class="{
-						'scale-105 sm:scale-110 shadow-2xl': activeIndex === index,
+						'shadow-2xl': activeIndex === index,
 						'scale-100 opacity-80': activeIndex !== index
 					}"
 				>
@@ -54,11 +57,6 @@
 							</span>
 						</div>
 					</div>
-				</div>
-
-				<!-- 新增：過渡提示元素 -->
-				<div v-if="activeIndex === index" class="transition-hint absolute bottom-[-24px] left-1/2 transform -translate-x-1/2 opacity-0">
-					<div class="text-white text-xs animate-pulse">點擊跳轉</div>
 				</div>
 			</div>
 		</div>
@@ -384,7 +382,6 @@ onUnmounted(() => {
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-	transition: all 0.5s ease;
 }
 
 .block-pattern {
@@ -405,43 +402,10 @@ onUnmounted(() => {
 	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.nav-block:hover .block-bg {
-	transform: translateY(-10px);
-	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-}
-
-.nav-block:hover .transition-hint {
-	opacity: 1;
-	animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-		transform: translate(-50%, 10px);
-	}
-	to {
-		opacity: 1;
-		transform: translate(-50%, 0);
-	}
-}
-
 /* 限制導航區塊描述文字的行數 */
 .line-clamp-3 {
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-}
-
-@media (max-width: 768px) {
-	.nav-block {
-		margin-bottom: 16px;
-	}
-}
-
-@media (max-width: 640px) {
-	.nav-block {
-		margin-bottom: 12px;
-	}
 }
 </style>
