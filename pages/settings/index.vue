@@ -116,7 +116,7 @@
 import { useUserStore } from "~/stores/userStore";
 import { useProductsStore } from "~/stores/models/products";
 import { useHierarchyStore } from "~/stores/hierarchyStore";
-import { useApi } from "~/composables/useApi";
+import { useApi } from "~/composables/useApi.js";
 
 const config = useRuntimeConfig();
 const { locale, setLocale, t } = useI18n();
