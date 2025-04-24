@@ -1,7 +1,6 @@
-import { createEntityStore } from "../entityStore";
+import { createEntityStore } from '@/stores/entityStore'
 
-// BaseController 預設 responseKey 為 'specifications'
-// 讀取操作通常不需要驗證
-export const useSpecificationsStore = createEntityStore("specifications", {
-	requiresAuth: false
-});
+// 創建規格 store 實例
+export const useSpecificationsStore = createEntityStore('specifications', {
+  responseKey: 'specificationsList',
+})

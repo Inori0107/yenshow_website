@@ -1,5 +1,5 @@
 import { computed } from "vue";
-import { useLanguageStore } from "~/stores/language"; // Adjusted path for yenshow
+import { useLanguageStore } from "~/stores/core/languageStore";
 
 /**
  * 統一的多語言處理工具
@@ -7,43 +7,66 @@ import { useLanguageStore } from "~/stores/language"; // Adjusted path for yensh
  * @returns {Object} 多語言處理工具函數集
  */
 export function useLanguage(options = {}) {
+	// 可選擇是否使用 languageStore
 	const useStore = options.useStore !== false;
-	let languageStore = null;
-	try {
-		languageStore = useStore ? useLanguageStore() : null;
-	} catch (e) {
-		console.warn("useLanguageStore could not be instantiated, possibly outside setup context.");
-	}
+	const languageStore = useStore ? useLanguageStore() : null;
 
-	const supportedLanguages = options.languages || (languageStore ? languageStore.supportedLangs.map((l) => l.code) : ["TW", "EN"]);
-	const defaultLanguage = options.defaultLanguage || (languageStore ? languageStore.currentLang : "TW");
+	// 支援的語言配置
+	const supportedLanguages = options.languages || (useStore ? languageStore.supportedLangs.map((l) => l.code) : ["TW", "EN"]);
+	const defaultLanguage = options.defaultLanguage || (useStore ? languageStore.currentLang : "TW");
 
-	const currentLang = languageStore ? computed(() => languageStore.currentLang) : ref(defaultLanguage); // Use ref if store is not available
+	// 當前語言 (如果使用 store，則為響應式)
+	const currentLang = useStore ? computed(() => languageStore.currentLang) : { value: defaultLanguage };
 
+	/**
+	 * 獲取實體的本地化字段值
+	 * @param {Object} entity - 實體對象
+	 * @param {String} field - 欄位名稱，預設為 'name'
+	 * @param {String} fallback - 如果找不到本地化名稱時的預設值
+	 * @param {String} preferredLang - 優先使用的語言，如果指定，將優先使用此語言
+	 * @returns {String} 本地化的字段值
+	 */
 	const getLocalizedField = (entity, field = "name", fallback = "", preferredLang = null) => {
 		if (!entity) return fallback;
 
 		const fieldValue = entity[field];
 
-		if (fieldValue && typeof fieldValue === "object" && fieldValue !== null) {
-			const targetLang = preferredLang || currentLang.value;
-
-			if (fieldValue[targetLang]) {
-				return fieldValue[targetLang];
+		// 標準格式: { TW: "值", EN: "值" }
+		if (fieldValue && typeof fieldValue === "object") {
+			// 如果指定了優先語言，優先使用該語言
+			if (preferredLang && fieldValue[preferredLang]) {
+				return fieldValue[preferredLang];
 			}
+
+			// 嘗試獲取當前語言的值
+			const lang = useStore ? currentLang.value : defaultLanguage;
+			if (fieldValue[lang]) {
+				return fieldValue[lang];
+			}
+
+			// 嘗試獲取預設語言
 			if (fieldValue[defaultLanguage]) {
 				return fieldValue[defaultLanguage];
 			}
+
+			// 嘗試獲取任何可用語言
 			for (const supportedLang of supportedLanguages) {
 				if (fieldValue[supportedLang]) {
 					return fieldValue[supportedLang];
 				}
 			}
 		}
-		// Fallback to the direct field value if it's not an object or no language matched
+
+		// 非多語言物件，直接返回
 		return fieldValue || fallback;
 	};
 
+	/**
+	 * 將 API 資料轉換為表單格式 (如 {name: {TW: '值'}} 轉為 {name_TW: '值'})
+	 * @param {Object} apiData - API 資料
+	 * @param {Array} fields - 要處理的多語言欄位
+	 * @returns {Object} 表單格式資料
+	 */
 	const toFormFormat = (apiData, fields = ["name"]) => {
 		if (!apiData) return {};
 		const result = { ...apiData };
@@ -53,6 +76,8 @@ export function useLanguage(options = {}) {
 				supportedLanguages.forEach((lang) => {
 					result[`${field}_${lang}`] = apiData[field][lang] || "";
 				});
+
+				// 刪除原始欄位
 				delete result[field];
 			}
 		});
@@ -60,6 +85,12 @@ export function useLanguage(options = {}) {
 		return result;
 	};
 
+	/**
+	 * 將表單資料轉換為 API 格式 (如 {name_TW: '值'} 轉為 {name: {TW: '值'}})
+	 * @param {Object} formData - 表單資料
+	 * @param {Array} fields - 要處理的多語言欄位
+	 * @returns {Object} API 格式資料
+	 */
 	const toApiFormat = (formData, fields = ["name"]) => {
 		if (!formData) return {};
 		const result = { ...formData };
@@ -72,9 +103,12 @@ export function useLanguage(options = {}) {
 				if (formData[fieldKey] !== undefined) {
 					result[field][lang] = formData[fieldKey] || "";
 				}
+
+				// 刪除原始欄位
 				delete result[fieldKey];
 			});
 
+			// 檢查是否有任何語言包含有效值
 			const hasValue = Object.values(result[field]).some((v) => v && v.trim() !== "");
 			if (!hasValue) {
 				delete result[field];
@@ -84,11 +118,20 @@ export function useLanguage(options = {}) {
 		return result;
 	};
 
+	/**
+	 * 基本多語言欄位驗證
+	 * @param {Object} multilingualObject - 多語言物件 {TW: '值', EN: '值'}
+	 * @param {Array} requiredLanguages - 必須的語言
+	 * @param {Number} minLength - 最小長度
+	 * @returns {Object} 驗證結果
+	 */
 	const validateField = (multilingualObject, requiredLanguages = [defaultLanguage], minLength = 2) => {
+		// 基本類型檢查
 		if (!multilingualObject || typeof multilingualObject !== "object") {
 			return { valid: false, message: "欄位為必填項" };
 		}
 
+		// 檢查必要語言
 		for (const lang of requiredLanguages) {
 			if (!multilingualObject[lang] || multilingualObject[lang].trim().length < minLength) {
 				return {
@@ -101,10 +144,21 @@ export function useLanguage(options = {}) {
 		return { valid: true };
 	};
 
+	/**
+	 * 驗證多語言欄位（根據欄位類型）
+	 * @param {Object} value - 多語言物件
+	 * @param {String} fieldType - 欄位類型如 'name', 'description'
+	 * @param {Array} requiredLanguages - 必須的語言
+	 * @param {Object} options - 額外選項
+	 * @returns {Object} 驗證結果
+	 */
 	const validateFieldByType = (value, fieldType = "name", requiredLanguages = [defaultLanguage], options = {}) => {
 		const { minLength = 2, maxLength = null } = options;
+
+		// 執行基本驗證
 		const result = validateField(value, requiredLanguages, minLength);
 		if (!result.valid) {
+			// 自定義錯誤訊息
 			if (result.message === "欄位為必填項") {
 				return { valid: false, message: `${fieldType}為必填項` };
 			}
@@ -117,6 +171,7 @@ export function useLanguage(options = {}) {
 			return result;
 		}
 
+		// 額外驗證
 		if (maxLength) {
 			for (const lang of Object.keys(value)) {
 				if (value[lang] && value[lang].length > maxLength) {
@@ -131,30 +186,50 @@ export function useLanguage(options = {}) {
 		return { valid: true };
 	};
 
+	/**
+	 * 切換語言 (只在使用 languageStore 時可用)
+	 * @param {String} langCode - 語言代碼
+	 */
 	const setLanguage = (langCode) => {
-		if (languageStore) {
+		if (useStore && languageStore) {
 			languageStore.setLanguage(langCode);
 		}
 	};
 
+	/**
+	 * 獲取多語言欄位的欄位名稱
+	 * @param {String} baseField - 基本欄位名稱（如 'name'）
+	 * @param {String} lang - 語言代碼（如 'TW'）
+	 * @returns {String} 多語言欄位名稱（如 'name_TW'）
+	 */
 	const getFieldNameForLang = (baseField, lang = defaultLanguage) => {
 		return `${baseField}_${lang}`;
 	};
 
+	/**
+	 * 創建初始化的多語言表單數據
+	 * @param {Array} fields - 要處理的多語言欄位名稱數組
+	 * @returns {Object} 初始化表單數據
+	 */
 	const createEmptyMultilingualForm = (fields = ["name"]) => {
 		const result = {};
+
 		fields.forEach((field) => {
 			supportedLanguages.forEach((lang) => {
 				result[`${field}_${lang}`] = "";
 			});
 		});
+
 		return result;
 	};
 
 	return {
+		// 核心屬性
 		currentLang,
 		supportedLanguages,
 		defaultLanguage,
+
+		// 核心功能
 		getLocalizedField,
 		toFormFormat,
 		toApiFormat,
@@ -162,11 +237,15 @@ export function useLanguage(options = {}) {
 		validateFieldByType,
 		getFieldNameForLang,
 		createEmptyMultilingualForm,
+
+		// 支援 languageStore 的功能
 		setLanguage,
-		parseApiData: toFormFormat, // Alias
-		formatFormData: toApiFormat, // Alias
-		formatToForm: toFormFormat, // Alias
-		formatToApi: toApiFormat, // Alias
-		validateMultilingualField: validateField // Alias
+
+		// 提供向後兼容的別名
+		parseApiData: toFormFormat,
+		formatFormData: toApiFormat,
+		formatToForm: toFormFormat,
+		formatToApi: toApiFormat,
+		validateMultilingualField: validateField
 	};
 }

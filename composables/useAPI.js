@@ -1,200 +1,219 @@
 import axios from "axios";
-import { useUserStore } from "../stores/user.js";
-import { useLanguageStore } from "~/stores/language";
+import { useUserStore } from "~/stores/userStore";
+import { useLanguageStore } from "~/stores/core/languageStore";
 
-export function useAPI() {
+export const useApi = () => {
 	const config = useRuntimeConfig();
-	const { $cookies } = useNuxtApp();
-	const userStore = useUserStore();
+	const languageStore = useLanguageStore();
 
-	// 從 runtimeConfig 獲取基礎 URL
-	// 注意：在開發模式下，由於 devProxy，請求仍會發往相對路徑 '/'
-	// 但 config.public.apiBaseUrl 存儲了實際的後端 URL，可用於某些情況或生產環境
-	const apiBaseUrl = config.public.apiBaseUrl;
-
-	// 創建基礎 API 實例 (公共)
-	// 基礎 URL 使用相對路徑以利用 devProxy
+	// 建立實例
 	const api = axios.create({
-		baseURL: "/",
-		timeout: 10000,
-		headers: {
-			"Content-Type": "application/json"
-		},
-		withCredentials: true // 允許跨域請求攜帶憑證
+		baseURL: config.public.apiBaseUrl
 	});
 
-	// 創建需要認證的 API 實例
 	const apiAuth = axios.create({
-		baseURL: "/",
-		timeout: 10000,
-		headers: {
-			"Content-Type": "application/json"
-		},
-		withCredentials: true // 允許跨域請求攜帶憑證
+		baseURL: config.public.apiBaseUrl
 	});
 
-	// --- 攔截器 ---
+	// 在每個請求中自動加上 JWT Token
+	apiAuth.interceptors.request.use((config) => {
+		try {
+			const user = useUserStore();
+			config.headers.Authorization = "Bearer " + user.token;
+		} catch (storeError) {
+			console.error("Error accessing userStore in API interceptor:", storeError);
+		}
+		return config;
+	});
 
-	// apiAuth 請求攔截器：自動添加 token
-	apiAuth.interceptors.request.use(
-		(config) => {
-			const token = userStore.token;
-			if (token) {
-				config.headers.Authorization = `Bearer ${token}`;
-			} else {
-				const cookieToken = $cookies.get("auth_token");
-				if (cookieToken) {
-					config.headers.Authorization = `Bearer ${cookieToken}`;
+	// 處理回應錯誤，特別是處理登入過期的情況
+	apiAuth.interceptors.response.use(
+		(res) => {
+			return res;
+		},
+		async (error) => {
+			if (error.response) {
+				if (error.response.data.message === "登入過期" && error.config.url !== "/api/users/extend") {
+					try {
+						const user = useUserStore();
+						const { data } = await apiAuth.patch("/api/users/extend");
+						user.token = data.result;
+						error.config.headers.Authorization = "Bearer " + user.token;
+						return axios(error.config);
+					} catch (extendError) {
+						console.error("Error extending token:", extendError);
+						try {
+							const user = useUserStore();
+							user.logout(); // 嘗試登出
+						} catch (logoutError) {
+							console.error("Error logging out after token extension failure:", logoutError);
+						}
+						return Promise.reject(extendError);
+					}
 				}
 			}
-			return config;
-		},
-		(error) => {
 			return Promise.reject(error);
 		}
 	);
 
-	// apiAuth 響應攔截器：處理 401 未授權 (例如 token 過期) 或嘗試延長 token
-	apiAuth.interceptors.response.use(
-		(response) => response,
-		async (error) => {
-			if (error.response && error.response.status === 401) {
-				console.error("API Auth Error 401: Token 可能已過期或無效。清除本地狀態。");
-				userStore.clearUser();
-			} else if (error.response) {
-				console.error(`API Auth Error ${error.response.status}:`, error.response.data);
-			} else if (error.request) {
-				console.error("API Auth Error: No response received", error.request);
-			} else {
-				console.error("API Auth Error:", error.message);
-			}
-			const errorData = error.response?.data || {};
-			return Promise.reject({
-				success: false,
-				message: errorData.message || error.message || "請求失敗",
-				status: error.response?.status,
-				error: error.error || error
-			});
-		}
-	);
-
-	// --- API 方法 ---
-
-	// 安全調用封裝
+	/**
+	 * 安全API請求，自動處理錯誤
+	 * @param {Function} apiCall - API調用函數
+	 * @param {Object} errorOptions - 錯誤處理選項
+	 * @returns {Promise} 處理過的Promise
+	 */
 	const safeApiCall = async (apiCall, errorOptions = {}) => {
 		try {
 			const response = await apiCall();
-			return handleSuccessResponse(response);
+			return response;
 		} catch (error) {
-			console.error("API請求錯誤:", error.message || error);
+			// 簡化錯誤日誌，只保留關鍵信息
+			if (error.response) {
+				console.error(`API錯誤 (${error.response.status}):`, error.response.data);
+			} else if (error.request) {
+				console.error("API請求未收到回應");
+			} else {
+				console.error("API請求錯誤:", error.message);
+			}
 
-			const errorMessage = error.message || errorOptions.defaultMessage || "請求失敗";
-			const errorStatus = error.status;
-
+			// 如果有提供回調函數，執行它
 			if (errorOptions.onError) {
-				errorOptions.onError({ ...error, message: errorMessage, status: errorStatus });
+				errorOptions.onError(error);
 			}
 
 			if (errorOptions.onFinally) {
 				errorOptions.onFinally();
 			}
 
-			throw {
-				success: false,
-				message: errorMessage,
-				status: errorStatus,
-				error: error.error || error
-			};
+			throw error;
 		}
 	};
 
-	// 認證相關方法
-	const auth = {
-		login: async (credentials) => {
-			return await api.post("/users/login", credentials);
-		},
-		getProfile: async () => {
-			return await apiAuth.get("/users/profile");
-		},
-		logout: async () => {
-			try {
-				await apiAuth.delete("/users/logout");
-				return { success: true };
-			} catch (error) {
-				console.error("Logout API call failed:", error);
-				return { success: true };
+	// 1. 添加語言攔截器
+	const setupLanguageInterceptor = () => {
+		// 請求攔截器 - 自動添加語言參數
+		api.interceptors.request.use((config) => {
+			// 為GET請求添加語言參數
+			if (config.method?.toLowerCase() === "get") {
+				config.params = {
+					...(config.params || {}),
+					lang: languageStore.currentLang
+				};
 			}
-		}
+			// 為其他請求在數據中添加語言參數
+			else if (config.data && typeof config.data === "object" && !(config.data instanceof FormData)) {
+				config.data = {
+					...config.data,
+					lang: languageStore.currentLang
+				};
+			}
+
+			return config;
+		});
+
+		// 同樣為 apiAuth 添加語言攔截器
+		apiAuth.interceptors.request.use((config) => {
+			// 檢查是否已經是來自 token 攔截器的 config
+			// if (!config.headers?.Authorization?.startsWith('Bearer')) { // 移除日誌相關的警告
+			// 	console.warn('[Debug] useApi: apiAuth language interceptor running before token interceptor? Skipping Authorization header check logic here.');
+			// }
+			if (config.method?.toLowerCase() === "get") {
+				config.params = {
+					...(config.params || {}),
+					lang: languageStore.currentLang
+				};
+			} else if (config.data && typeof config.data === "object" && !(config.data instanceof FormData)) {
+				config.data = {
+					...config.data,
+					lang: languageStore.currentLang
+				};
+			}
+			return config;
+		});
 	};
 
-	// 產品相關
-	const products = {
-		getAll: async (params = {}) => {
-			return await safeApiCall(() => api.get("/api/products", { params }));
-		},
-		getById: async (id) => {
-			return await safeApiCall(() => api.get(`/api/products/${id}`));
-		},
-		search: async (params) => {
-			return await safeApiCall(() => api.get("/api/products/search", { params }));
+	// 2. 添加響應格式處理
+	const handleSuccessResponse = (response) => {
+		// 處理後端成功響應格式
+		if (response.data && response.data.success === true) {
+			return response.data.result || {};
 		}
+
+		// 如果沒有遵循標準格式，直接返回
+		return response.data;
 	};
 
-	// 層次結構相關
-	const hierarchy = {
-		getFullHierarchy: async (params = {}) => {
-			return await safeApiCall(() => api.get("/api/hierarchy", { params }));
-		},
-		getChildrenByParent: async (parentType, parentId) => {
-			return await safeApiCall(() => api.get(`/api/hierarchy/children/${parentType}/${parentId}`));
-		},
-		getParentHierarchy: async (itemType, itemId) => {
-			return await safeApiCall(() => api.get(`/api/hierarchy/parents/${itemType}/${itemId}`));
-		}
-	};
-
-	// 實體通用API工廠
+	// 3. 創建符合 EntityService 處理邏輯的API包裝器
 	const entityApi = (entityType, options = {}) => {
 		const responseKey = options.responseKey || `${entityType}List`;
-		// 假設所有實體瀏覽操作都使用公共 api 實例
-		const instance = api;
+
+		// 判斷是否需要認證，默認為 true
+		const requiresAuth = options.requiresAuth !== false;
+		const instance = requiresAuth ? apiAuth : api;
 
 		return {
+			// 獲取所有項目 (對應 BaseController.getAllItems)
 			getAll: async (params = {}) => {
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}`, { params }));
-				return response?.[responseKey] || [];
+				return response?.data?.result?.[responseKey] || [];
 			},
+
+			// 獲取單個項目 (對應 BaseController.getItemById)
 			getById: async (id, params = {}) => {
-				const singleEntityKey = entityType; // BaseController 返回 { success: true, result: { [entityType]: data } }
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}/${id}`, { params }));
-				return response?.[singleEntityKey] || null;
+				return response?.data?.result?.[entityType] || null;
 			},
+
 			// 搜索項目 (對應 BaseController.searchItems)
 			search: async (params = {}) => {
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}/search`, { params }));
 				return {
-					items: response?.[responseKey] || [],
-					pagination: response?.pagination || null
+					items: response?.data?.result?.[responseKey] || [],
+					pagination: response?.data?.result?.pagination || null
 				};
 			}
 		};
 	};
 
-	// 返回所有需要使用的部分
-	return {
-		api, // 公共 axios 實例
-		apiAuth, // 帶認證的 axios 實例
-		safeApiCall, // 安全調用封裝
-		auth, // 認證方法集合
-		products, // 產品方法集合
-		hierarchy, // 層次結構方法集合
-		entityApi, // 實體API工廠
-		// 處理響應格式
-		handleSuccessResponse: (response) => {
-			if (response.data && response.data.success === true) {
-				return response.data.result || {};
-			}
-			return response.data;
+	// 4. 創建符合 HierarchyManager 的API包裝器
+	const hierarchyApi = {
+		// 獲取完整層次結構 (對應 HierarchyManager.getFullHierarchy)
+		getFullHierarchy: async (params = {}) => {
+			const response = await safeApiCall(() => apiAuth.get("/api/hierarchy", { params })); // 假設需要認證
+			return response?.data?.result?.hierarchy || [];
+		},
+
+		// 根據父項獲取子項 (對應 HierarchyManager.getChildrenByParentId)
+		getChildrenByParent: async (parentType, parentId, params = {}) => {
+			const response = await safeApiCall(
+				() => apiAuth.get(`/api/hierarchy/children/${parentType}/${parentId}`, { params }) // 假設需要認證
+			);
+			return response?.data?.result || null;
+		},
+
+		// 獲取父層結構 (對應 HierarchyManager.getParentHierarchy)
+		getParentHierarchy: async (itemType, itemId, params = {}) => {
+			const response = await safeApiCall(
+				() => apiAuth.get(`/api/hierarchy/parents/${itemType}/${itemId}`, { params }) // 假設需要認證
+			);
+			return response?.data?.result?.hierarchy || [];
 		}
 	};
-}
+
+	// SSR 和 CSR 環境下處理不同
+	if (process.client) {
+		setupLanguageInterceptor();
+	}
+
+	return {
+		// 現有功能
+		api,
+		apiAuth,
+		safeApiCall,
+
+		// 新增功能
+		entityApi,
+		hierarchyApi,
+		handleSuccessResponse
+	};
+};

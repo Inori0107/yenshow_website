@@ -28,18 +28,13 @@
 			</div>
 
 			<!-- 用戶資料 -->
-			<div v-if="isAuthenticated" class="card p-6 border rounded-lg shadow-sm">
+			<div v-if="isLogin" class="card p-6 border rounded-lg shadow-sm">
 				<h2 class="text-xl font-medium mb-4">{{ $t("settings.user_info") }}</h2>
 
-				<div v-if="user" class="space-y-4">
+				<div class="space-y-4">
 					<div>
 						<h3 class="text-sm font-medium text-gray-500">{{ $t("settings.account") }}</h3>
-						<p class="mt-1">{{ user.account }}</p>
-					</div>
-
-					<div>
-						<h3 class="text-sm font-medium text-gray-500">{{ $t("settings.role") }}</h3>
-						<p class="mt-1">{{ user.role }}</p>
+						<p class="mt-1">{{ userAccount }}</p>
 					</div>
 
 					<div>
@@ -118,17 +113,17 @@
 
 <script setup>
 // 引入 composables 和 stores
-import { useUserStore } from "~/stores/user";
-import { useProductsStore } from "~/stores/models/product";
+import { useUserStore } from "~/stores/userStore";
+import { useProductsStore } from "~/stores/models/products";
 import { useHierarchyStore } from "~/stores/hierarchyStore";
-import { useAPI } from "~/composables/useAPI";
+import { useApi } from "~/composables/useApi";
 
 const config = useRuntimeConfig();
 const { locale, setLocale, t } = useI18n();
 const router = useRouter();
 
 // 初始化 API
-const { api } = useAPI();
+const { api } = useApi();
 
 // Stores
 const userStore = useUserStore();
@@ -136,8 +131,8 @@ const productsStore = useProductsStore();
 const hierarchyStore = useHierarchyStore();
 
 // 計算屬性與狀態
-const isAuthenticated = computed(() => userStore.isAuthenticated);
-const user = computed(() => userStore.user);
+const isLogin = computed(() => userStore.isLogin);
+const userAccount = computed(() => userStore.account);
 const apiBaseUrl = config.public.apiBaseUrl;
 const currentLanguage = ref(locale.value);
 
@@ -158,9 +153,7 @@ const testConnection = async () => {
 	isLoading.value = true;
 
 	try {
-		const startTime = Date.now();
 		const response = await api.get("/api/ping");
-		const endTime = Date.now();
 
 		if (response.status === 200) {
 			apiStatus.connected = true;
