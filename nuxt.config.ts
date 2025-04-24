@@ -33,8 +33,21 @@ export default defineNuxtConfig({
 		apiSecret: process.env.API_SECRET || "",
 		apiKey: process.env.API_KEY || "",
 		public: {
-			apiBaseUrl: process.env.API_BASE_URL || "http://localhost:4000",
+			apiBaseUrl: process.env.API_BASE_URL || "/api",
 			storagePath: process.env.STORAGE_PATH || "/storage"
+		}
+	},
+	nitro: {
+		devProxy: {
+			"/api": {
+				target: process.env.API_TARGET_URL || "http://localhost:4000/api",
+				changeOrigin: true,
+				prependPath: false
+			},
+			"/storage": {
+				target: process.env.STORAGE_PATH || "http://localhost:4000/storage",
+				changeOrigin: true
+			}
 		}
 	},
 	site: {
@@ -49,20 +62,6 @@ export default defineNuxtConfig({
 			},
 			products: {
 				include: ["/products/**"]
-			}
-		}
-	},
-	// 配置 Nitro 以處理 API 代理
-	nitro: {
-		devProxy: {
-			"/api": {
-				target: process.env.API_BASE_URL || "http://localhost:4000",
-				changeOrigin: true,
-				prependPath: true
-			},
-			"/storage": {
-				target: process.env.API_BASE_URL || "http://localhost:4000",
-				changeOrigin: true
 			}
 		}
 	}

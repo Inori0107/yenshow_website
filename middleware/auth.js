@@ -1,13 +1,27 @@
+import { useUserStore } from "~/stores/userStore";
+
 // 驗證用戶是否已登入的中間件
 export default defineNuxtRouteMiddleware((to, from) => {
-	const { $cookies } = useNuxtApp();
+	// 只在客戶端執行檢查，避免 SSR 問題
+	if (process.client) {
+		const userStore = useUserStore();
 
-	// 從 Cookie 檢查是否有 token
-	const token = $cookies.get("auth_token");
+		// 檢查是否已登入
+		if (!userStore.isLogin) {
+			// 儲存想要訪問的頁面，用於登入後重定向
+			const redirectPath = to.fullPath;
 
-	// 如果沒有 token 且不是已經在登入頁面，則重定向到登入頁面
-	if (!token && to.path !== "/login") {
-		// 儲存原始目標路徑，以便登入後重定向回去
-		return navigateTo(`/login?redirect=${encodeURIComponent(to.fullPath)}`);
+			// 轉至登入頁面
+			return navigateTo({
+				path: "/login",
+				query: { redirect: redirectPath }
+			});
+		}
+
+		// 如果路由需要管理員權限
+		if (to.meta.requiresAdmin && !userStore.isAdmin) {
+			// 無權限，返回首頁
+			return navigateTo("/");
+		}
 	}
 });
