@@ -1,6 +1,5 @@
 <template>
-	<aside class="bg-secondary rounded-[100px] flex flex-col pt-[24px] lg:pt-[48px] pb-[72px] lg:pb-[144px] gap-[24px] md:gap-[48px]">
-		<span class="overflow-hidden text-[48px] lg:text-[96px] text-primary opacity-50 text-nowrap">{{ $t("learn more text") }}</span>
+	<aside class="bg-secondary rounded-[100px] min-h-screen flex flex-col justify-center gap-[24px] md:gap-[48px]">
 		<!-- News -->
 		<article class="container px-[48px] lg:px-[120px] text-primary flex flex-col lg:flex-row justify-between lg:items-center gap-[24px] lg:gap-0">
 			<!-- CTA -->
