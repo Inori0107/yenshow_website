@@ -13,21 +13,9 @@
 			<Button-CTA class="cooperation-btn" :label="$t('view more')" color="white" to="/cooperation"></Button-CTA>
 		</article>
 		<aside class="flex flex-col justify-center items-center -rotate-6">
-			<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-full">
+			<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-[120%]">
 				<div class="marquee" :class="rowIndex % 2 === 0 ? '' : 'marquee--reverse'">
 					<div class="marquee__group">
-						<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
-							<img class="w-[200px] h-[150px] lg:w-[400px] lg:h-[300px]" :src="image" alt="Slide image" />
-						</div>
-					</div>
-
-					<div aria-hidden="true" class="marquee__group">
-						<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
-							<img class="w-[200px] h-[150px] lg:w-[400px] lg:h-[300px]" :src="image" alt="Slide image" />
-						</div>
-					</div>
-
-					<div aria-hidden="true" class="marquee__group">
 						<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
 							<img class="w-[200px] h-[150px] lg:w-[400px] lg:h-[300px]" :src="image" alt="Slide image" />
 						</div>
@@ -185,10 +173,6 @@ onUnmounted(() => {
 <style scoped>
 .bg-overlay {
 	background-color: rgba(33, 42, 55, 0.6); /* 增加透明度，讓文字更加清晰 */
-}
-
-.marquee-background {
-	transition: background-color 0.6s ease;
 }
 
 /* 跑馬燈基本樣式 */

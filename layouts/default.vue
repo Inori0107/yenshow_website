@@ -169,6 +169,12 @@ const linkCTA = ref([
 
 <style scoped>
 .parallax-bg {
-	background: url("/heroPic.jpg") no-repeat fixed center center/cover;
+	background: url("/heroPic.jpg") no-repeat scroll center center / cover;
+}
+
+@screen md {
+	.parallax-bg {
+		background-attachment: fixed;
+	}
 }
 </style>

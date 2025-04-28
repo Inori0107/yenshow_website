@@ -1,15 +1,15 @@
 <template>
-	<section class="relative min-h-screen overflow-hidden flex flex-col justify-center items-center">
+	<section class="relative min-h-screen overflow-hidden flex flex-col justify-center items-center gap-[24px] md:gap-[48px]">
 		<!-- Three.js 背景 -->
 		<canvas ref="threeCanvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
 
 		<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
-		<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10 mt-16">
+		<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10">
 			<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px]" src="/public/yenshow.png" alt="遠岫科技" />
 		</div>
 
 		<!-- 主標語 -->
-		<div ref="heroText" class="text-center text-secondary mt-[30px] sm:mt-[50px] md:mt-[80px] opacity-0 transform translate-y-10 z-10 px-4">
+		<div ref="heroText" class="text-center text-secondary opacity-0 transform translate-y-10 z-10 px-4">
 			<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold leading-tight">
 				智慧防護
 				<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] mt-2">讓安心無所不在</span>
@@ -17,10 +17,7 @@
 		</div>
 
 		<!-- 互動導航區塊 -->
-		<div
-			ref="navContainer"
-			class="flex flex-col lg:flex-row justify-center mt-[12px] md:mt-[24px] gap-[12px] md:gap-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4"
-		>
+		<div ref="navContainer" class="flex flex-col lg:flex-row justify-center gap-[12px] md:gap-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4">
 			<div
 				v-for="(block, index) in blocks"
 				:key="block.id"
