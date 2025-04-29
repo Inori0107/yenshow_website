@@ -38,7 +38,7 @@
 			<!-- 左側內容說明 -->
 			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
 				<div class="relative">
-					<h3 class="text-[20px] sm:text-[24px] md:text-[36px] lg:text-[48px] section-title product-title">YSCentral Professional</h3>
+					<h3 class="text-[20px] sm:text-[24px] md:text-[36px] lg:text-[48px] section-title product-title break-all">YSCentral Professional</h3>
 					<div class="title-decoration absolute bottom-[-5px] left-[-5px] w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
 				</div>
 
@@ -126,6 +126,7 @@ let sharedGeometry = null;
 
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
+const { isMobile } = scrollAnimation;
 
 // 用於存儲創建的波紋元素引用
 let waveElements = [];
@@ -177,32 +178,33 @@ const animate = () => {
 
 		// 為每個六角形應用獨立的波浪動畫
 		hexagons.forEach((hexInfo) => {
-			// 獲取當前六角形
 			const hex = hexInfo.mesh;
 			const distance = hexInfo.distance;
 
-			// 創建基於距離的波浪效果參數
-			const waveSpeed = 0.8; // 波浪速度
-			const waveLength = 8; // 波浪長度
-			const waveHeight = 0.2; // 波浪高度
+			// 波浪效果參數
+			const waveSpeed = 0.8;
+			const waveLength = 8;
+			const waveHeight = 0.2;
 
-			// 計算波動值 - 使波浪從中心向外擴散
+			// 計算波動值
 			const wave = Math.sin(time * waveSpeed - distance / waveLength) * waveHeight;
-
-			// 應用波浪效果到Y坐標
 			hex.position.y = wave;
 
-			// 添加輕微的旋轉
-			const rotationAmount = Math.sin(time * 0.5 + distance * 0.1) * 0.05;
-			hex.rotation.z = rotationAmount;
+			// --- 移動端優化：只在非移動端執行額外計算 ---
+			if (!isMobile.value) {
+				// 添加輕微的旋轉
+				const rotationAmount = Math.sin(time * 0.5 + distance * 0.1) * 0.05;
+				hex.rotation.z = rotationAmount;
 
-			// 輕微的呼吸效果 - 通過距離調整相位
-			const breathingScale = 1 + Math.sin(time * 0.7 + distance * 0.2) * 0.05;
+				// 輕微的呼吸效果
+				const breathingScale = 1 + Math.sin(time * 0.7 + distance * 0.2) * 0.05;
 
-			// 應用到已經顯示的六角形的縮放
-			if (hex.scale.x > 0.1) {
-				hex.scale.set(breathingScale, breathingScale, breathingScale);
+				// 應用到已經顯示的六角形的縮放
+				if (hex.scale.x > 0.1) {
+					hex.scale.set(breathingScale, breathingScale, breathingScale);
+				}
 			}
+			// --- 優化結束 ---
 		});
 	}
 

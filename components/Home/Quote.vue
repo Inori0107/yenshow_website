@@ -21,8 +21,8 @@
 		</div>
 
 		<!-- 引用內容 -->
-		<div class="quote-container relative z-10 max-w-4xl text-center text-[24px] md:text-[36px] text-secondary px-8" style="font-family: 'LXGW WenKai Mono TC'">
-			<div v-for="(sentence, index) in sentences" :key="index" class="quote-sentence mb-6">
+		<div class="quote-container relative z-10 text-center text-[24px] md:text-[36px] text-secondary px-8" style="font-family: 'LXGW WenKai Mono TC'">
+			<div v-for="(sentence, index) in sentences" :key="index" class="quote-sentence">
 				<span v-for="(char, i) in localizedSentence(sentence)" :key="i" class="quote-char">{{ char }}</span>
 			</div>
 
@@ -44,7 +44,7 @@ const { t } = useI18n();
 
 // 使用滾動動畫控制器
 const scrollAnimation = useScrollAnimation();
-const { gsap, ScrollTrigger } = scrollAnimation;
+const { gsap, ScrollTrigger, isMobile } = scrollAnimation;
 
 // 引用語句鍵名
 const sentences = ref(["遠岫科技", "既是一段故事，也是一份使命", "我們期待與每一位客戶攜手", "如白雲般靈活，如遠岫般穩固", "共創晴空般廣闊的願景"]);
@@ -65,7 +65,7 @@ const setupQuoteAnimation = async () => {
 	gsap.set(".quote-char", {
 		opacity: 0,
 		y: 15,
-		filter: "blur(3px)"
+		filter: isMobile.value ? "none" : "blur(3px)"
 	});
 
 	// 設置畫框初始狀態
@@ -206,7 +206,7 @@ const setupQuoteAnimation = async () => {
 			{
 				opacity: 0,
 				y: 15,
-				filter: "blur(3px)"
+				filter: isMobile.value ? "none" : "blur(3px)"
 			},
 			{
 				opacity: 1,
@@ -235,7 +235,7 @@ const setupQuoteAnimation = async () => {
 		{
 			opacity: 0,
 			y: 20,
-			filter: "blur(3px)"
+			filter: isMobile.value ? "none" : "blur(3px)"
 		},
 		{
 			opacity: 1,
@@ -299,28 +299,26 @@ const setupQuoteAnimation = async () => {
 	});
 
 	// 電流流動效果 - 模擬電流在電路間流動
-	const circuitTimeline = gsap.timeline({ repeat: -1 });
-
-	// 添加閃爍效果
-	circuitTimeline.to(".tech-circuit .circuit-ring", {
-		boxShadow: "0 0 15px rgba(58, 209, 152, 0.8), inset 0 0 8px rgba(58, 209, 152, 0.8)",
-		duration: 0.2,
-		stagger: {
-			each: 0.1,
-			repeat: 1,
-			yoyo: true
-		}
-	});
-
-	// 延遲後再次閃爍
-	circuitTimeline.to(
-		".tech-circuit .circuit-ring",
-		{
-			boxShadow: "0 0 5px rgba(58, 209, 152, 0.3), inset 0 0 3px rgba(58, 209, 152, 0.3)",
-			duration: 0.2
-		},
-		"+=1.5"
-	);
+	if (!isMobile.value) {
+		const circuitTimeline = gsap.timeline({ repeat: -1 });
+		circuitTimeline.to(".tech-circuit .circuit-ring", {
+			boxShadow: "0 0 15px rgba(58, 209, 152, 0.8), inset 0 0 8px rgba(58, 209, 152, 0.8)",
+			duration: 0.2,
+			stagger: {
+				each: 0.1,
+				repeat: 1,
+				yoyo: true
+			}
+		});
+		circuitTimeline.to(
+			".tech-circuit .circuit-ring",
+			{
+				boxShadow: "0 0 5px rgba(58, 209, 152, 0.3), inset 0 0 3px rgba(58, 209, 152, 0.3)",
+				duration: 0.2
+			},
+			"+=1.5"
+		);
+	}
 };
 
 onMounted(async () => {
