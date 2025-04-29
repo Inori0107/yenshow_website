@@ -113,10 +113,6 @@ export const useApi = () => {
 
 		// 同樣為 apiAuth 添加語言攔截器
 		apiAuth.interceptors.request.use((config) => {
-			// 檢查是否已經是來自 token 攔截器的 config
-			// if (!config.headers?.Authorization?.startsWith('Bearer')) { // 移除日誌相關的警告
-			// 	console.warn('[Debug] useApi: apiAuth language interceptor running before token interceptor? Skipping Authorization header check logic here.');
-			// }
 			if (config.method?.toLowerCase() === "get") {
 				config.params = {
 					...(config.params || {}),
@@ -197,6 +193,14 @@ export const useApi = () => {
 				() => apiAuth.get(`/api/hierarchy/parents/${itemType}/${itemId}`, { params }) // 假設需要認證
 			);
 			return response?.data?.result?.hierarchy || [];
+		},
+
+		// 新增：獲取指定項目以下的子階層 (對應 HierarchyManager.getSubHierarchy)
+		getSubHierarchy: async (itemType, itemId, params = {}) => {
+			const response = await safeApiCall(
+				() => apiAuth.get(`/api/hierarchy/subtree/${itemType}/${itemId}`, { params }) // 假設需要認證
+			);
+			return response?.data?.result?.hierarchy || null;
 		}
 	};
 

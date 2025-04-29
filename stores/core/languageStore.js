@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-// import { useI18n } from "vue-i18n"; // 不再直接使用 useI18n
 import { useNuxtApp } from "#app"; // 導入 useNuxtApp
 import { computed, ref } from "vue"; // 確保導入 computed 和 ref
 

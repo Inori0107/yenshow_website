@@ -93,7 +93,7 @@ export const useProductsStore = defineStore("productsStore", {
 		/**
 		 * 搜索產品
 		 */
-		async searchProducts(keyword, params = {}) {
+		async searchProducts(key, params = {}) {
 			this.isLoading = true;
 			this.error = null;
 
@@ -103,7 +103,7 @@ export const useProductsStore = defineStore("productsStore", {
 
 				// 搜索參數
 				const searchParams = {
-					keyword,
+					key,
 					page: params.page || this.pagination.page,
 					limit: params.limit || this.pagination.limit,
 					sort: params.sort || "createdAt",

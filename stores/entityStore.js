@@ -83,7 +83,7 @@ export const createEntityStore = (entityType, options = {}) => {
 			},
 
 			// 搜尋項目
-			async search(keyword, params = {}) {
+			async search(key, params = {}) {
 				this.isLoading = true;
 				this.error = null;
 
@@ -92,7 +92,7 @@ export const createEntityStore = (entityType, options = {}) => {
 					const languageStore = useLanguageStore();
 
 					const searchParams = {
-						keyword,
+						key,
 						page: params.page || this.pagination.page,
 						limit: params.limit || this.pagination.limit,
 						sort: params.sort || "createdAt",
