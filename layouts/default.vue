@@ -135,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import ButtonCTA from "../components/common/Button-CTA.vue";
 import MenuCTA from "../components/common/Menu-CTA.vue";
 import LanguageSwitcher from "../components/common/LanguageSwitcher.vue";
@@ -165,6 +165,15 @@ const linkCTA = ref([
 		extra: true
 	}
 ]);
+
+// 添加 onMounted 鉤子來控制滾動恢復
+onMounted(() => {
+	if ("scrollRestoration" in history) {
+		history.scrollRestoration = "manual";
+	}
+	// 確保頁面載入時滾動到頂部
+	window.scrollTo(0, 0);
+});
 </script>
 
 <style scoped>

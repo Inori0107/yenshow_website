@@ -128,6 +128,28 @@ const setupTextAnimation = () => {
 	});
 };
 
+// 在 setup 或 onMounted 中
+const isMobile = ref(false);
+onMounted(() => {
+	const mediaQuery = window.matchMedia("(max-width: 767px)"); // 假設 md 斷點是 768px
+	isMobile.value = mediaQuery.matches;
+	// 可以添加監聽器處理窗口大小變化
+});
+
+// 在 setupPinEffects 中
+scrollAnimation.createPinnedSection({
+	scrub: 1.5, // 或者調整後的值
+	snap: isMobile.value
+		? false
+		: {
+				// 如果是移動端，禁用 snap
+				snapTo: (progress, direction) => (direction > 0 ? 1 : 0),
+				duration: { min: 0.5, max: 1.2 },
+				delay: 0.1,
+				ease: "power2.inOut"
+		  }
+});
+
 onMounted(async () => {
 	try {
 		// 等待 DOM 更新完成後再初始化
