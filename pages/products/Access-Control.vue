@@ -12,7 +12,7 @@
 		<div class="min-h-screen flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
 			<!-- title -->
 			<h1 class="text-[48px] md:text-[64px] lg:text-[96px] xl:text-[128px] opacity-50 mt-[24px] md:mt-[48px] ms-[32px] md:ms-[48px] lg:ms-[64px] font-bold">
-				可視對講
+				門禁管理
 			</h1>
 			<!-- List CTA -->
 			<div>
@@ -121,8 +121,7 @@ const productsError = ref(null);
 const selectedCategory = ref(null);
 const selectedSubItem = ref(null);
 
-// 假設 'video-intercom' 是此系列在資料庫中的 ID 或唯一標識符
-const SERIES_ID = "67ed0511296210e234e0ddd7";
+const SERIES_ID = "67ed0512296210e234e0de10";
 
 // 獲取本地化名稱的輔助函數
 const getCategoryName = (item) => {

@@ -147,7 +147,7 @@ const linkCTA = ref([
 		links: [
 			{ label: "About us", to: "/" },
 			{ label: "Success Stories", to: "/Success-Stories" },
-			// { label: "Products", to: "/products/" },
+			{ label: "Products", to: "/Products" },
 			{ label: "News & Events", to: "/News-Events" },
 			{ label: "Support & Resources", to: "/Support-Resources" }
 		],
@@ -156,11 +156,11 @@ const linkCTA = ref([
 	{
 		title: "Products",
 		links: [
-			// { label: "Video Intercom", to: "/products/Video-Intercom" },
-			// { label: "Access Control", to: "/products/Access-Control" },
-			// { label: "Surveillance & Monitoring", to: "/products/Surveillance-Monitoring" },
-			// { label: "Security Solutions", to: "/products/Security-Solutions" },
-			// { label: "Devices & Accessories", to: "/products/Devices-Accessories" }
+			{ label: "Video Intercom", to: "/Products/Video-Intercom" },
+			{ label: "Access Control", to: "/Products/Access-Control" },
+			{ label: "Surveillance & Monitoring", to: "/Products/Surveillance-Monitoring" },
+			{ label: "Security Solutions", to: "/Products/Security-Solutions" },
+			{ label: "Devices & Accessories", to: "/Products/Devices-Accessories" }
 		],
 		extra: true
 	}
