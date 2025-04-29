@@ -6,7 +6,7 @@
 			<!-- 頂部功能列 -->
 			<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
 				<Hexagon imageSrc="/YSCP/board-game.png" title="數位看板" />
-				<Hexagon imageSrc="/YSCP/intelligent-analytics.png" title="智能分析" />
+				<Hexagon imageSrc="/YSCP/intelligent-analytics.png" title="智慧分析" />
 				<Hexagon imageSrc="/YSCP/vehicle.png" title="車輛" />
 				<Hexagon imageSrc="/YSCP/visitor.png" title="訪客" />
 			</div>
@@ -15,9 +15,7 @@
 			<div ref="hexagonRow2" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]">
 				<Hexagon imageSrc="/YSCP/image.png" title="影像" />
 				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
-				<div class="w-full flex flex-col gap-[4px] items-center">
-					<span class="text-[10px] sm:text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</span>
-				</div>
+				<div class="w-full flex flex-col gap-[4px] items-center text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</div>
 				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
 				<Hexagon imageSrc="/YSCP/guarded-entrance.png" title="門禁" />
 			</div>
@@ -131,6 +129,12 @@ const scrollAnimation = inject("scrollAnimation");
 
 // 用於存儲創建的波紋元素引用
 let waveElements = [];
+
+// Store timeline instances if they need to be killed specifically
+let featureTl,
+	yscpTextTl,
+	circlesMasterTl,
+	waveTls = []; // waveTls needs to be populated in createWaveAnimation
 
 // 初始化 Three.js
 const initThree = () => {
@@ -250,43 +254,58 @@ const setupSectionBgAnimation = () => {
 const setupHexagonRowAnimations = async () => {
 	const rows = [hexagonRow1.value, hexagonRow2.value, hexagonRow3.value];
 	const hexagonElements = document.querySelectorAll(".hexagon");
+	const hexagonContents = document.querySelectorAll(".hexagon .hexagon-content"); // Select inner content
 
-	// 確保元素存在
-	if (!rows.every(Boolean) || !hexagonElements.length) {
+	if (!rows.every(Boolean) || !hexagonElements.length || !hexagonContents.length) {
+		// Check for content too
 		console.warn("服務特點區部分元素未找到，動畫可能無法執行");
 		return;
 	}
 
-	// 強制設定初始狀態
 	gsap.set(rows, { opacity: 0, y: 50 });
 	gsap.set(hexagonElements, { opacity: 0, y: 30 });
+	gsap.set(hexagonContents, { opacity: 0, y: 10 }); // Set initial state for content slightly lower and invisible
 
-	// 創建單一時間軸
-	const featureTl = gsap.timeline({
+	// Store the timeline instance
+	featureTl = gsap.timeline({
+		// Assign to featureTl
 		scrollTrigger: {
 			trigger: ".feature-section",
 			start: "top 60%",
-			toggleActions: "play none none reverse" // 統一設置
+			toggleActions: "play none none reverse"
 		}
 	});
 
-	// 1. 行動畫 - 按原延遲加入時間軸
+	// 1. Row animations
 	featureTl
-		.to(rows[0], { opacity: 1, y: 0, duration: 1.2 }, 1.0) // 在 1.0s 時開始
-		.to(rows[1], { opacity: 1, y: 0, duration: 1.2 }, 1.3) // 在 1.3s 時開始
-		.to(rows[2], { opacity: 1, y: 0, duration: 1.2 }, 1.6); // 在 1.6s 時開始
+		.to(rows[0], { opacity: 1, y: 0, duration: 1.2 }, 1.0)
+		.to(rows[1], { opacity: 1, y: 0, duration: 1.2 }, 1.3)
+		.to(rows[2], { opacity: 1, y: 0, duration: 1.2 }, 1.6);
 
-	// 2. 六角形元素動畫 - 按原延遲和 stagger 加入時間軸
+	// 2. Hexagon container animation
 	featureTl.to(
 		hexagonElements,
 		{
 			opacity: 1,
 			y: 0,
 			duration: 0.6,
-			stagger: 0.1, // 保留原 stagger
-			ease: "back.out(1.7)" // 保留原 ease
+			stagger: 0.1,
+			ease: "back.out(1.7)"
 		},
-		2.0 // 在 2.0s 時開始 stagger 動畫
+		2.0 // Start container animation at 2.0s
+	);
+
+	// 3. Hexagon content animation (slightly delayed)
+	featureTl.to(
+		hexagonContents,
+		{
+			opacity: 1,
+			y: 0, // Animate content opacity and y
+			duration: 0.5,
+			stagger: 0.08, // Stagger content slightly less than containers if needed
+			ease: "power2.out"
+		},
+		2.2 // Start content animation slightly after containers (e.g., 2.0s + 0.2s delay)
 	);
 };
 
@@ -310,6 +329,8 @@ const createWaveAnimation = (container) => {
 
 	// 創建波紋元素陣列以便追蹤
 	const waves = [];
+
+	waveTls = []; // Clear previous wave timelines if function is called again
 
 	for (let i = 0; i < waveCount; i++) {
 		const wave = document.createElement("div");
@@ -337,12 +358,12 @@ const createWaveAnimation = (container) => {
 				delay: linearDelay,
 				repeatDelay: totalDuration - visibleDuration,
 				onComplete: () => {
-					// 檢查元素是否仍然在DOM中
 					if (wave && !document.body.contains(wave)) {
-						waveTl.kill(); // 如果元素已從DOM中移除，則殺死動畫時間軸
+						waveTl.kill();
 					}
 				}
 			});
+			waveTls.push(waveTl); // Store the timeline instance
 
 			waveTl
 				.fromTo(
@@ -374,60 +395,62 @@ const setupYSCPAnimations = async () => {
 	gsap.set(".benefit-section h4", { y: 30, opacity: 0 });
 	// ---------------------------------
 
-	// 建立左側文字時間軸動畫
-	const tl = scrollAnimation.createTimelineAnimation({
+	// Store the timeline instances
+	yscpTextTl = scrollAnimation.createTimelineAnimation({
+		// Assign to yscpTextTl
 		trigger: "#yscp-article",
 		start: "top 70%",
 		toggleActions: "play none none reverse"
 	});
 
 	// 1. 整個區塊淡入 (使用 to，因為 gsap.set 已設 from)
-	tl.to(yscpSection.value, { opacity: 1, y: 0, duration: isMobile ? 0.8 : 1.2, ease: "power2.out" });
+	yscpTextTl.to(yscpSection.value, { opacity: 1, y: 0, duration: isMobile ? 0.8 : 1.2, ease: "power2.out" });
 
 	// 2. 標題與裝飾線條 (使用 to)
-	tl.to(
+	yscpTextTl.to(
 		".product-title",
 		{ opacity: 1, scale: 1, textShadow: "0 0 5px rgba(221, 28, 28, 0.3)", color: "#dd1c1c", duration: isMobile ? 0.8 : 1.2, ease: "power3.out" },
 		"-=0.9"
 	);
 
 	// 3. 標題裝飾線 (使用 to)
-	tl.to(".title-decoration", { scaleX: 1, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.8");
+	yscpTextTl.to(".title-decoration", { scaleX: 1, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.8");
 
 	// 4. 特性標籤 (使用 to)
-	tl.to(".feature-tag", { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.5)" }, "-=0.5"); // 注意 ease 保持原樣
+	yscpTextTl.to(".feature-tag", { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.5)" }, "-=0.5"); // 注意 ease 保持原樣
 
 	// 5. 描述文字 (使用 to)
-	tl.to("h5", { y: 0, opacity: 0.8, duration: 0.8, ease: "power2.out" }, "-=0.3");
+	yscpTextTl.to("h5", { y: 0, opacity: 0.8, duration: 0.8, ease: "power2.out" }, "-=0.3");
 
 	// 6. 裝飾線 (使用 to)
-	tl.to(".benefit-decorative-line", { height: "80%", duration: 1.2, ease: "power2.inOut" }, "-=0.5");
+	yscpTextTl.to(".benefit-decorative-line", { height: "80%", duration: 1.2, ease: "power2.inOut" }, "-=0.5");
 
 	// 7. 主要描述文字 (使用 to)
-	tl.to(".benefit-section h4", { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, "-=0.8");
+	yscpTextTl.to(".benefit-section h4", { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, "-=0.8");
 
 	// --- 為右側圓圈添加 gsap.set ---
 	const circlesArray = [circleOne.value, circleTwo.value, circleThree.value];
 	gsap.set(circlesArray, { scale: 0.7, opacity: 0, y: 30 });
 	// -----------------------------
 
-	// 功能圓圈動畫 - 使用序列風格
-	const masterTimeline = gsap.timeline({
+	// Store the timeline instances
+	circlesMasterTl = gsap.timeline({
+		// Assign to circlesMasterTl
 		scrollTrigger: {
 			trigger: ".feature-circles",
 			start: "top 70%",
-			toggleActions: "play none none reverse" // 確保設置
+			toggleActions: "play none none reverse"
 		},
 		delay: animationDelay
 	});
 
 	// 使用 to，因為 gsap.set 已設 from
 	circlesArray.forEach((circle, index) => {
-		masterTimeline.to(circle, { scale: 1, opacity: 1, y: 0, duration: isMobile ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" }, index * (isMobile ? 0.2 : 0.3));
+		circlesMasterTl.to(circle, { scale: 1, opacity: 1, y: 0, duration: isMobile ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" }, index * (isMobile ? 0.2 : 0.3));
 	});
 
 	// 波紋動畫添加在最後
-	masterTimeline.call(
+	circlesMasterTl.call(
 		() => {
 			if (featureCircles.value && document.body.contains(featureCircles.value)) {
 				waveElements = createWaveAnimation(featureCircles.value);
@@ -617,25 +640,40 @@ onUnmounted(() => {
 	}
 	window.removeEventListener("resize", onWindowResize);
 
-	// 清理 GSAP 動畫
-	if (gsap && gsap.globalTimeline) {
-		gsap.globalTimeline.clear(); // 清除所有 GSAP 動畫
-	}
+	// --- More specific GSAP cleanup ---
+	// Kill specific timelines created in this component
+	if (featureTl) featureTl.kill();
+	if (yscpTextTl) yscpTextTl.kill(); // Assuming scrollAnimation helper returns the timeline or handles its own cleanup
+	if (circlesMasterTl) circlesMasterTl.kill();
+	waveTls.forEach((tl) => tl.kill()); // Kill wave timelines
 
-	// 清理波紋元素
+	// It's generally safer to kill triggers associated with elements in this component
+	// rather than killing all triggers globally, unless you are sure.
+	// The scrollAnimation helper might handle this, or you can kill triggers based on their element:
+	// Example: ScrollTrigger.killAll(true, true, true); // This is still broad
+	// Or find specific triggers if needed:
+	if (scrollAnimation && scrollAnimation.ScrollTrigger && scrollAnimation.ScrollTrigger.value) {
+		// Let's stick to the previous method which seems robust if the helper manages triggers well
+		const triggers = scrollAnimation.ScrollTrigger.value.getAll();
+		// Filter triggers related to this component if possible, otherwise kill all managed by the helper instance
+		triggers.forEach((trigger) => {
+			// You could potentially check trigger.vars.trigger element if needed
+			trigger.kill();
+		});
+	}
+	// --- End specific GSAP cleanup ---
+
+	// Cleanup wave DOM elements
 	waveElements.forEach((wave) => {
-		if (wave && document.body.contains(wave)) {
-			wave.remove();
+		if (wave && wave.parentNode) {
+			// Check parentNode before removing
+			wave.parentNode.removeChild(wave);
 		}
 	});
 	waveElements = [];
+	waveTls = [];
 
-	// 清理ScrollTrigger實例，防止記憶體洩漏
-	if (scrollAnimation && scrollAnimation.ScrollTrigger && scrollAnimation.ScrollTrigger.value) {
-		const triggers = scrollAnimation.ScrollTrigger.value.getAll();
-		triggers.forEach((trigger) => trigger.kill());
-	}
-
+	// Cleanup Three.js
 	if (renderer) {
 		renderer.dispose();
 		renderer = null;
@@ -649,10 +687,24 @@ onUnmounted(() => {
 		hexMaterial = null;
 	}
 	if (scene) {
-		scene.clear();
+		// Dispose geometries and materials within the scene if necessary
+		scene.traverse((object) => {
+			if (object.geometry) {
+				object.geometry.dispose();
+			}
+			if (object.material) {
+				// Handle arrays of materials
+				if (Array.isArray(object.material)) {
+					object.material.forEach((material) => material.dispose());
+				} else {
+					object.material.dispose();
+				}
+			}
+		});
+		scene.clear(); // Removes all objects, but doesn't dispose them automatically
 		scene = null;
 	}
-	hexagons = [];
+	hexagons = []; // Clear the hexagons array
 });
 </script>
 

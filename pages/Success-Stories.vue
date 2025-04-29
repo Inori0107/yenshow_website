@@ -37,7 +37,7 @@
 					</div>
 				</div>
 
-				<!-- 服務經驗 -->
+				<!-- 服務年資 -->
 				<div class="block-bg rounded-xl p-6 transition-all duration-500">
 					<div class="absolute inset-0 rounded-xl overflow-hidden">
 						<div class="block-pattern pattern-3"></div>
@@ -58,7 +58,7 @@
 	<div class="bg-primary rounded-[100px] p-12">
 		<section ref="sectionRef" class="relative min-h-screen">
 			<!-- 企業與商業合作 -->
-			<article ref="businessRef" class="mb-12 absolute inset-0 flex flex-col justify-center items-center opacity-0">
+			<article ref="businessRef" class="absolute inset-0 flex flex-col justify-center items-center">
 				<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">企業與商業合作</h4>
 				<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					<div v-for="(feature, index) in business_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
@@ -68,6 +68,7 @@
 					</div>
 				</div>
 			</article>
+
 			<!-- 公共與專業場域支援 -->
 			<article ref="publicRef" class="absolute inset-0 flex flex-col justify-center items-center opacity-0">
 				<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">公共與專業場域支援</h4>
@@ -81,50 +82,23 @@
 			</article>
 		</section>
 	</div>
-	<!-- 案例介紹 -->
-	<section class="container flex flex-col justify-center items-center bg-[#F2F2F2] min-h-screen my-[128px] lg:my-[512px] py-[64px] px-4 md:px-8 rounded-[50px]">
-		<h2 class="text-[24px] md:text-[48px] lg:text-[64px] font-bold mb-[64px]">實績案例</h2>
-		<!-- 案例列表 -->
-		<div class="flex flex-col w-full max-w-7xl gap-[96px]">
-			<article v-for="(example, index) in examples" :key="index" class="w-full grid grid-cols-1 md:grid-cols-2 gap-[32px] md:gap-[48px]">
-				<!-- 左側內容 -->
-				<div class="flex flex-col justify-center gap-[12px] md:gap-[24px]">
-					<!-- <h3 class="text-[24px] md:text-[36px] lg:text-[48px] font-bold">
-						{{ example.title }}
-					</h3> -->
-					<h4 class="text-[21px] md:text-[28px] lg:text-[36px] font-bold">
-						{{ example.subtitle }}
-					</h4>
-
-					<!-- 詳細資訊 -->
-					<div class="border-s-2 border-primary px-[24px] flex flex-col gap-[12px]">
-						<span v-for="(detail, dIndex) in example.details" :key="dIndex" class="text-[12px] md:text-[16px] lg:text-[24px]">
-							{{ detail.label }}：{{ detail.value }}
-						</span>
-					</div>
-
-					<!-- 描述 -->
-					<p class="text-[12px] md:text-[16px] lg:text-[24px]">
-						{{ example.description }}
-					</p>
-				</div>
-
-				<!-- 右側圖片 -->
-				<div class="relative w-full aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
-					<img :src="example.image" :alt="example.title" class="absolute inset-0 w-full h-full object-cover" />
-				</div>
-			</article>
-		</div>
-	</section>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useScrollAnimation } from "~/composables/useScrollAnimation";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// 使用自定義滾動動畫
-const scrollAnimation = useScrollAnimation();
+gsap.registerPlugin(ScrollTrigger);
+
+// --- Refs for Entrance Animation ---
+const titleRef = ref(null);
+const heroBlocks = ref(null);
+
+// --- Refs for ScrollTrigger Animation ---
+const sectionRef = ref(null);
+const businessRef = ref(null);
+const publicRef = ref(null);
 
 const business_feature = ref([
 	{
@@ -156,8 +130,8 @@ const public_feature = ref([
 		image: "/corporation/hospital.svg"
 	},
 	{
-		title: "學校和補習班",
-		description: "提供學校和補習班門禁出勤，安全監控設備。",
+		title: "學校",
+		description: "提供學校安全解決方案，包括學校、幼兒園等。",
 		image: "/corporation/school.svg"
 	},
 	{
@@ -167,136 +141,122 @@ const public_feature = ref([
 	}
 ]);
 
-const sectionRef = ref(null);
-const businessRef = ref(null);
-const publicRef = ref(null);
+onMounted(() => {
+	// --- Entrance Animation ---
+	if (titleRef.value && heroBlocks.value) {
+		gsap.set(titleRef.value, { autoAlpha: 0, y: 30 });
+		gsap.set(heroBlocks.value.children, { autoAlpha: 0, y: 30 });
 
-// 添加入口動畫相關引用
-const heroBlocks = ref(null);
-const titleRef = ref(null);
-
-// 新增案例資料
-const examples = ref([
-	{
-		title: "合總君悅",
-		subtitle: "集合式住宅建築",
-		details: [
-			{ label: "基地位置", value: "雲林縣" },
-			{ label: "基地面積", value: "541坪" },
-			{ label: "產品類型", value: "電梯大樓" },
-			{ label: "戶數", value: "91戶、2戶店鋪" }
-		],
-		description:
-			"該項目使用遠岫全往可視對講系統，採用10寸室內機YS-9510，4.3吋人臉辨識住戶門口機,整社區人臉辨識通行不須再攜帶磁卡。其他配套產品包含：視頻監控前後端產品、傳輸、門禁、集中管理平臺軟體。",
-		image: "/corporation/example01.png"
+		const entranceTl = gsap.timeline({ delay: 0.2 }); // Add a small delay
+		entranceTl
+			.to(titleRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
+			.to(heroBlocks.value.children, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" }, "-=0.4"); // Start slightly before title finishes
 	}
-]);
 
-onMounted(async () => {
-	// 初始化滾動插件
-	await scrollAnimation.initScrollPlugins();
+	// --- ScrollTrigger Animations (Existing Code) ---
+	const businessTitle = businessRef.value.querySelector("h4");
+	const businessFeatures = businessRef.value.querySelectorAll(".feature");
+	const publicTitle = publicRef.value.querySelector("h4");
+	const publicFeatures = publicRef.value.querySelectorAll(".feature");
 
-	// 入口動畫
-	const entranceTl = scrollAnimation.gsap.timeline({ delay: 0.5 });
-	entranceTl
-		.fromTo(titleRef.value, { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 1 })
-		.fromTo(heroBlocks.value.querySelectorAll(".block-bg"), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.2, duration: 0.8 }, "-=0.5");
+	ScrollTrigger.matchMedia({
+		// --- 大螢幕 (>= 768px) ---
+		"(min-width: 768px)": function () {
+			// --- 初始狀態設定 ---
+			gsap.set(businessRef.value, { autoAlpha: 1 });
+			gsap.set(publicRef.value, { autoAlpha: 0 });
+			gsap.set([businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], {
+				autoAlpha: 0,
+				y: 30
+			});
 
-	// 檢查是否為桌面版
-	const isMdScreen = window.matchMedia("(min-width: 768px)").matches;
+			// --- 主時間軸設定 ---
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: sectionRef.value,
+					start: "top top",
+					end: "+=350%",
+					scrub: 1,
+					pin: true,
+					markers: false
+				}
+			});
 
-	if (isMdScreen) {
-		// 創建固定區塊動畫
-		const pinnedSection = scrollAnimation.createPinnedSection({
-			trigger: sectionRef.value,
-			start: "top top",
-			end: "+=200%",
-			scrub: 1.5, // 增加滾動的平滑度
-			markers: false
-		});
+			// --- 動畫序列編排 ---
+			tl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" })
+				.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5")
+				.to(businessTitle, { autoAlpha: 0, y: -30, duration: 1, ease: "power2.in" }, "+=1")
+				.to(businessFeatures, { autoAlpha: 0, y: -30, stagger: 0.2, duration: 1, ease: "power2.in" }, "<+0.3")
+				.set(businessRef.value, { autoAlpha: 0 }, "<+0.5")
+				.set(publicRef.value, { autoAlpha: 1 }, "<+0.5")
+				.to(publicTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "<+0.2")
+				.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5");
 
-		// 創建內容過渡時間軸
-		const contentTimeline = scrollAnimation.createTimelineAnimation({
-			trigger: sectionRef.value,
-			start: "top top",
-			end: "+=200%",
-			scrub: 1.5, // 和固定區塊保持一致
-			toggleActions: "play none none reverse"
-		});
+			// 返回一個清理函數，當條件不再匹配時執行
+			return () => {
+				if (tl && tl.scrollTrigger) {
+					tl.scrollTrigger.kill();
+				}
+				tl.kill(); // 清理 timeline 本身
+				// 重置樣式，避免影響手機版佈局
+				gsap.set([businessRef.value, publicRef.value, businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], { clearProps: "all" });
+			};
+		},
 
-		if (contentTimeline) {
-			// 第一部分動畫 - 企業合作
-			contentTimeline
-				.fromTo(businessRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-				.fromTo(
-					businessRef.value.querySelectorAll(".feature"),
-					{ opacity: 0, y: 30 },
-					{
-						opacity: 1,
-						y: 0,
-						stagger: 0.2,
-						duration: 0.8,
-						ease: "back.out(1.7)"
-					},
-					"-=0.5"
-				)
-				// 滾動到中間位置
-				.to(
-					businessRef.value,
-					{
-						opacity: 0,
-						y: -50,
-						duration: 2,
-						ease: "power2.inOut"
-					},
-					"+=1" // 稍微延遲，讓第一部分有更多顯示時間
-				)
-				// 第二部分動畫 - 公共支援
-				.fromTo(publicRef.value, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out" })
-				.fromTo(
-					publicRef.value.querySelectorAll(".feature"),
-					{ opacity: 0, y: 30 },
-					{
-						opacity: 1,
-						y: 0,
-						stagger: 0.2,
-						duration: 0.8,
-						ease: "back.out(1.7)"
-					},
-					"-=0.5"
-				);
+		// --- 小螢幕 (< 768px) ---
+		"(max-width: 767px)": function () {
+			const mobileTriggers = []; // 用於收集手機版的 ScrollTriggers
+
+			// 初始狀態設定 (手機版)
+			gsap.set([businessRef.value, publicRef.value], { autoAlpha: 1 }); // 容器可見
+			gsap.set([businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], { autoAlpha: 0, y: 20 }); // 內容準備進場
+
+			// 為 Business 區塊創建簡單進場動畫
+			const businessTl = gsap
+				.timeline({ paused: true })
+				.to(businessTitle, { autoAlpha: 1, y: 0, duration: 0.6 })
+				.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
+
+			mobileTriggers.push(
+				ScrollTrigger.create({
+					trigger: businessRef.value,
+					start: "top 85%",
+					animation: businessTl,
+					toggleActions: "play none none none", // 進入時播放一次
+					once: true // 確保只觸發一次
+				})
+			);
+
+			// 為 Public 區塊創建簡單進場動畫
+			const publicTl = gsap
+				.timeline({ paused: true })
+				.to(publicTitle, { autoAlpha: 1, y: 0, duration: 0.6 })
+				.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
+
+			mobileTriggers.push(
+				ScrollTrigger.create({
+					trigger: publicRef.value,
+					start: "top 85%",
+					animation: publicTl,
+					toggleActions: "play none none none",
+					once: true
+				})
+			);
+
+			// 返回清理函數
+			return () => {
+				mobileTriggers.forEach((trigger) => trigger.kill());
+				if (businessTl) businessTl.kill();
+				if (publicTl) publicTl.kill();
+				// 重置樣式
+				gsap.set([businessRef.value, publicRef.value, businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], { clearProps: "all" });
+			};
+		},
+
+		// --- 通用設定 (可選) ---
+		all: function () {
+			// 這裡可以放所有螢幕尺寸都需要的設定 (如果有的話)
 		}
-
-		// 為案例區塊添加入場動畫
-		scrollAnimation.createElementEntrance({
-			elements: ".flex.flex-col.w-full.max-w-7xl > article",
-			trigger: ".bg-[#F2F2F2]",
-			start: "top 70%",
-			fromY: 50,
-			fromOpacity: 0,
-			duration: 1,
-			staggerAmount: 0.3
-		});
-	} else {
-		// 手機版直接顯示所有內容
-		scrollAnimation.gsap.set([businessRef.value, publicRef.value], { opacity: 1 });
-		scrollAnimation.gsap.set([...businessRef.value.querySelectorAll(".feature"), ...publicRef.value.querySelectorAll(".feature")], { opacity: 1 });
-
-		// 為案例區塊添加簡單的淡入效果
-		scrollAnimation.createElementEntrance({
-			elements: ".flex.flex-col.w-full.max-w-7xl > article",
-			trigger: ".bg-[#F2F2F2]",
-			start: "top 90%",
-			fromY: 30,
-			fromOpacity: 0,
-			duration: 0.8
-		});
-	}
-
-	// 監聽螢幕變化
-	window.matchMedia("(min-width: 768px)").addEventListener("change", () => {
-		// 重新整理頁面以重新初始化動畫
-		window.location.reload();
 	});
 });
 </script>
@@ -313,6 +273,12 @@ onMounted(async () => {
 		position: relative !important;
 		opacity: 1 !important;
 		transform: none !important;
+		margin-bottom: 4rem; /* 在手機版增加區塊間距 */
+	}
+
+	/* 移除最後一個 article 的 margin-bottom */
+	article:last-child {
+		margin-bottom: 0;
 	}
 }
 
