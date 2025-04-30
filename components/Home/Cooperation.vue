@@ -10,11 +10,7 @@
 				>{{ $t("cooperation description line1") }}<br />
 				{{ $t("cooperation description line2") }}</span
 			>
-<<<<<<< HEAD
 			<Button-CTA class="cooperation-btn" :label="$t('view more')" color="white" to="/Success-Stories"></Button-CTA>
-=======
-			<Button-CTA class="cooperation-btn" :label="$t('view more')" color="white" to="/success-stories"></Button-CTA>
->>>>>>> 39ccc7583b05316281a0b397737b755a3b3e1aa0
 		</article>
 		<aside class="flex flex-col justify-center items-center -rotate-6">
 			<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-[120%]">

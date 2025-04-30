@@ -11,7 +11,7 @@
 				class="bg-gray-50 p-4 rounded-lg hover:shadow-lg transition-all duration-300 w-72 flex-shrink-0"
 				@click="viewProduct(product)"
 			>
-				<div class="aspect-square bg-gray-100 rounded-md mb-4">
+				<div class="aspect-square bg-gray-100 rounded-md mb-4 cursor-pointer">
 					<img
 						v-if="product.images && product.images.length > 0"
 						:src="product.images[0]"

@@ -206,8 +206,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, inject, onUnmounted } from "vue";
-import { useGlobalSearch } from "~/components/composables/useGlobalSearch";
+import { ref, onMounted, inject, onUnmounted, watch } from "vue";
+import { useGlobalSearch } from "~/composables/useGlobalSearch";
 
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
@@ -218,16 +218,13 @@ const searchInput = ref(null);
 
 // 全局搜尋 Composable
 const {
-	isVisible, // GlobalSearch 用來控制 modal 可見性，此處不用
 	isLoading,
 	keyword,
-	results, // Raw results from store
 	activeTab,
 	resultCounts,
 	hasResults,
 	currentTabResults, // Results filtered by activeTab
 	recentSearches,
-	closeSearch, // GlobalSearch 用來關閉 modal，此處不用
 	setActiveTab,
 	debouncedSearch,
 	performSearch, // 直接觸發搜尋，會更新 store
@@ -277,8 +274,6 @@ const handleResultClick = (entityType, item) => {
 	if (blurTimeout) clearTimeout(blurTimeout);
 	navigateToResult(entityType, item);
 	closeResultsPanel();
-	// clearSearch(); // navigateToResult 內部通常會處理清除或重置
-	// keyword.value = ""; // 可以選擇是否清空輸入框
 };
 
 // 處理最近搜尋項點擊
@@ -301,7 +296,6 @@ const clearInputAndSearch = () => {
 const clearRecentSearchesAndClose = () => {
 	clearRecentSearches();
 	searchInput.value?.focus(); // 清除後聚焦，方便用戶輸入
-	// showResults 保持 true，因為清空後會顯示「輸入關鍵字...」
 };
 
 // Enter 鍵觸發搜索（如果需要立即搜索）
@@ -355,8 +349,16 @@ onMounted(async () => {
 
 onUnmounted(() => {
 	if (blurTimeout) clearTimeout(blurTimeout);
-	// 清理 GSAP ScrollTriggers
-	ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+	try {
+		// 只有當 ScrollTrigger 存在且 getAll 是函數時才執行
+		if (ScrollTrigger && typeof ScrollTrigger.getAll === "function") {
+			ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+		} else {
+			console.warn("ScrollTrigger.getAll is not available or ScrollTrigger is not correctly defined. Cannot kill triggers.");
+		}
+	} catch (error) {
+		console.error("Error during ScrollTrigger cleanup:", error);
+	}
 });
 </script>
 
