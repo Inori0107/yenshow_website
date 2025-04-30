@@ -82,6 +82,48 @@
 			</article>
 		</section>
 	</div>
+
+	<!-- Success Cases Section -->
+	<section class="min-h-screen flex flex-col justify-center">
+		<!-- Light background -->
+		<div class="container mx-auto px-4">
+			<h2 class="text-3xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-secondary">實績案例</h2>
+
+			<!-- Single Case Example -->
+			<div
+				class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white p-8 md:p-12 rounded-2xl shadow-lg relative overflow-hidden border border-gray-100"
+			>
+				<!-- Left Column: Text Details -->
+				<div class="w-full md:w-1/2 space-y-6 z-10 order-2 md:order-1">
+					<h3 class="text-2xl md:text-3xl font-bold text-neutral-800">合總君悅</h3>
+					<p class="text-lg md:text-xl text-neutral-600">集合式住宅建案</p>
+					<div class="border-l-4 border-blue-500 pl-4 space-y-2 text-gray-700">
+						<p><strong class="font-medium text-gray-800">基地位置：</strong> 雲林縣斗南鎮延平路二段455號旁</p>
+						<p><strong class="font-medium text-gray-800">基地面積：</strong> 541坪</p>
+						<p><strong class="font-medium text-gray-800">產品類型：</strong> 電梯大樓</p>
+						<p><strong class="font-medium text-gray-800">坪數規劃：</strong> 23-34坪</p>
+						<p><strong class="font-medium text-gray-800">戶數：</strong> 91戶、2戶店鋪</p>
+					</div>
+					<p class="text-sm md:text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-md border border-gray-200">
+						該項目使用遠岫全住可視對講系統，採用10寸室內機YS-9510，4.3吋人臉辨識住戶門口機，整社區人臉辨識通行不須再攜帶磁卡。其他配套產品包含：視頻監控前後端產品、傳輸、門禁、集中管理平臺軟體。
+					</p>
+				</div>
+
+				<!-- Right Column: Image -->
+				<div class="w-full md:w-1/2 z-10 order-1 md:order-2">
+					<!-- TODO: Replace with actual image path -->
+					<!-- <img src="/success_cases/case_01.jpg" alt="合總君悅 建案外觀" class="rounded-lg shadow-md w-full h-auto object-cover aspect-[4/3]" /> -->
+				</div>
+
+				<!-- Pagination Dots (Simple) -->
+				<div class="absolute bottom-6 right-8 flex space-x-2 z-10">
+					<span class="w-3 h-3 bg-blue-500 rounded-full cursor-pointer"></span>
+					<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
+					<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
+				</div>
+			</div>
+		</div>
+	</section>
 </template>
 
 <script setup>

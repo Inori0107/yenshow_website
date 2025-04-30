@@ -5,10 +5,21 @@ export function useScrollAnimation() {
 	const ScrollTrigger = ref(null);
 	const ScrollToPlugin = ref(null);
 	const isInitialized = ref(false);
+	const isMobile = ref(false);
+
+	// Handle resize function to update isMobile
+	let resizeHandler = null;
+	const updateIsMobile = () => {
+		if (typeof window !== "undefined") {
+			const mediaQuery = window.matchMedia("(max-width: 767px)"); // Assume md breakpoint is 768px
+			isMobile.value = mediaQuery.matches;
+		}
+	};
 
 	// 初始化GSAP插件
 	const initScrollPlugins = async () => {
 		if (isInitialized.value) return { ScrollTrigger: ScrollTrigger.value, ScrollToPlugin: ScrollToPlugin.value };
+		if (typeof window === "undefined") return { ScrollTrigger: null, ScrollToPlugin: null }; // Avoid running on server
 
 		try {
 			const ST = await import("gsap/ScrollTrigger");
@@ -19,6 +30,11 @@ export function useScrollAnimation() {
 
 			gsap.registerPlugin(ScrollTrigger.value, ScrollToPlugin.value);
 			isInitialized.value = true;
+
+			// Initialize isMobile on client side after plugins loaded
+			updateIsMobile();
+			resizeHandler = updateIsMobile; // Assign the handler
+			window.addEventListener("resize", resizeHandler);
 
 			return { ScrollTrigger: ScrollTrigger.value, ScrollToPlugin: ScrollToPlugin.value };
 		} catch (error) {
@@ -78,24 +94,35 @@ export function useScrollAnimation() {
 
 	// 創建固定區塊
 	const createPinnedSection = (params) => {
-		const { trigger, start = "top top", end, scrub = 1, markers = false, onUpdate } = params;
+		const {
+			trigger,
+			start = "top top",
+			end,
+			scrub = 1,
+			markers = false,
+			onUpdate,
+			snap,
+			pinSpacing = true,
+			anticipatePin = 1,
+			mobileScrubFactor = 1.5,
+			disableSnapOnMobile = true
+		} = params;
 
 		if (!ScrollTrigger.value) return null;
+
+		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
+		const finalSnap = isMobile.value && disableSnapOnMobile ? false : snap;
 
 		return ScrollTrigger.value.create({
 			trigger,
 			pin: true,
 			start,
-			end: end || (() => `+=${window.innerHeight}`),
+			end: end || (() => `+=${window.innerHeight * (typeof scrub === "number" ? scrub : 1)}`),
 			markers,
-			pinSpacing: true,
-			anticipatePin: 1,
-			scrub,
-			snap: params.snap || {
-				snapTo: 1,
-				duration: 0.8,
-				ease: "power2.out"
-			},
+			pinSpacing,
+			anticipatePin,
+			scrub: finalScrub,
+			snap: finalSnap,
 			onUpdate
 		});
 	};
@@ -119,11 +146,9 @@ export function useScrollAnimation() {
 
 		if (!ScrollTrigger.value) return null;
 
-		// 選擇所有字符元素
 		const chars = document.querySelectorAll(selector);
 		if (chars.length === 0) return null;
 
-		// 創建時間軸
 		return gsap
 			.timeline({
 				scrollTrigger: {
@@ -133,21 +158,7 @@ export function useScrollAnimation() {
 					toggleActions: "play none none reverse"
 				}
 			})
-			.fromTo(
-				chars,
-				{
-					y: fromY,
-					opacity: fromOpacity
-				},
-				{
-					y: toY,
-					opacity: toOpacity,
-					duration,
-					stagger: staggerAmount,
-					ease,
-					delay
-				}
-			);
+			.fromTo(chars, { y: fromY, opacity: fromOpacity }, { y: toY, opacity: toOpacity, duration, stagger: staggerAmount, ease, delay });
 	};
 
 	// 創建文字動畫 - 為文字塊添加動畫效果
@@ -170,11 +181,9 @@ export function useScrollAnimation() {
 
 		if (!ScrollTrigger.value) return null;
 
-		// 選擇所有文字元素
 		const textElements = document.querySelectorAll(elements);
 		if (textElements.length === 0) return null;
 
-		// 創建時間軸
 		return gsap
 			.timeline({
 				scrollTrigger: {
@@ -186,21 +195,8 @@ export function useScrollAnimation() {
 			})
 			.fromTo(
 				textElements,
-				{
-					y: fromY,
-					opacity: fromOpacity
-				},
-				{
-					y: toY,
-					opacity: toOpacity,
-					duration,
-					stagger: {
-						amount: staggerAmount,
-						from: staggerFrom
-					},
-					ease,
-					delay
-				}
+				{ y: fromY, opacity: fromOpacity },
+				{ y: toY, opacity: toOpacity, duration, stagger: { amount: staggerAmount, from: staggerFrom }, ease, delay }
 			);
 	};
 
@@ -224,11 +220,9 @@ export function useScrollAnimation() {
 
 		if (!ScrollTrigger.value) return null;
 
-		// 選擇所有目標元素
 		const targetElements = document.querySelectorAll(elements);
 		if (targetElements.length === 0) return null;
 
-		// 創建時間軸
 		return gsap
 			.timeline({
 				scrollTrigger: {
@@ -238,22 +232,7 @@ export function useScrollAnimation() {
 					toggleActions: "play none none reverse"
 				}
 			})
-			.fromTo(
-				targetElements,
-				{
-					y: fromY,
-					opacity: fromOpacity,
-					scale: fromScale
-				},
-				{
-					y: toY,
-					opacity: toOpacity,
-					scale: toScale,
-					duration,
-					ease,
-					delay
-				}
-			);
+			.fromTo(targetElements, { y: fromY, opacity: fromOpacity, scale: fromScale }, { y: toY, opacity: toOpacity, scale: toScale, duration, ease, delay });
 	};
 
 	// 清理所有滾動觸發器
@@ -263,8 +242,7 @@ export function useScrollAnimation() {
 		}
 	};
 
-	// 窗口大小變化處理
-	const handleResize = () => refreshScrollTriggers();
+	// 窗口大小變化處理 - Combined into initScrollPlugins and onUnmounted
 
 	// 基礎元素動畫 - 用於創建從一種狀態到另一種狀態的過渡
 	const createBasicAnimation = (params) => {
@@ -280,10 +258,13 @@ export function useScrollAnimation() {
 			stagger = 0,
 			ease = "power2.out",
 			scrub = false,
-			toggleActions = "play none none reverse"
+			toggleActions = "play none none reverse",
+			mobileScrubFactor = 1.5
 		} = params;
 
 		if (!elements || !ScrollTrigger.value) return null;
+
+		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
 
 		return gsap.fromTo(
 			elements,
@@ -298,7 +279,7 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end,
-					scrub,
+					scrub: finalScrub,
 					toggleActions
 				}
 			}
@@ -307,16 +288,18 @@ export function useScrollAnimation() {
 
 	// 創建時間軸動畫 - 用於更複雜的連續動畫
 	const createTimelineAnimation = (params) => {
-		const { trigger, start = "top 80%", end = "bottom 20%", scrub = false, toggleActions = "play none none reverse" } = params;
+		const { trigger, start = "top 80%", end = "bottom 20%", scrub = false, toggleActions = "play none none reverse", mobileScrubFactor = 1.5 } = params;
 
 		if (!ScrollTrigger.value) return null;
+
+		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
 
 		return gsap.timeline({
 			scrollTrigger: {
 				trigger,
 				start,
 				end,
-				scrub,
+				scrub: finalScrub,
 				toggleActions
 			}
 		});
@@ -324,9 +307,20 @@ export function useScrollAnimation() {
 
 	// 基礎視差效果
 	const createParallax = (params) => {
-		const { element, trigger, start = "top bottom", end = "bottom top", fromProps = { yPercent: 0 }, toProps = { yPercent: 30 }, scrub = true } = params;
+		const {
+			element,
+			trigger,
+			start = "top bottom",
+			end = "bottom top",
+			fromProps = { yPercent: 0 },
+			toProps = { yPercent: 30 },
+			scrub = true,
+			mobileScrubFactor = 1.5
+		} = params;
 
 		if (!element || !ScrollTrigger.value) return null;
+
+		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
 
 		return gsap.fromTo(
 			element,
@@ -338,19 +332,19 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end,
-					scrub
+					scrub: finalScrub
 				}
 			}
 		);
 	};
 
-	onMounted(async () => {
-		await initScrollPlugins();
-		window.addEventListener("resize", handleResize);
-	});
+	// Lifecycle hooks integrated into initScrollPlugins and onUnmounted
+	// onMounted(async () => { ... }); // Logic moved to initScrollPlugins
 
 	onUnmounted(() => {
-		window.removeEventListener("resize", handleResize);
+		if (resizeHandler && typeof window !== "undefined") {
+			window.removeEventListener("resize", resizeHandler);
+		}
 		cleanupScrollTriggers();
 	});
 
@@ -361,8 +355,7 @@ export function useScrollAnimation() {
 		initScrollPlugins,
 		refreshScrollTriggers,
 		scrollToSection,
-		cleanupScrollTriggers,
-		handleResize
+		cleanupScrollTriggers
 	};
 
 	// 基本動畫工具
@@ -380,6 +373,7 @@ export function useScrollAnimation() {
 	return {
 		...core,
 		...animationTools,
-		gsap // 導出 gsap 實例，允許元件直接訪問更高級的功能
+		gsap,
+		isMobile
 	};
 }
