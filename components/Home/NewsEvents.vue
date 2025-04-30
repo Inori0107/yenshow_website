@@ -89,29 +89,9 @@ onMounted(async () => {
 		ease: "power1.out"
 	});
 
-	// 3. LEARN MORE 文字橫幅動畫
-	scrollAnimation.createScrollAnimation({
-		trigger: "aside",
-		start: "top 80%",
-		animation: scrollAnimation.gsap.fromTo(
-			".text-nowrap",
-			{
-				opacity: 0,
-				x: -50
-			},
-			{
-				opacity: 0.5,
-				x: 0,
-				duration: 1.5,
-				ease: "power2.out",
-				delay: 0.1
-			}
-		)
-	});
-
 	// 4. 按鈕元素進場動畫
 	scrollAnimation.createElementEntrance({
-		elements: "button-c-t-a",
+		elements: ".view-all-button",
 		trigger: "aside",
 		start: "top 65%",
 		delay: 0.9,
