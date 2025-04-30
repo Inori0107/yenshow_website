@@ -24,12 +24,11 @@ const { locale, setLocale } = useI18n();
 
 // 確保點擊時語言切換有效
 const toggleLocale = async (event, lang) => {
-	event.stopPropagation(); // 防止外層 `div` 攔截事件
-	console.log(`切換語言到: ${lang}`);
+	event.stopPropagation();
 
-	if (locale.value !== lang) {
-		await setLocale(lang); // 確保語言切換完成
-		await nextTick(); // 強制 Vue 重新渲染
-	}
+	// if (locale.value !== lang) {
+	// 	await setLocale(lang);
+	// 	await nextTick();
+	// }
 };
 </script>

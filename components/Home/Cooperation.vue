@@ -1,6 +1,6 @@
 <template>
 	<!-- Cooperation -->
-	<section class="marquee-background bg-primary relative overflow-hidden my-[128px] md:my-[512px] flex items-center">
+	<section class="marquee-background bg-primary relative overflow-hidden my-[128px] md:my-[512px] flex items-center min-h-screen">
 		<article
 			class="bg-overlay absolute inset-0 z-50 flex flex-col justify-center items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary text-center"
 		>

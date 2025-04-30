@@ -50,7 +50,7 @@
 							<!-- 子分類標題 -->
 							<h3 class="text-[24px] md:text-[36px] font-semibold text-primary/80 flex-shrink-0">{{ getCategoryName(subCategory) }}</h3>
 							<!-- 規格篩選器 (只在子分類級別有規格時顯示) -->
-							<div v-if="hasSpecifications(subCategory)" class="w-full md:w-auto">
+							<div v-if="hasSpecifications(subCategory)" class="w-fit">
 								<FilterSection
 									:options="getSpecifications(subCategory)"
 									v-model="filterValues[subCategory._id]"
@@ -60,6 +60,7 @@
 							</div>
 						</div>
 
+<<<<<<< HEAD
 						<!-- 產品展示 -->
 						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 							<NuxtLink
@@ -87,6 +88,10 @@
 							<!-- 如果沒有產品則顯示提示 -->
 							<div v-if="getFilteredProducts(subCategory).length === 0" class="col-span-full text-center py-8 text-gray-500">目前沒有符合條件的產品</div>
 						</div>
+=======
+						<!-- 產品展示 (使用 ProductList) -->
+						<ProductList :products="prepareProductsForList(getFilteredProducts(subCategory))" :loading="false" @view-product="handleViewProduct" />
+>>>>>>> 4efedd48ee281943cc3f6a74f1fc038fc5bafb72
 					</div>
 				</div>
 				<!-- 如果 computedDisplayCategories 為空 -->
@@ -103,7 +108,8 @@ import { useHierarchyStore } from "~/stores/hierarchyStore";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 import NavList from "~/components/products/NavList.vue";
 import FilterSection from "~/components/products/FilterSection.vue";
-import SkeletonProductCard from "~/components/products/SketetonProductCard.vue";
+import SkeletonProductCard from "~/components/products/SkeletonProductCard.vue";
+import ProductList from "~/components/products/ProductList.vue";
 
 const languageStore = useLanguageStore();
 const hierarchyStore = useHierarchyStore();
@@ -183,6 +189,12 @@ const handleSubItemSelected = ({ category, subItem }) => {
 	console.log("SubItem selected (but ignored for product list filtering):", subItem, "for category:", category);
 };
 
+// Handle product click from ProductList
+const handleViewProduct = (product) => {
+	console.log("View product clicked:", product);
+	// TODO: Implement navigation to product details page or show modal
+};
+
 // 添加 watch 來監控 filterValues 的變化
 watch(filterValues, (newValue, oldValue) => {}, { deep: true });
 
@@ -202,6 +214,14 @@ watch(isLoadingNav, (newValue, oldValue) => {
 		});
 	}
 });
+
+const prepareProductsForList = (products) => {
+	if (!products) return [];
+	return products.map((product) => ({
+		...product,
+		displayName: getCategoryName(product)
+	}));
+};
 
 onMounted(async () => {
 	isLoadingNav.value = true;
