@@ -62,10 +62,11 @@
 
 						<!-- 產品展示 -->
 						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-							<div
+							<NuxtLink
 								v-for="product in getFilteredProducts(subCategory)"
 								:key="product._id"
-								class="bg-gray-50 p-4 rounded-lg hover:shadow-lg transition-all duration-300"
+								:to="`/Products/${product._id}`"
+								class="block bg-gray-50 p-4 rounded-lg hover:shadow-lg transition-all duration-300 no-underline text-current"
 							>
 								<!-- 產品圖片 -->
 								<div class="aspect-square bg-gray-100 rounded-md mb-4">
@@ -81,7 +82,7 @@
 								<h4 class="text-[16px] md:text-[18px] font-medium text-gray-800">{{ getCategoryName(product) }}</h4>
 								<!-- 產品型號/簡短描述 -->
 								<p v-if="product.model" class="text-[14px] text-gray-500">{{ product.model }}</p>
-							</div>
+							</NuxtLink>
 
 							<!-- 如果沒有產品則顯示提示 -->
 							<div v-if="getFilteredProducts(subCategory).length === 0" class="col-span-full text-center py-8 text-gray-500">目前沒有符合條件的產品</div>
@@ -118,8 +119,6 @@ const productCategories = ref([]);
 const filterValues = reactive({});
 const isLoadingProducts = ref(false);
 const productsError = ref(null);
-const selectedCategory = ref(null);
-const selectedSubItem = ref(null);
 
 // 假設 'video-intercom' 是此系列在資料庫中的 ID 或唯一標識符
 const SERIES_ID = "67ed0512296210e234e0de64";

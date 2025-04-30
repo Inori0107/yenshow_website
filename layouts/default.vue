@@ -168,7 +168,15 @@ const linkCTA = ref([
 </script>
 
 <style scoped>
+/* 預設使用大圖 */
 .parallax-bg {
 	background: url("/heroPic.jpg") no-repeat fixed center center/cover;
+}
+
+/* 在螢幕寬度小於 768px 時，使用小圖 */
+@media (max-width: 768px) {
+	.parallax-bg {
+		background: url("/heroPic-sm.png") no-repeat fixed center center/cover;
+	}
 }
 </style>
