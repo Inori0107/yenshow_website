@@ -14,9 +14,6 @@
 	<!-- Cooperation -->
 	<Cooperation id="cases" />
 
-	<!-- Product -->
-	<ProductIntro />
-
 	<!-- News & Events -->
 	<NewsEvents id="products" />
 </template>
@@ -29,7 +26,6 @@ import Intro from "~/components/Home/Intro.vue";
 import Cooperation from "~/components/Home/Cooperation.vue";
 import Quote from "~/components/Home/Quote.vue";
 import NewsEvents from "~/components/Home/NewsEvents.vue";
-import ProductIntro from "~/components/Home/ProductIntro.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 useHead({

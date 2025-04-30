@@ -50,7 +50,7 @@
 							<!-- 子分類標題 -->
 							<h3 class="text-[24px] md:text-[36px] font-semibold text-primary/80 flex-shrink-0">{{ getCategoryName(subCategory) }}</h3>
 							<!-- 規格篩選器 (只在子分類級別有規格時顯示) -->
-							<div v-if="hasSpecifications(subCategory)" class="w-full md:w-auto">
+							<div v-if="hasSpecifications(subCategory)" class="w-fit">
 								<FilterSection
 									:options="getSpecifications(subCategory)"
 									v-model="filterValues[subCategory._id]"
@@ -60,32 +60,8 @@
 							</div>
 						</div>
 
-						<!-- 產品展示 -->
-						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-							<div
-								v-for="product in getFilteredProducts(subCategory)"
-								:key="product._id"
-								class="bg-gray-50 p-4 rounded-lg hover:shadow-lg transition-all duration-300"
-							>
-								<!-- 產品圖片 -->
-								<div class="aspect-square bg-gray-100 rounded-md mb-4">
-									<img
-										v-if="product.images && product.images.length > 0"
-										:src="product.images[0]"
-										:alt="getCategoryName(product)"
-										class="w-full h-full object-contain"
-									/>
-									<div v-else class="w-full h-full flex items-center justify-center text-gray-400">尚無圖片</div>
-								</div>
-								<!-- 產品名稱 -->
-								<h4 class="text-[16px] md:text-[18px] font-medium text-gray-800">{{ getCategoryName(product) }}</h4>
-								<!-- 產品型號/簡短描述 -->
-								<p v-if="product.model" class="text-[14px] text-gray-500">{{ product.model }}</p>
-							</div>
-
-							<!-- 如果沒有產品則顯示提示 -->
-							<div v-if="getFilteredProducts(subCategory).length === 0" class="col-span-full text-center py-8 text-gray-500">目前沒有符合條件的產品</div>
-						</div>
+						<!-- 產品展示 (使用 ProductList) -->
+						<ProductList :products="prepareProductsForList(getFilteredProducts(subCategory))" :loading="false" @view-product="handleViewProduct" />
 					</div>
 				</div>
 				<!-- 如果 computedDisplayCategories 為空 -->
@@ -102,7 +78,8 @@ import { useHierarchyStore } from "~/stores/hierarchyStore";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 import NavList from "~/components/products/NavList.vue";
 import FilterSection from "~/components/products/FilterSection.vue";
-import SkeletonProductCard from "~/components/products/SketetonProductCard.vue";
+import SkeletonProductCard from "~/components/products/SkeletonProductCard.vue";
+import ProductList from "~/components/products/ProductList.vue";
 
 const languageStore = useLanguageStore();
 const hierarchyStore = useHierarchyStore();
@@ -121,6 +98,7 @@ const productsError = ref(null);
 const selectedCategory = ref(null);
 const selectedSubItem = ref(null);
 
+// 假設 'video-intercom' 是此系列在資料庫中的 ID 或唯一標識符
 const SERIES_ID = "67ed0512296210e234e0de10";
 
 // 獲取本地化名稱的輔助函數
@@ -183,6 +161,12 @@ const handleSubItemSelected = ({ category, subItem }) => {
 	console.log("SubItem selected (but ignored for product list filtering):", subItem, "for category:", category);
 };
 
+// Handle product click from ProductList
+const handleViewProduct = (product) => {
+	console.log("View product clicked:", product);
+	// TODO: Implement navigation to product details page or show modal
+};
+
 // 添加 watch 來監控 filterValues 的變化
 watch(filterValues, (newValue, oldValue) => {}, { deep: true });
 
@@ -202,6 +186,14 @@ watch(isLoadingNav, (newValue, oldValue) => {
 		});
 	}
 });
+
+const prepareProductsForList = (products) => {
+	if (!products) return [];
+	return products.map((product) => ({
+		...product,
+		displayName: getCategoryName(product)
+	}));
+};
 
 onMounted(async () => {
 	isLoadingNav.value = true;

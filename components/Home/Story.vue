@@ -27,6 +27,7 @@
 
 <script setup>
 import { ref, onMounted, nextTick, onUnmounted, inject } from "vue";
+import { useScrollAnimation } from "~/composables/useScrollAnimation"; // 確保路徑正確
 
 // 將 storyContainers 提到外面作為共用變數
 const storyContainers = ["intro", "cloud", "mountain", "sky"];
@@ -161,6 +162,13 @@ onMounted(async () => {
 		// 設置動畫效果
 		setupPinEffects();
 		setupTextAnimation();
+
+		// --- 如果移除 anticipatePin 無效，再加入以下代碼 ---
+		// setTimeout(() => {
+		//     console.log("Refreshing ScrollTriggers for Story after delay");
+		//     scrollAnimation.refreshScrollTriggers();
+		// }, 500); // 延遲 500ms，可調整
+		// -----------------------------------------------------
 	} catch (error) {
 		console.error("Story 動畫設置錯誤:", error);
 	}

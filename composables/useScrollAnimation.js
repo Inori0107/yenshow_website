@@ -103,7 +103,6 @@ export function useScrollAnimation() {
 			onUpdate,
 			snap,
 			pinSpacing = true,
-			anticipatePin = 1,
 			mobileScrubFactor = 1.5,
 			disableSnapOnMobile = true
 		} = params;
