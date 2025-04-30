@@ -3,27 +3,26 @@
 		<div v-if="loading" class="flex justify-center items-center p-8">
 			<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
 		</div>
-		<div v-else-if="!products || products.length === 0" class="text-center py-8">
-			<p class="text-gray-500 text-[16px] md:text-[21px]">沒有符合條件的產品</p>
-		</div>
-		<div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+		<div v-else-if="!products || products.length === 0" class="text-center py-8 text-gray-500">目前沒有符合條件的產品</div>
+		<div v-else class="flex overflow-x-auto whitespace-nowrap space-x-6 px-4 py-4 horizontal-scroll-container">
 			<div
 				v-for="product in products"
 				:key="product._id"
-				class="bg-[#F3F5F7] rounded-lg overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
+				class="bg-gray-50 p-4 rounded-lg hover:shadow-lg transition-all duration-300 w-72 flex-shrink-0"
 				@click="viewProduct(product)"
 			>
-				<div class="aspect-square p-4 flex items-center justify-center">
-					<img :src="product.imageUrl || '/product/placeholder.png'" :alt="getProductName(product)" class="max-h-full max-w-full object-contain" />
+				<div class="aspect-square bg-gray-100 rounded-md mb-4">
+					<img
+						v-if="product.images && product.images.length > 0"
+						:src="product.images[0]"
+						:alt="product.displayName || product.model || '產品圖片'"
+						class="w-full h-full object-contain"
+					/>
+					<div v-else class="w-full h-full flex items-center justify-center text-gray-400">尚無圖片</div>
 				</div>
-				<div class="p-4 bg-white">
-					<h3 class="text-[16px] md:text-[18px] font-medium truncate">{{ getProductName(product) }}</h3>
-					<p class="text-gray-500 text-[14px] mt-1 truncate">{{ getProductDescription(product) }}</p>
-				</div>
+				<h4 class="text-[16px] md:text-[18px] font-medium text-gray-800 whitespace-normal">{{ product.displayName || product.model || "未命名產品" }}</h4>
+				<p v-if="product.model" class="text-[14px] text-gray-500 whitespace-normal">{{ product.model }}</p>
 			</div>
-		</div>
-		<div v-if="showMore && products && products.length > 0 && products.length < totalProducts" class="text-center mt-8">
-			<button @click="loadMore" class="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-dark transition-colors duration-300">載入更多</button>
 		</div>
 	</div>
 </template>
@@ -39,39 +38,45 @@ const props = defineProps({
 	loading: {
 		type: Boolean,
 		default: false
-	},
-	showMore: {
-		type: Boolean,
-		default: false
-	},
-	totalProducts: {
-		type: Number,
-		default: 0
 	}
 });
 
-const emit = defineEmits(["load-more", "view-product"]);
+const emit = defineEmits(["view-product"]);
 const router = useRouter();
 
-// 獲取產品名稱 (處理本地化)
-const getProductName = (product) => {
-	return product.name?.zh || product.name || product.model || "未命名產品";
-};
-
-// 獲取產品描述 (處理本地化)
-const getProductDescription = (product) => {
-	return product.description?.zh || product.description || product.model || "";
-};
-
-// 查看產品詳情
 const viewProduct = (product) => {
 	emit("view-product", product);
-	// 可以導航到產品詳情頁
+	// Example navigation (can be uncommented if needed)
 	// router.push(`/products/${product._id}`);
 };
-
-// 加載更多產品
-const loadMore = () => {
-	emit("load-more");
-};
 </script>
+
+<style scoped>
+/* Target the container to hide scrollbar */
+.horizontal-scroll-container {
+	scrollbar-width: none; /* For Firefox */
+	-ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+.horizontal-scroll-container::-webkit-scrollbar {
+	display: none;
+}
+
+.scrollbar-thin {
+	scrollbar-width: thin; /* For Firefox */
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+	background-color: #d1d5db; /* gray-300 */
+	border-radius: 6px;
+}
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+	background-color: #f3f4f6; /* gray-100 */
+	border-radius: 6px;
+}
+::-webkit-scrollbar {
+	height: 8px; /* Height of the horizontal scrollbar */
+}
+</style>

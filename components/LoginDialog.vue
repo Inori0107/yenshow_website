@@ -1,6 +1,7 @@
 <template>
-	<section class="w-full flex justify-center items-center min-h-screen">
-		<div class="login-box">
+	<div v-if="modelValue" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50" @click.self="closeDialog">
+		<div class="login-box relative">
+			<button @click="closeDialog" class="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl">&times;</button>
 			<div class="title-container">
 				<h2 class="title-text text-[24px] lg:text-[36px] font-semibold text-center mb-[12px] lg:mb-[24px]">登入系統</h2>
 				<div class="title-decoration"></div>
@@ -8,18 +9,25 @@
 			<form @submit.prevent="handleLogin" class="flex flex-col gap-[24px]">
 				<!-- 帳號 -->
 				<div>
-					<label for="account" class="text-white">帳號</label>
+					<label for="dialog-account" class="text-white">帳號</label>
 					<div class="relative">
-						<input type="text" id="account" v-model="account" required placeholder="請輸入帳號" class="bg-white/10 text-white placeholder-white/50 w-full" />
+						<input
+							type="text"
+							id="dialog-account"
+							v-model="account"
+							required
+							placeholder="請輸入帳號"
+							class="bg-white/10 text-white placeholder-white/50 w-full"
+						/>
 					</div>
 				</div>
 				<!-- 密碼 -->
 				<div>
-					<label for="password" class="text-white">密碼</label>
+					<label for="dialog-password" class="text-white">密碼</label>
 					<div class="relative">
 						<input
 							type="password"
-							id="password"
+							id="dialog-password"
 							v-model="password"
 							required
 							placeholder="請輸入密碼"
@@ -48,16 +56,23 @@
 				</button>
 			</form>
 		</div>
-	</section>
+	</div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useUserStore } from "~/stores/userStore";
 
-const userStore = useUserStore();
+const props = defineProps({
+	modelValue: {
+		type: Boolean,
+		required: true
+	}
+});
 
-console.log("檢查 userStore 實例:", userStore);
+const emit = defineEmits(["update:modelValue", "login-success"]);
+
+const userStore = useUserStore();
 
 // 表單狀態
 const account = ref("");
@@ -76,42 +91,59 @@ const handleLogin = async () => {
 	error.value = "";
 
 	try {
-		console.log("正在嘗試登入...");
 		const response = await userStore.login({
 			account: account.value,
 			password: password.value
 		});
 
-		console.log("登入回應:", response);
-
 		if (response.success) {
-			console.log("登入成功，即將跳轉...");
-
-			setTimeout(() => {
-				window.location.href = "/";
-			}, 1000);
+			emit("login-success"); // 發送成功事件
+			closeDialog(); // 關閉對話框
+			// 延遲跳轉可以在父元件中處理，或者如果希望在這裡處理，可以這樣：
+			// setTimeout(() => {
+			//   window.location.href = "/";
+			// }, 500); // 短暫延遲讓使用者看到成功狀態
 		} else {
 			error.value = response.message || "登入失敗";
-			console.error("登入未成功，原因:", response.message);
 		}
 	} catch (err) {
-		console.error("登入過程拋出錯誤:", err);
 		error.value = err?.response?.data?.message || err?.message || "登入失敗，請稍後再試";
 	} finally {
 		loading.value = false;
 	}
 };
+
+// 關閉對話框
+const closeDialog = () => {
+	emit("update:modelValue", false);
+};
+
+// 當對話框關閉時重置表單狀態
+watch(
+	() => props.modelValue,
+	(newValue) => {
+		if (!newValue) {
+			account.value = "";
+			password.value = "";
+			error.value = "";
+			loading.value = false;
+		}
+	}
+);
 </script>
 
 <style scoped>
+/* 沿用 login.vue 的樣式 */
 .login-box {
 	background: rgba(33, 42, 55, 0.7);
 	padding: 48px;
-	border-radius: 50px;
+	border-radius: 50px; /* 可調整 */
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-	width: fit-content;
+	width: fit-content; /* 保持內容寬度 */
+	max-width: 90vw; /* 增加最大寬度限制 */
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
+	position: relative; /* 確保關閉按鈕定位 */
 }
 
 .title-container {
@@ -145,7 +177,8 @@ const handleLogin = async () => {
 }
 
 input {
-	width: 360px;
+	width: 360px; /* 可考慮移除固定寬度或設為 100% */
+	max-width: 100%; /* 確保在小螢幕上正常 */
 	padding: 12px 24px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	border-radius: 10px;
@@ -159,8 +192,10 @@ input:focus {
 	background-color: rgba(255, 255, 255, 0.15);
 }
 
-button {
-	width: 360px;
+button[type="submit"] {
+	/* 只針對 submit 按鈕 */
+	width: 360px; /* 可考慮移除固定寬度或設為 100% */
+	max-width: 100%; /* 確保在小螢幕上正常 */
 	padding: 12px 24px;
 	border-radius: 10px;
 	font-size: 24px;
@@ -185,5 +220,53 @@ label {
 	font-size: 24px;
 	margin-bottom: 12px;
 	opacity: 0.9;
+}
+
+/* Dialog specific styles */
+.fixed {
+	position: fixed;
+}
+.inset-0 {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.bg-black\/50 {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.backdrop-blur-sm {
+	backdrop-filter: blur(4px);
+}
+.flex {
+	display: flex;
+}
+.justify-center {
+	justify-content: center;
+}
+.items-center {
+	align-items: center;
+}
+.z-50 {
+	z-index: 50;
+}
+.absolute {
+	position: absolute;
+}
+.top-4 {
+	top: 1rem; /* 16px */
+}
+.right-4 {
+	right: 1rem; /* 16px */
+}
+.text-white {
+	color: white;
+}
+.hover\:text-gray-300:hover {
+	color: #d1d5db; /* gray-300 */
+}
+.text-2xl {
+	font-size: 1.5rem; /* 24px */
+	line-height: 2rem; /* 32px */
 }
 </style>
