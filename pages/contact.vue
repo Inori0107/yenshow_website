@@ -291,8 +291,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useApi } from "~/composables/useApi";
 
 const router = useRouter();
+const { api, safeApiCall } = useApi();
 const step = ref(1);
 const isSubmitting = ref(false);
 const dragover = ref(false);
@@ -440,14 +442,60 @@ const submitForm = async () => {
 	if (!validateForm()) return;
 
 	isSubmitting.value = true;
+	errors.value = {}; // 清除舊錯誤
 
-	// 模擬API請求延遲
-	await new Promise((resolve) => setTimeout(resolve, 1500));
+	// 創建 FormData 物件
+	const formData = new FormData();
 
-	console.log("表單資料:", form.value);
-	isSubmitting.value = false;
-	step.value = 3;
-	window.scrollTo({ top: 0, behavior: "smooth" });
+	// 添加文字欄位
+	formData.append("name", form.value.name);
+	formData.append("phone", form.value.phone);
+	formData.append("email", form.value.email);
+	formData.append("company", form.value.company || ""); // 如果是空值，傳送空字串
+	formData.append("subject", form.value.subject);
+	// formData.append("type", form.value.type); // FormData 對陣列的處理方式可能與後端預期不同
+	// 逐一添加 type 陣列中的每個值，確保後端能正確解析為陣列
+	form.value.type.forEach((typeOption) => {
+		formData.append("type", typeOption);
+	});
+	formData.append("details", form.value.details);
+
+	// 添加檔案
+	form.value.files.forEach((file) => {
+		formData.append("files", file); // 使用 'files' 作為 key，與後端 multer 配置一致
+	});
+
+	try {
+		// 使用 safeApiCall 發送請求
+		const response = await safeApiCall(() =>
+			api.post("/api/contact", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data"
+				}
+			})
+		);
+
+		// 檢查後端回應是否成功 (假設成功時 success 為 true)
+		if (response && response.data && response.data.success) {
+			step.value = 3;
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		} else {
+			// 如果後端回應格式不符或 success 為 false，顯示通用錯誤
+			errors.value.submit = response?.data?.message || "提交失敗，請稍後再試";
+		}
+	} catch (error) {
+		// safeApiCall 已經打印了錯誤，這裡處理前端顯示
+		if (error.response && error.response.data && error.response.data.message) {
+			// 優先顯示後端返回的具體錯誤信息
+			errors.value.submit = error.response.data.message;
+		} else {
+			// 顯示通用錯誤
+			errors.value.submit = "發生未知錯誤，請檢查網路連線或稍後再試";
+		}
+		console.error("表單提交失敗:", error);
+	} finally {
+		isSubmitting.value = false;
+	}
 };
 
 // 返回首頁
