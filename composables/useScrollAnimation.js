@@ -102,6 +102,7 @@ export function useScrollAnimation() {
 			markers = false,
 			onUpdate,
 			snap,
+			pinElement = true,
 			pinSpacing = true,
 			anticipatePin = 1,
 			mobileScrubFactor = 1.5,
@@ -113,18 +114,25 @@ export function useScrollAnimation() {
 		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
 		const finalSnap = isMobile.value && disableSnapOnMobile ? false : snap;
 
-		return ScrollTrigger.value.create({
+		// 構建 ScrollTrigger 配置
+		const config = {
 			trigger,
-			pin: true,
 			start,
 			end: end || (() => `+=${window.innerHeight * (typeof scrub === "number" ? scrub : 1)}`),
 			markers,
-			pinSpacing,
-			anticipatePin,
 			scrub: finalScrub,
 			snap: finalSnap,
 			onUpdate
-		});
+		};
+
+		// 只有在 pinElement 為 true 時才應用 pin 相關屬性
+		if (pinElement) {
+			config.pin = true;
+			config.pinSpacing = pinSpacing;
+			config.anticipatePin = anticipatePin;
+		}
+
+		return ScrollTrigger.value.create(config);
 	};
 
 	// 創建字符動畫 - 為字符逐個添加動畫效果

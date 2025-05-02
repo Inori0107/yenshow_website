@@ -11,7 +11,7 @@
 		<!-- 主標語 -->
 		<div ref="heroText" class="text-center text-secondary opacity-0 transform translate-y-10 z-10 px-4">
 			<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold leading-tight">
-				智慧防護
+				遠岫科技
 				<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] mt-2">讓安心無所不在</span>
 			</h1>
 		</div>
@@ -68,8 +68,8 @@ import gsap from "gsap";
 // 導航資料
 const blocks = ref([
 	{ number: 1, title: "品牌故事", description: "探索遠岫科技的起源與願景，了解我們的品牌精神", id: "story" },
-	{ number: 2, title: "合作案例", description: "查看我們與客戶共同創建的成功案例與解決方案", id: "cases" },
-	{ number: 3, title: "產品中心", description: "發現我們的創新產品與技術，幫助企業實現數位轉型", id: "products" }
+	{ number: 2, title: "產品中心", description: "發現我們的創新產品與技術，幫助企業實現數位轉型", id: "products" },
+	{ number: 3, title: "合作案例", description: "查看我們與客戶共同創建的成功案例與解決方案", id: "cases" }
 ]);
 
 const activeIndex = ref(null);

@@ -23,6 +23,7 @@
 					href="https://page.line.me/084yzfsc"
 					aria-label="Line"
 					class="w-[48px] h-[42px] md:w-[64px] md:h-[56px] transition-all duration-300 hover:scale-110 hover:text-green-400 group"
+					target="_blank"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -42,6 +43,7 @@
 					href="https://www.facebook.com/YENSHOW2020"
 					aria-label="Facebook"
 					class="w-[48px] h-[42px] md:w-[64px] md:h-[64px] transition-all duration-300 hover:scale-110 hover:text-blue-500 group"
+					target="_blank"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -58,20 +60,15 @@
 				</a>
 				<!-- Email -->
 				<a
-					href="mailto:contact@yenshow.com"
+					href="https://www.youtube.com/@yenshow706"
 					aria-label="Email"
 					class="w-[48px] h-[42px] md:w-[64px] md:h-[64px] transition-all duration-300 hover:scale-110 hover:text-yellow-400 group"
+					target="_blank"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						height="100%"
-						width="100%"
-						viewBox="0 0 448 512"
-						class="transition-all duration-300 group-hover:fill-yellow-400"
-					>
+					<svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" viewBox="0 0 448 512">
 						<path
 							fill="#ffffff"
-							d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zM218 271.7L64.2 172.4C66 156.4 79.5 144 96 144l256 0c16.5 0 30 12.4 31.8 28.4L230 271.7c-1.8 1.2-3.9 1.8-6 1.8s-4.2-.6-6-1.8zm29.4 26.9L384 210.4 384 336c0 17.7-14.3 32-32 32L96 368c-17.7 0-32-14.3-32-32l0-125.6 136.6 88.2c7 4.5 15.1 6.9 23.4 6.9s16.4-2.4 23.4-6.9z"
+							d="M282 256.2l-95.2-54.1V310.3L282 256.2zM384 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm14.4 136.1c7.6 28.6 7.6 88.2 7.6 88.2s0 59.6-7.6 88.1c-4.2 15.8-16.5 27.7-32.2 31.9C337.9 384 224 384 224 384s-113.9 0-142.2-7.6c-15.7-4.2-28-16.1-32.2-31.9C42 315.9 42 256.3 42 256.3s0-59.7 7.6-88.2c4.2-15.8 16.5-28.2 32.2-32.4C110.1 128 224 128 224 128s113.9 0 142.2 7.7c15.7 4.2 28 16.6 32.2 32.4z"
 						/>
 					</svg>
 				</a>

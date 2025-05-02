@@ -73,25 +73,16 @@ const setTextRef = (el, sectionIndex, textIndex) => {
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
 
-// 設置區塊固定效果
+// 設置區塊滾動觸發 (原 setupPinEffects)
 const setupPinEffects = () => {
 	storyContainers.forEach((section, index) => {
 		scrollAnimation.createPinnedSection({
 			trigger: `#story-${section}`,
 			start: "top top",
-			end: () => `+=${window.innerHeight * 1.5}`,
+			end: "bottom top", // 當元素底部到達視窗頂部時結束
 			markers: false,
-			pinSpacing: true,
-			anticipatePin: 1,
-			scrub: 1.5,
-			snap: {
-				snapTo: (progress, direction) => {
-					return direction > 0 ? 1 : 0;
-				},
-				duration: { min: 0.5, max: 1.2 },
-				delay: 0.1,
-				ease: "power2.inOut"
-			}
+			pinElement: false,
+			scrub: 1.5
 		});
 	});
 };
@@ -128,28 +119,6 @@ const setupTextAnimation = () => {
 	});
 };
 
-// 在 setup 或 onMounted 中
-const isMobile = ref(false);
-onMounted(() => {
-	const mediaQuery = window.matchMedia("(max-width: 767px)"); // 假設 md 斷點是 768px
-	isMobile.value = mediaQuery.matches;
-	// 可以添加監聽器處理窗口大小變化
-});
-
-// 在 setupPinEffects 中
-scrollAnimation.createPinnedSection({
-	scrub: 1.5, // 或者調整後的值
-	snap: isMobile.value
-		? false
-		: {
-				// 如果是移動端，禁用 snap
-				snapTo: (progress, direction) => (direction > 0 ? 1 : 0),
-				duration: { min: 0.5, max: 1.2 },
-				delay: 0.1,
-				ease: "power2.inOut"
-		  }
-});
-
 onMounted(async () => {
 	try {
 		// 等待 DOM 更新完成後再初始化
@@ -161,13 +130,6 @@ onMounted(async () => {
 		// 設置動畫效果
 		setupPinEffects();
 		setupTextAnimation();
-
-		// --- 如果移除 anticipatePin 無效，再加入以下代碼 ---
-		// setTimeout(() => {
-		//     console.log("Refreshing ScrollTriggers for Story after delay");
-		//     scrollAnimation.refreshScrollTriggers();
-		// }, 500); // 延遲 500ms，可調整
-		// -----------------------------------------------------
 	} catch (error) {
 		console.error("Story 動畫設置錯誤:", error);
 	}

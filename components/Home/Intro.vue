@@ -37,10 +37,8 @@
 		>
 			<!-- 左側內容說明 -->
 			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
-				<div class="relative">
-					<h3 class="text-[20px] sm:text-[24px] md:text-[36px] lg:text-[48px] section-title product-title break-all">YSCentral Professional</h3>
-					<div class="title-decoration absolute bottom-[-5px] left-[-5px] w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
-				</div>
+				<h3 class="text-[21px] sm:text-[24px] md:text-[36px] lg:text-[48px] product-title">YSCentral Professional</h3>
+				<div class="title-decoration w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
 
 				<div class="feature-tag-container">
 					<span class="feature-tag">整合性</span>
@@ -724,8 +722,7 @@ onUnmounted(() => {
 	transition: transform 0.3s ease;
 }
 
-.section-title {
-	position: relative;
+.product-title {
 	display: inline-block;
 	font-weight: 700;
 	background: linear-gradient(to right, #dd1c1c, #212a37);

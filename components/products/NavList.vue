@@ -20,7 +20,7 @@
 					<li
 						v-for="item in getSubItems(category)"
 						:key="item._id || item"
-						class="text-[16px] md:text-[24px] text-gray-700 cursor-pointer hover:text-primary hover:translate-x-1 transition-all duration-200 group"
+						class="text-[16px] md:text-[24px] text-gray-700 cursor-default hover:text-primary transition-all duration-200 group"
 						@click="selectSubItem(category, item)"
 					>
 						<span class="opacity-60 group-hover:opacity-100 transition-opacity">-&nbsp;</span>
