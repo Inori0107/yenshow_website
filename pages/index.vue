@@ -11,14 +11,14 @@
 	<!-- Quote -->
 	<Quote />
 
+	<!-- Product -->
+	<ProductIntro id="products" />
+
 	<!-- Cooperation -->
 	<Cooperation id="cases" />
 
-	<!-- Product -->
-	<ProductIntro />
-
 	<!-- News & Events -->
-	<NewsEvents id="products" />
+	<NewsEvents />
 </template>
 
 <script setup>
@@ -63,7 +63,3 @@ onUnmounted(() => {
 	scrollAnimation.cleanupScrollTriggers();
 });
 </script>
-
-<style scoped>
-/* Index 頁面的基本樣式 */
-</style>

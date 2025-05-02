@@ -206,7 +206,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, onUnmounted, watch } from "vue";
+import { ref, onMounted, inject, onUnmounted } from "vue";
 import { useGlobalSearch } from "~/composables/useGlobalSearch";
 
 // 注入滾動動畫控制器

@@ -11,6 +11,21 @@ export function useGlobalSearch() {
 	// 本地輸入關鍵字，用於防抖處理
 	const inputKeyword = ref("");
 
+	// 系列 ID 到路由 slug 的映射
+	const seriesIdToSlugMap = {
+		"67ed0511296210e234e0ddd7": "video-intercom", // 可視對講
+		"67ed0512296210e234e0de10": "access-control", // 門禁管理
+		"67ed0512296210e234e0df00": "devices-accessories", // 其他設備
+		"67ed0512296210e234e0deb2": "security-solutions", // 安全防護
+		"67ed0512296210e234e0de64": "surveillance-monitoring" // 影像監控
+		// 可以根據需要添加更多映射
+	};
+
+	// 從 series ID 獲取 slug 的輔助函數
+	function getSeriesSlug(seriesId) {
+		return seriesIdToSlugMap[seriesId] || null;
+	}
+
 	// 搜尋結果統計
 	const resultCounts = computed(() => {
 		return {
@@ -66,25 +81,50 @@ export function useGlobalSearch() {
 
 		if (!item || !item._id) return;
 
+		let seriesSlug = null;
+		let targetPath = "/products"; // 預設回退路徑
+
 		// 根據實體類型跳轉到不同頁面
 		switch (entityType) {
+			case "products":
+				targetPath = `/products/${item._id}`;
+				router.push({ path: targetPath });
+				break;
 			case "series":
-				router.push({ path: `/series/${item._id}` });
+				seriesSlug = getSeriesSlug(item._id);
+				if (seriesSlug) {
+					targetPath = `/products/${seriesSlug}`;
+					router.push({ path: targetPath });
+				} else {
+					console.warn(`找不到系列 ID ${item._id} 對應的 slug，跳轉至產品列表`);
+					router.push({ path: targetPath });
+				}
 				break;
 			case "categories":
-				router.push({ path: `/categories/${item._id}` });
-				break;
 			case "subCategories":
-				router.push({ path: `/sub-categories/${item._id}` });
-				break;
 			case "specifications":
-				router.push({ path: `/specifications/${item._id}` });
-				break;
-			case "products":
-				router.push({ path: `/products/${item._id}` });
+				// 假設 item 中包含 series._id 來找到所屬系列
+				// 注意：這需要後端 API 返回結果中包含 series._id
+				const seriesId = item.series?._id;
+				if (seriesId) {
+					seriesSlug = getSeriesSlug(seriesId);
+					if (seriesSlug) {
+						targetPath = `/products/${seriesSlug}`;
+						// 可以考慮添加 hash 或 query 以便在目標頁面定位
+						// 例如：router.push({ path: targetPath, hash: `#${item._id}` });
+						router.push({ path: targetPath });
+					} else {
+						console.warn(`找不到項目 ${item._id} (${entityType}) 所屬系列 ID ${seriesId} 對應的 slug，跳轉至產品列表`);
+						router.push({ path: targetPath });
+					}
+				} else {
+					console.warn(`項目 ${item._id} (${entityType}) 缺少 series._id 信息，無法跳轉至系列頁面，跳轉至產品列表`);
+					router.push({ path: targetPath });
+				}
 				break;
 			default:
-				console.warn(`未知的實體類型: ${entityType}`);
+				console.warn(`未知的實體類型: ${entityType}，跳轉至產品列表`);
+				router.push({ path: targetPath });
 		}
 	}
 

@@ -102,11 +102,12 @@ export const useSearchStore = defineStore("search", {
 			}
 
 			// 保存到 localStorage
-			localStorage.setItem("recentSearches", JSON.stringify(this.recentSearches));
+			if (process.client) localStorage.setItem("recentSearches", JSON.stringify(this.recentSearches));
 		},
 
 		// 載入最近搜尋紀錄
 		loadRecentSearches() {
+			if (!process.client) return; // 如果不在客戶端，直接返回
 			try {
 				const saved = localStorage.getItem("recentSearches");
 				if (saved) {
@@ -120,7 +121,7 @@ export const useSearchStore = defineStore("search", {
 		// 清除最近搜尋紀錄
 		clearRecentSearches() {
 			this.recentSearches = [];
-			localStorage.removeItem("recentSearches");
+			if (process.client) localStorage.removeItem("recentSearches");
 		},
 
 		// 全局搜尋

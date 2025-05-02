@@ -1,7 +1,7 @@
 <template>
 	<section id="intro-section" ref="introSection" class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
 		<!-- 服務特點區 -->
-		<article class="relative min-h-[80vh] sm:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
+		<article class="relative min-h-[70vh] md:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
 			<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
 			<!-- 頂部功能列 -->
 			<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
@@ -33,7 +33,7 @@
 		<article
 			id="yscp-article"
 			ref="yscpSection"
-			class="relative container min-h-[90vh] sm:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
+			class="relative container min-h-[70vh] md:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
 		>
 			<!-- 左側內容說明 -->
 			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">

@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, onUnmounted, inject } from "vue";
+import { ref, onMounted, nextTick, inject } from "vue";
 
 // 將 storyContainers 提到外面作為共用變數
 const storyContainers = ["intro", "cloud", "mountain", "sky"];

@@ -1,5 +1,5 @@
 <template>
-	<aside class="bg-secondary rounded-[100px] min-h-screen flex flex-col justify-center gap-[24px] md:gap-[48px]">
+	<section class="bg-secondary rounded-[100px] min-h-screen flex flex-col justify-center gap-[24px] md:gap-[48px]">
 		<!-- News -->
 		<article class="container px-[48px] lg:px-[120px] text-primary flex flex-col lg:flex-row justify-between lg:items-center gap-[24px] lg:gap-0">
 			<!-- CTA -->
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 		</article>
-	</aside>
+	</section>
 </template>
 
 <script setup>
