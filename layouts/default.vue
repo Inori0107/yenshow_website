@@ -184,7 +184,7 @@ onMounted(() => {
 	left: 0;
 	width: 100%;
 	height: 100vh;
-	background: url("/heroPic.jpg") no-repeat fixed center center/cover;
+	background: url("/heroPic.jpg") no-repeat center center/cover;
 }
 
 /* 在螢幕寬度小於 768px 時，使用小圖 */
@@ -195,7 +195,7 @@ onMounted(() => {
 		left: 0;
 		width: 100%;
 		height: 100vh;
-		background: url("/heroPic-sm.png") no-repeat fixed center center/cover;
+		background: url("/heroPic-sm.png") no-repeat center center/cover;
 	}
 }
 </style>

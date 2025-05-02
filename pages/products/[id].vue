@@ -29,11 +29,14 @@
 			<section class="container flex flex-col md:flex-row py-4 md:py-6 lg:py-8 justify-center items-center gap-4 md:gap-8 lg:gap-12">
 				<!-- 產品圖片區 -->
 				<div class="bg-white rounded-lg overflow-hidden flex items-center justify-center aspect-square w-[282px] md:w-[384px]">
-					<img
+					<NuxtImg
 						v-if="currentImage"
 						:src="currentImage"
 						:alt="getLocalizedName(product)"
 						class="w-3/4 aspect-square object-contain cursor-pointer"
+						loading="lazy"
+						format="webp"
+						sizes="288px md:384px"
 						@click="openImageModal(currentImage)"
 					/>
 					<div v-else class="text-gray-500 py-20">尚無圖片</div>
@@ -103,7 +106,14 @@
 				</svg>
 			</button>
 			<div class="max-w-5xl max-h-[90vh]">
-				<img :src="modalImage" :alt="getLocalizedName(product)" class="max-w-full max-h-[90vh] object-contain" />
+				<NuxtImg
+					:src="modalImage"
+					:alt="getLocalizedName(product)"
+					class="max-w-full max-h-[90vh] object-contain"
+					loading="lazy"
+					format="webp"
+					sizes="90vw lg:1280px"
+				/>
 			</div>
 		</div>
 	</div>

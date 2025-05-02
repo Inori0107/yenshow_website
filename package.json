@@ -14,7 +14,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+
+    "@nuxt/image": "^1.10.0",
+
     "@emailjs/browser": "^4.4.1",
+
     "@nuxtjs/device": "^3.2.4",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "^9.2.0",

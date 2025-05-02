@@ -15,7 +15,7 @@
 	<ProductIntro id="products" />
 
 	<!-- Cooperation -->
-	<Cooperation id="cases" />
+	<SuccessCasesIntro id="cases" />
 
 	<!-- News & Events -->
 	<NewsEvents />
@@ -26,10 +26,10 @@ import { provide, onMounted, onUnmounted } from "vue";
 import HeroPic from "~/components/Home/HeroPic.vue";
 import Story from "~/components/Home/Story.vue";
 import Intro from "~/components/Home/Intro.vue";
-import Cooperation from "~/components/Home/Cooperation.vue";
 import Quote from "~/components/Home/Quote.vue";
 import NewsEvents from "~/components/Home/NewsEvents.vue";
 import ProductIntro from "~/components/Home/ProductIntro.vue";
+import SuccessCasesIntro from "~/components/Home/SuccessCasesIntro.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 useHead({

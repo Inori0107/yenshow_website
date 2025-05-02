@@ -29,7 +29,7 @@
 	</section>
 
 	<!-- 產品列表 -->
-	<section class="bg-white">
+	<section class="bg-gray-50">
 		<div class="container mx-auto px-4 py-16 space-y-[24px] md:space-y-[48px] lg:space-y-[144px]">
 			<!-- 載入狀態和錯誤處理 -->
 			<div v-if="isLoadingProducts" class="text-center py-12">
