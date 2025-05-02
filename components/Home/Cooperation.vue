@@ -1,16 +1,175 @@
 <template>
-	<!-- Cooperation -->
+	<!-- ProductIntro -->
 	<section class="marquee-background bg-primary relative overflow-hidden my-[128px] md:my-[512px] flex items-center min-h-screen">
-		<article
-			class="bg-overlay absolute inset-0 z-50 flex flex-col justify-center items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary text-center"
-		>
-			<h3 class="cooperation-title text-[24px] md:text-[48px] lg:text-[64px] font-bold">{{ $t("Success Stories") }}</h3>
-			<h5 class="cooperation-subtitle text-[16px] md:text-[24px] lg:text-[36px] font-bold">{{ $t("building tech life") }}</h5>
-			<span class="cooperation-desc text-[12px] md:text-[16px] lg:text-[24px] font-light"
-				>{{ $t("cooperation description line1") }}<br />
-				{{ $t("cooperation description line2") }}</span
-			>
-			<Button-CTA class="cooperation-btn" :label="$t('view more')" color="white" to="/Success-Stories"></Button-CTA>
+		<article class="search-overlay absolute inset-0 z-50 flex flex-col justify-center items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary">
+			<div class="search-container w-full max-w-[80%] md:max-w-[60%] lg:max-w-[40%] z-10 transition-all duration-300 relative">
+				<div class="text-center space-y-[12px] md:space-y-[24px] mb-[24px] md:mb-[48px]">
+					<h2 class="text-secondary text-[24px] md:text-[36px] lg:text-[64px] font-bold">探索產品</h2>
+					<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">打造科技便捷的生活</h5>
+					<p class="text-secondary/80 text-[12px] md:text-[16px] lg:text-[24px]">
+						各類產品系統整合，提供多種優質的安全產品和服務，<br />
+						不用複雜的管理軟體，便可創造無限的價值
+					</p>
+				</div>
+
+				<!-- 搜尋輸入區域 -->
+				<div class="relative mb-[8px]">
+					<input
+						ref="searchInput"
+						v-model="keyword"
+						@input="handleInput"
+						@focus="handleFocus"
+						@blur="handleBlur"
+						@keydown.esc="closeResultsPanel"
+						@keydown.enter="triggerSearchFromEnter"
+						class="w-full rounded-lg px-[48px] py-[12px] outline-none focus:ring-2 focus:ring-blue-500 bg-slate-100 text-slate-700 border border-slate-200 shadow-sm hover:shadow-md transition-shadow placeholder-slate-400"
+						placeholder="搜尋產品、系列、分類..."
+					/>
+					<svg
+						class="absolute left-[16px] top-1/2 transform -translate-y-1/2 w-[20px] h-[20px] text-slate-400"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+					</svg>
+					<button
+						v-if="keyword"
+						@click="clearInputAndSearch"
+						class="absolute right-[16px] top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-200 transition-colors"
+					>
+						<svg class="w-[20px] h-[20px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+						</svg>
+					</button>
+				</div>
+
+				<!-- 搜尋結果面板 -->
+				<div
+					v-if="showResults"
+					class="search-results absolute top-full left-0 right-0 mt-[2px] bg-white border border-slate-200 rounded-xl max-h-[60vh] overflow-hidden z-20 shadow-xl flex flex-col"
+					@mousedown.prevent
+				>
+					<!-- 內容區域 -->
+					<div class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+						<!-- 加載中 -->
+						<div v-if="isLoading" class="p-[24px] text-center text-slate-400">
+							<div class="animate-spin inline-block w-[32px] h-[32px] border-4 rounded-full border-slate-200 border-t-blue-500"></div>
+							<p class="mt-[12px]">搜尋中...</p>
+						</div>
+
+						<!-- 最近搜尋 -->
+						<div v-else-if="!keyword && recentSearches.length > 0" class="p-[16px]">
+							<div class="flex justify-between items-center mb-[12px]">
+								<h3 class="text-[16px] text-slate-500">最近搜尋</h3>
+								<button @click="clearRecentSearchesAndClose" class="text-[14px] text-blue-400 hover:text-blue-300 transition-colors">清除</button>
+							</div>
+							<div class="flex flex-wrap gap-[8px]">
+								<button
+									v-for="(item, index) in recentSearches"
+									:key="index"
+									@click="searchRecent(item)"
+									class="px-[12px] py-[6px] rounded-full text-[14px] bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+								>
+									{{ item }}
+								</button>
+							</div>
+						</div>
+
+						<!-- 無結果 -->
+						<div v-else-if="keyword && !isLoading && !hasResults" class="p-[24px] text-center text-slate-500">
+							<p>找不到與「{{ keyword }}」相關的結果</p>
+						</div>
+
+						<!-- 搜尋結果 -->
+						<div v-else-if="keyword && hasResults" class="flex flex-col">
+							<!-- 分類標籤 -->
+							<div
+								class="flex overflow-x-auto whitespace-nowrap px-[16px] py-[8px] gap-[12px] bg-slate-100 border-b border-slate-200 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent sticky top-0 z-10"
+							>
+								<button
+									class="px-[12px] py-[6px] rounded-full transition-colors text-sm"
+									:class="activeTab === 'all' ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-200'"
+									@click="setActiveTab('all')"
+								>
+									全部 ({{ resultCounts.total }})
+								</button>
+								<button
+									v-for="(count, type) in resultCounts"
+									:key="type"
+									v-show="type !== 'total' && count > 0"
+									class="px-[12px] py-[6px] rounded-full transition-colors text-sm"
+									:class="activeTab === type ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-200'"
+									@click="setActiveTab(type)"
+								>
+									{{ entityTypeNames[type] }} ({{ count }})
+								</button>
+							</div>
+
+							<!-- 結果列表 -->
+							<div class="p-[16px]">
+								<template v-if="activeTab === 'all'">
+									<!-- 所有結果 -->
+									<div v-for="(items, type) in currentTabResults" :key="type" v-show="items.length > 0">
+										<h3 class="text-[16px] mb-[8px] text-slate-500 font-medium mt-4 first:mt-0">{{ entityTypeNames[type] }}</h3>
+										<div class="mb-[16px] space-y-1">
+											<button
+												v-for="item in items.slice(0, 3)"
+												:key="item._id"
+												@mousedown="handleResultClick(type, item)"
+												class="block w-full text-left px-[12px] py-[8px] rounded-lg transition-colors hover:bg-slate-100 text-slate-800"
+											>
+												<div class="text-[16px]">{{ getEntityName(item) }}</div>
+												<div v-if="item.code" class="text-[14px] text-slate-500">{{ item.code }}</div>
+											</button>
+										</div>
+										<button
+											v-if="items.length > 3"
+											@click="setActiveTab(type)"
+											class="text-[14px] text-blue-400 hover:text-blue-300 mt-[4px] transition-colors"
+										>
+											查看更多 {{ entityTypeNames[type] }} ({{ items.length }})
+										</button>
+									</div>
+								</template>
+								<template v-else>
+									<!-- 特定分類結果 -->
+									<div v-for="(items, type) in currentTabResults" :key="type" v-show="items.length > 0">
+										<h3 class="text-[16px] mb-[8px] text-slate-500 font-medium">{{ entityTypeNames[type] }}</h3>
+										<div class="mb-[16px] space-y-1">
+											<button
+												v-for="item in items"
+												:key="item._id"
+												@mousedown="handleResultClick(type, item)"
+												class="block w-full text-left px-[12px] py-[8px] rounded-lg transition-colors hover:bg-slate-100 text-slate-800"
+											>
+												<div class="text-[16px]">{{ getEntityName(item) }}</div>
+												<div v-if="item.code" class="text-[14px] text-slate-500">{{ item.code }}</div>
+											</button>
+										</div>
+									</div>
+								</template>
+							</div>
+						</div>
+
+						<!-- 初始提示或無最近搜尋 -->
+						<div v-else-if="!keyword && recentSearches.length === 0" class="p-[24px] text-center text-slate-400">
+							<span class="material-icons text-3xl">search</span>
+							<p class="mt-2">輸入關鍵字開始搜尋</p>
+						</div>
+					</div>
+
+					<!-- 底部操作區 -->
+					<div class="p-[16px] border-t border-slate-200">
+						<div class="flex justify-end">
+							<button @click="closeResultsPanel" class="px-[16px] py-[8px] rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+								關閉
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</article>
 		<aside class="flex flex-col justify-center items-center -rotate-6">
 			<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-[120%]">
@@ -34,14 +193,98 @@
 
 <script setup>
 import { ref, onMounted, nextTick, onUnmounted } from "vue";
-import ButtonCTA from "~/components/common/Button-CTA.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
+import { useGlobalSearch } from "~/composables/useGlobalSearch";
 
 // 注入滾動動畫控制器
 const scrollAnimation = useScrollAnimation();
 const { gsap, ScrollTrigger } = scrollAnimation;
 
-// 基本圖片資源
+// DOM 引用
+const searchInput = ref(null);
+
+// 全局搜尋 Composable
+const {
+	isLoading,
+	keyword,
+	activeTab,
+	resultCounts,
+	hasResults,
+	currentTabResults,
+	recentSearches,
+	setActiveTab,
+	debouncedSearch,
+	navigateToResult,
+	clearSearch,
+	getEntityName,
+	entityTypeNames,
+	clearRecentSearches,
+	search
+} = useGlobalSearch();
+
+// 本地狀態
+const showResults = ref(false);
+let blurTimeout = null;
+
+// --- 搜尋事件處理 ---
+const handleInput = () => {
+	showResults.value = true;
+	debouncedSearch(keyword.value);
+};
+
+const handleFocus = () => {
+	showResults.value = true;
+	if (!keyword.value) {
+		// Composable 會處理顯示最近搜尋
+	}
+};
+
+const handleBlur = () => {
+	blurTimeout = setTimeout(() => {
+		showResults.value = false;
+	}, 150);
+};
+
+const closeResultsPanel = () => {
+	showResults.value = false;
+	searchInput.value?.blur();
+};
+
+const handleResultClick = (entityType, item) => {
+	if (blurTimeout) clearTimeout(blurTimeout);
+	navigateToResult(entityType, item);
+	closeResultsPanel();
+};
+
+const searchRecent = (term) => {
+	if (blurTimeout) clearTimeout(blurTimeout);
+	search(term);
+	showResults.value = true;
+	searchInput.value?.focus();
+};
+
+const clearInputAndSearch = () => {
+	clearSearch();
+	keyword.value = "";
+	showResults.value = true;
+	searchInput.value?.focus();
+};
+
+const clearRecentSearchesAndClose = () => {
+	clearRecentSearches();
+	searchInput.value?.focus();
+};
+
+const triggerSearchFromEnter = () => {
+	if (keyword.value.trim()) {
+		search(keyword.value.trim());
+	} else {
+		closeResultsPanel();
+	}
+};
+// --- 搜尋事件處理結束 ---
+
+// --- 跑馬燈圖片資源 ---
 const baseImages = ref([
 	"/Location/location01.png",
 	"/Location/location02.png",
@@ -53,47 +296,37 @@ const baseImages = ref([
 
 const rows = ref(5);
 
-// 為不同的行生成不同順序的圖片陣列，增加視覺多樣性
 const getRowImages = (rowIndex) => {
-	// 根據行號創建一個獨特的排序
 	const shuffled = [...baseImages.value];
-
-	// 簡單的移位算法，根據行號調整起始位置
 	const offset = rowIndex % shuffled.length;
 	const reordered = [...shuffled.slice(offset), ...shuffled.slice(0, offset)];
-
 	return reordered;
 };
 
 // 設置跑馬燈動畫
 const setupMarqueeAnimation = async () => {
-	// 確保 ScrollTrigger 已初始化
 	await scrollAnimation.initScrollPlugins();
 	if (!ScrollTrigger.value) return;
 
-	// 初始設置 - 隱藏所有元素
-	gsap.set(".cooperation-title, .cooperation-subtitle, .cooperation-desc, .cooperation-btn", {
-		opacity: 0,
-		y: 32
+	// 初始設置 - 隱藏跑馬燈和搜尋容器內的文字
+	gsap.set(".marquee-wrapper, .search-container h2, .search-container h5, .search-container p", {
+		opacity: 0
 	});
+	gsap.set(".marquee-wrapper", {
+		x: (index) => (index % 2 === 0 ? -100 : 100),
+		scale: 0.95
+	});
+	// 設置文字元素的初始 Y 偏移
+	gsap.set(".search-container h2, .search-container h5, .search-container p", { y: 30 });
 
 	// 初始設置 section 的背景色為透明
 	gsap.set(".marquee-background", {
 		backgroundColor: "rgba(33, 42, 55, 0)"
 	});
 
-	// 初始設置 overlay 為透明
-	gsap.set(".bg-overlay", {
+	// 初始設置 overlay 為透明 (現在是 .search-overlay)
+	gsap.set(".search-overlay", {
 		opacity: 0
-	});
-
-	// 為奇偶行設定不同的初始位置 - 奇數行從左側進入，偶數行從右側進入
-	document.querySelectorAll(".marquee-wrapper").forEach((row, index) => {
-		gsap.set(row, {
-			opacity: 0,
-			x: index % 2 === 0 ? -100 : 100, // 偶數行從右側進入，奇數行從左側進入
-			scale: 0.95
-		});
 	});
 
 	// 主時間軸 - 統一控制所有動畫
@@ -103,7 +336,7 @@ const setupMarqueeAnimation = async () => {
 			start: "top 50%",
 			end: "top 0%",
 			toggleActions: "play none none reverse",
-			scrub: 1, // 平滑過渡效果
+			scrub: 1,
 			markers: false
 		}
 	});
@@ -111,18 +344,18 @@ const setupMarqueeAnimation = async () => {
 	// 1. 背景色和 overlay 的淡入效果
 	mainTl
 		.to(".marquee-background", {
-			backgroundColor: "rgba(33, 42, 55, 1)", // 背景色由透明變為實心
+			backgroundColor: "rgba(33, 42, 55, 1)",
 			duration: 2,
 			ease: "power1.inOut"
 		})
 		.to(
-			".bg-overlay",
+			".search-overlay", // 改為控制 search-overlay
 			{
 				opacity: 1, // overlay 淡入
 				duration: 1.5,
 				ease: "power1.inOut"
 			},
-			"-=1.5" // 與背景色變化有些重疊
+			"-=1.5"
 		);
 
 	// 2. 跑馬燈的層疊進入效果
@@ -136,43 +369,37 @@ const setupMarqueeAnimation = async () => {
 				duration: 0.8,
 				ease: "power2.out"
 			},
-			">-0.6" // 稍微重疊前一個動畫
+			">-0.6"
 		);
 	});
 
-	// 3. 文字元素的動畫 - 依序出現
+	// 3. 搜尋容器內文字的動畫 - 依序出現
 	mainTl
-		.to(".cooperation-title", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.3")
-		.to(".cooperation-subtitle", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.4")
-		.to(".cooperation-desc", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.3")
-		.to(".cooperation-btn", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.2");
+		.to(".search-container h2", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.5") // 在最後一個跑馬燈動畫快結束時開始
+		.to(".search-container h5", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.4") // 與 h2 動畫部分重疊
+		.to(".search-container p", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.4"); // 與 h5 動畫部分重疊
 };
 
 onMounted(async () => {
 	try {
-		// 等待 DOM 更新完成後再初始化
 		await nextTick();
-
-		// 設置動畫效果
 		await setupMarqueeAnimation();
-
-		// 監聽視窗調整事件
 		window.addEventListener("resize", scrollAnimation.handleResize);
 	} catch (error) {
 		console.error("Cooperation 動畫設置錯誤:", error);
 	}
 });
 
-// 清理動畫
 onUnmounted(() => {
+	if (blurTimeout) clearTimeout(blurTimeout); // 清理 timeout
 	window.removeEventListener("resize", scrollAnimation.handleResize);
 	scrollAnimation.cleanupScrollTriggers();
 });
 </script>
 
 <style scoped>
-.bg-overlay {
-	background-color: rgba(33, 42, 55, 0.6); /* 增加透明度，讓文字更加清晰 */
+.search-overlay {
+	background-color: rgba(33, 42, 55, 0.6);
 }
 
 /* 跑馬燈基本樣式 */
@@ -245,4 +472,48 @@ onUnmounted(() => {
 		transform: translateX(calc(-100% - var(--gap)));
 	}
 }
+
+/* === 搜尋相關樣式開始 === */
+.search-container {
+	will-change: transform, opacity;
+}
+
+.search-results {
+	transform-origin: top center;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	animation: fadeInScale 0.2s ease-out;
+	/* 確保結果面板在搜尋框之上，但在 overlay 之下 */
+	/* z-index 在 Tailwind 中為 z-20，已足夠 */
+}
+
+@keyframes fadeInScale {
+	from {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.98);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+/* 自定義滾動條 */
+.scrollbar-thin::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+.scrollbar-thumb-slate-300::-webkit-scrollbar-thumb {
+	background-color: #cbd5e1; /* slate-300 */
+	border-radius: 6px;
+}
+
+.scrollbar-thumb-slate-300:hover::-webkit-scrollbar-thumb {
+	background-color: #94a3b8; /* slate-400 */
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+/* === 搜尋相關樣式結束 === */
 </style>

@@ -8,15 +8,18 @@
 			<div
 				v-for="product in products"
 				:key="product._id"
-				class="bg-gray-50 p-4 rounded-lg hover:shadow-lg transition-all duration-300 w-72 flex-shrink-0"
+				class="bg-white p-4 rounded-lg hover:shadow-lg transition-all duration-300 w-72 flex-shrink-0"
 				@click="viewProduct(product)"
 			>
-				<div class="aspect-square bg-gray-100 rounded-md mb-4 cursor-pointer">
-					<img
+				<div class="aspect-square rounded-md mb-4 cursor-pointer flex items-center justify-center">
+					<NuxtImg
 						v-if="product.images && product.images.length > 0"
 						:src="product.images[0]"
 						:alt="product.displayName || product.model || '產品圖片'"
-						class="w-full h-full object-contain"
+						class="h-[80%] object-contain"
+						loading="lazy"
+						format="webp"
+						sizes="288px"
 					/>
 					<div v-else class="w-full h-full flex items-center justify-center text-gray-400">尚無圖片</div>
 				</div>

@@ -72,7 +72,7 @@ export function useGlobalSearch() {
 
 		searchTimeout = setTimeout(() => {
 			performSearch(keyword);
-		}, 300);
+		}, 500);
 	}
 
 	// 點擊搜尋結果進行導航
