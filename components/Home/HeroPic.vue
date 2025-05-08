@@ -90,6 +90,7 @@ let animationId;
 
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
+const { isMobile } = scrollAnimation;
 
 // Hero animation - 使用 timeline 統一控制
 const setupEntranceAnimation = () => {
@@ -150,8 +151,8 @@ const initThree = () => {
 
 // 根據螢幕尺寸獲取相機距離
 const getCameraDistance = () => {
-	const width = window.innerWidth;
-	if (width < 640) return 20; // sm
+	if (isMobile.value) return 20; // 使用 isMobile.value
+	const width = window.innerWidth; // 保留寬度判斷平板和桌面
 	if (width < 768) return 18; // md
 	if (width < 1024) return 16; // lg
 	return 15; // xl 及以上
@@ -159,13 +160,15 @@ const getCameraDistance = () => {
 
 const createNetworkSphere = () => {
 	// 根據裝置調整粒子數量
-	const width = window.innerWidth;
 	let particleCount;
 
-	if (width < 640) particleCount = 600; // sm
-	else if (width < 768) particleCount = 800; // md
-	else if (width < 1024) particleCount = 1200; // lg
-	else particleCount = 1500; // xl 及以上
+	if (isMobile.value) particleCount = 600; // sm and potentially md based on breakpoint
+	else {
+		// 根據桌面和平板區分
+		const width = window.innerWidth;
+		if (width < 1024) particleCount = 1200; // lg
+		else particleCount = 1500; // xl 及以上
+	}
 
 	const particles = new THREE.BufferGeometry();
 	const positions = new Float32Array(particleCount * 3);
@@ -204,7 +207,7 @@ const createNetworkSphere = () => {
 	particles.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
 	// 粒子材質 - 根據裝置調整大小
-	const particleSize = width < 640 ? 0.18 : width < 768 ? 0.15 : 0.1;
+	const particleSize = isMobile.value ? 0.18 : 0.1; // 簡化為移動或非移動
 	const particleMaterial = new THREE.PointsMaterial({
 		size: particleSize,
 		vertexColors: true,
@@ -221,14 +224,14 @@ const createNetworkSphere = () => {
 	const linePositions = [];
 
 	// 為每個粒子尋找最近的幾個粒子並連線
-	const connectionsPerParticle = width < 768 ? 2 : width < 1024 ? 3 : 4;
+	const connectionsPerParticle = isMobile.value ? 2 : 4; // 簡化為移動或非移動
 	for (let i = 0; i < particleCount; i++) {
 		const x1 = positions[i * 3];
 		const y1 = positions[i * 3 + 1];
 		const z1 = positions[i * 3 + 2];
 
 		// 根據裝置類型調整連線數量
-		const connectionsCount = connectionsPerParticle + Math.floor(Math.random() * (width < 768 ? 1 : 2));
+		const connectionsCount = connectionsPerParticle + Math.floor(Math.random() * (isMobile.value ? 1 : 2));
 
 		for (let j = 0; j < connectionsCount; j++) {
 			// 隨機選擇另一個粒子

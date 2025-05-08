@@ -93,6 +93,7 @@
 										@dragleave.prevent="dragover = false"
 										@drop.prevent="onDrop"
 										:class="{ dragover: dragover }"
+										@click="openFileDialog"
 									>
 										<input type="file" ref="fileInput" @change="onFileSelected" multiple class="hidden" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" />
 										<div class="flex flex-col items-center justify-center h-full">
@@ -110,7 +111,7 @@
 												<polyline points="17 8 12 3 7 8"></polyline>
 												<line x1="12" y1="3" x2="12" y2="15"></line>
 											</svg>
-											<p class="mt-2 text-sm text-cyan-400 cursor-pointer" @click="openFileDialog">選擇檔案</p>
+											<p class="mt-2 text-sm text-cyan-400 cursor-pointer">選擇檔案</p>
 										</div>
 									</div>
 

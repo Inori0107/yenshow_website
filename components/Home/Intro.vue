@@ -235,7 +235,8 @@ const setupSectionBgAnimation = () => {
 	scrollAnimation.createBasicAnimation({
 		elements: introSection.value,
 		trigger: "#intro-section",
-		start: "top 60%",
+		start: "top 70%",
+		end: "bottom 20%",
 		fromProps: {
 			opacity: 0,
 			y: 30
@@ -268,10 +269,10 @@ const setupHexagonRowAnimations = async () => {
 
 	// Store the timeline instance
 	featureTl = gsap.timeline({
-		// Assign to featureTl
 		scrollTrigger: {
 			trigger: ".feature-section",
-			start: "top 60%",
+			start: "top 70%",
+			end: "bottom 20%",
 			toggleActions: "play none none reverse"
 		}
 	});
@@ -282,28 +283,28 @@ const setupHexagonRowAnimations = async () => {
 		.to(rows[1], { opacity: 1, y: 0, duration: 1.2 }, 1.3)
 		.to(rows[2], { opacity: 1, y: 0, duration: 1.2 }, 1.6);
 
-	// 2. Hexagon container animation
+	// 2. Hexagon container animation - Adjusted for mobile
 	featureTl.to(
 		hexagonElements,
 		{
 			opacity: 1,
 			y: 0,
-			duration: 0.6,
-			stagger: 0.1,
-			ease: "back.out(1.7)"
+			duration: isMobile.value ? 0.4 : 0.6, // Shorter duration on mobile
+			stagger: isMobile.value ? 0.07 : 0.1, // Less stagger on mobile
+			ease: isMobile.value ? "power1.out" : "back.out(1.7)" // Simpler ease on mobile
 		},
 		2.0 // Start container animation at 2.0s
 	);
 
-	// 3. Hexagon content animation (slightly delayed)
+	// 3. Hexagon content animation (slightly delayed) - Adjusted for mobile
 	featureTl.to(
 		hexagonContents,
 		{
 			opacity: 1,
 			y: 0, // Animate content opacity and y
-			duration: 0.5,
-			stagger: 0.08, // Stagger content slightly less than containers if needed
-			ease: "power2.out"
+			duration: isMobile.value ? 0.3 : 0.5, // Shorter duration on mobile
+			stagger: isMobile.value ? 0.05 : 0.08, // Less stagger on mobile
+			ease: "power2.out" // Keep this ease, it's simple enough
 		},
 		2.2 // Start content animation slightly after containers (e.g., 2.0s + 0.2s delay)
 	);
@@ -382,8 +383,7 @@ const createWaveAnimation = (container) => {
 // 設置 YSCP 部分的滾動觸發動畫
 const setupYSCPAnimations = async () => {
 	// 檢測是否為移動設備
-	const isMobile = window.innerWidth < 768;
-	const animationDelay = isMobile ? 0.3 : 0.5;
+	const animationDelay = isMobile.value ? 0.3 : 0.5; // 使用 isMobile.value
 
 	// --- 添加 gsap.set 設定初始狀態 ---
 	gsap.set(yscpSection.value, { opacity: 0, y: 40 });
@@ -397,19 +397,26 @@ const setupYSCPAnimations = async () => {
 
 	// Store the timeline instances
 	yscpTextTl = scrollAnimation.createTimelineAnimation({
-		// Assign to yscpTextTl
 		trigger: "#yscp-article",
 		start: "top 70%",
+		end: "bottom 20%",
 		toggleActions: "play none none reverse"
 	});
 
 	// 1. 整個區塊淡入 (使用 to，因為 gsap.set 已設 from)
-	yscpTextTl.to(yscpSection.value, { opacity: 1, y: 0, duration: isMobile ? 0.8 : 1.2, ease: "power2.out" });
+	yscpTextTl.to(yscpSection.value, { opacity: 1, y: 0, duration: isMobile.value ? 0.8 : 1.2, ease: "power2.out" }); // 使用 isMobile.value
 
 	// 2. 標題與裝飾線條 (使用 to)
 	yscpTextTl.to(
 		".product-title",
-		{ opacity: 1, scale: 1, textShadow: "0 0 5px rgba(221, 28, 28, 0.3)", color: "#dd1c1c", duration: isMobile ? 0.8 : 1.2, ease: "power3.out" },
+		{
+			opacity: 1,
+			scale: 1,
+			textShadow: "0 0 5px rgba(221, 28, 28, 0.3)",
+			color: "#dd1c1c",
+			duration: isMobile.value ? 0.8 : 1.2, // 使用 isMobile.value
+			ease: "power3.out"
+		},
 		"-=0.9"
 	);
 
@@ -435,10 +442,10 @@ const setupYSCPAnimations = async () => {
 
 	// Store the timeline instances
 	circlesMasterTl = gsap.timeline({
-		// Assign to circlesMasterTl
 		scrollTrigger: {
 			trigger: ".feature-circles",
 			start: "top 70%",
+			end: "bottom 20%",
 			toggleActions: "play none none reverse"
 		},
 		delay: animationDelay
@@ -446,14 +453,21 @@ const setupYSCPAnimations = async () => {
 
 	// 使用 to，因為 gsap.set 已設 from
 	circlesArray.forEach((circle, index) => {
-		circlesMasterTl.to(circle, { scale: 1, opacity: 1, y: 0, duration: isMobile ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" }, index * (isMobile ? 0.2 : 0.3));
+		circlesMasterTl.to(
+			circle,
+			{ scale: 1, opacity: 1, y: 0, duration: isMobile.value ? 0.6 : 0.8, ease: "elastic.out(1, 0.75)" },
+			index * (isMobile.value ? 0.2 : 0.3)
+		); // 使用 isMobile.value
 	});
 
-	// 波紋動畫添加在最後
+	// 波紋動畫添加在最後 - Skip on mobile
 	circlesMasterTl.call(
 		() => {
-			if (featureCircles.value && document.body.contains(featureCircles.value)) {
+			// 只在非行動裝置上創建波紋
+			if (!isMobile.value && featureCircles.value && document.body.contains(featureCircles.value)) {
 				waveElements = createWaveAnimation(featureCircles.value);
+			} else if (isMobile.value) {
+				console.log("Wave animation skipped on mobile.");
 			} else {
 				console.warn("功能圓圈容器不存在或未附加到DOM，無法創建波紋");
 			}
@@ -471,9 +485,9 @@ const setupHexGridAnimation = () => {
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: "#intro-section",
-				start: "top 60%",
-				end: "top 20%",
-				toggleActions: "play none none reverse", // 確保反覆滾動時動畫會重置
+				start: "top 70%",
+				end: "bottom 20%",
+				toggleActions: "play none none reverse",
 				onEnter: () => {
 					// 當進入觸發區域時播放動畫
 					console.log("Three.js animation triggered - enter");
@@ -526,11 +540,11 @@ const createHexagonGrid = () => {
 	// 設置初始位置
 	hexGrid.position.y = -4;
 
-	// 根據螢幕寬度調整網格密度
+	// 根據螢幕寬度調整網格密度 - Further reduced for mobile
 	const isMobile = window.innerWidth < 768;
-	const hexRadius = isMobile ? 1.2 : 1.5;
-	const rows = isMobile ? 10 : 15;
-	const cols = isMobile ? 15 : 20;
+	const hexRadius = isMobile ? 1.0 : 1.5; // Smaller radius on mobile
+	const rows = isMobile ? 8 : 15; // Fewer rows on mobile
+	const cols = isMobile ? 10 : 20; // Fewer cols on mobile
 	const vertDist = hexRadius * Math.sqrt(3);
 	const horizDist = hexRadius * 1.5;
 
@@ -774,7 +788,7 @@ canvas {
 	color: white;
 	padding: 4px 10px;
 	border-radius: 20px;
-	font-size: 12px;
+	font-size: 16px;
 	font-weight: 600;
 	box-shadow: 0 2px 4px rgba(221, 28, 28, 0.3);
 }
@@ -806,7 +820,7 @@ canvas {
 /* 添加較小螢幕的特定樣式 */
 @media (max-width: 639px) {
 	.feature-tag {
-		font-size: 10px;
+		font-size: 12px;
 		padding: 3px 8px;
 	}
 

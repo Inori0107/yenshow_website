@@ -333,10 +333,9 @@ const setupMarqueeAnimation = async () => {
 	const mainTl = gsap.timeline({
 		scrollTrigger: {
 			trigger: ".marquee-background",
-			start: "top 50%",
-			end: "top 0%",
+			start: "top 70%",
+			end: "bottom 20%",
 			toggleActions: "play none none reverse",
-			scrub: 1,
 			markers: false
 		}
 	});

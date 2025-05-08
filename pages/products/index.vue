@@ -42,59 +42,59 @@
 			</div>
 		</section>
 
-		<!-- 3. Product Series Introduction Sections (Scroll-triggered) -->
-		<section
-			id="video-intercom"
-			class="series-section h-screen bg-gradient-to-b from-transparent via-blue-900/80 to-blue-900 text-white flex items-center justify-center"
-		>
-			<div class="text-center">
-				<h2 class="text-4xl font-bold mb-4">可視對講</h2>
-				<p class="max-w-2xl mx-auto">創新的可視對講系統，提升居家與社區安全。</p>
-				<!-- Add more details or link -->
-			</div>
-		</section>
+		<!-- 3. Product Introduction Section -->
+		<section id="products" class="my-[128px] md:my-[256px] flex flex-col gap-[48px] lg:gap-[96px] relative z-10 container mx-auto px-4">
+			<h1 class="text-[24px] md:text-[48px] lg:text-[64px] text-white text-center">產品中心</h1>
 
-		<section
-			id="access-control"
-			class="series-section h-screen bg-gradient-to-b from-blue-900 via-purple-900/80 to-purple-900 text-white flex items-center justify-center"
-		>
-			<div class="text-center">
-				<h2 class="text-4xl font-bold mb-4">門禁管理</h2>
-				<p class="max-w-2xl mx-auto">智慧化門禁解決方案，管理人流與進出權限。</p>
-				<!-- Add more details or link -->
-			</div>
-		</section>
-
-		<section
-			id="surveillance-monitoring"
-			class="series-section h-screen bg-gradient-to-b from-purple-900 via-teal-900/80 to-teal-900 text-white flex items-center justify-center"
-		>
-			<div class="text-center">
-				<h2 class="text-4xl font-bold mb-4">影像監控</h2>
-				<p class="max-w-2xl mx-auto">高清影像監控，守護您的財產與安全。</p>
-				<!-- Add more details or link -->
-			</div>
-		</section>
-
-		<section
-			id="security-solutions"
-			class="series-section h-screen bg-gradient-to-b from-teal-900 via-indigo-900/80 to-indigo-900 text-white flex items-center justify-center"
-		>
-			<div class="text-center">
-				<h2 class="text-4xl font-bold mb-4">安全防護</h2>
-				<p class="max-w-2xl mx-auto">全方位的安全防護系統，應對各種挑戰。</p>
-				<!-- Add more details or link -->
-			</div>
-		</section>
-
-		<section
-			id="devices-accessories"
-			class="series-section h-screen bg-gradient-to-b from-indigo-900 via-gray-800/80 to-gray-900 text-white flex items-center justify-center"
-		>
-			<div class="text-center">
-				<h2 class="text-4xl font-bold mb-4">其他設備</h2>
-				<p class="max-w-2xl mx-auto">多樣化的週邊設備與配件，完善您的系統。</p>
-				<!-- Add more details or link -->
+			<!-- Product Display Area -->
+			<div class="flex flex-col gap-16 md:gap-24">
+				<div v-for="(product, index) in productCategories" :key="index" class="product-item bg-secondary rounded-[50px] lg:rounded-[100px]">
+					<div
+						class="py-[24px] px-4 md:px-8 md:py-[48px] lg:min-h-[600px] flex flex-col md:flex-row justify-evenly items-center gap-[24px]"
+						:class="{ 'md:flex-row-reverse': index % 2 !== 0 }"
+						Alternate
+						layout
+						--
+					>
+						>
+						<!-- content -->
+						<div class="flex flex-col items-center gap-[24px] lg:gap-[48px] text-primary max-w-lg">
+							<div class="w-full flex gap-[32px] lg:gap-[64px] items-center">
+								<span :class="['h-fit rounded-full text-[12px] md:text-[16px] lg:text-[24px] px-[12px] py-1 text-black', product.colorClass]">
+									{{ product.number }}
+								</span>
+								<h3 class="text-[21px] md:text-[32px] lg:text-[48px] font-semibold">{{ product.title }}</h3>
+							</div>
+							<div class="text-[12px] md:text-[16px] lg:text-[20px] text-left w-full">
+								{{ product.description }}
+							</div>
+							<ButtonCTA :to="product.link"></ButtonCTA>
+						</div>
+						<!-- image -->
+						<div class="h-fit flex flex-col items-center gap-[16px] p-[16px] lg:p-[32px] bg-white rounded-[50px]">
+							<!-- Image Selection Buttons -->
+							<div class="flex flex-wrap justify-center gap-x-[16px] gap-y-2 lg:gap-x-[32px]">
+								<span
+									v-for="(item, i) in product.imageOptions"
+									:key="i"
+									@click="selectedImageIndices[index] = i"
+									class="text-[14px] lg:text-[20px] cursor-pointer transition duration-300 text-gray-700 hover:text-primary"
+									:class="{ 'text-primary font-bold border-b-2 border-primary': selectedImageIndices[index] === i }"
+								>
+									{{ item.label }}
+								</span>
+							</div>
+							<!-- Image Display -->
+							<div class="w-[300px] h-[225px] lg:w-[400px] lg:h-[300px] flex justify-center items-center overflow-hidden rounded-[25px] bg-gray-100">
+								<img
+									class="max-h-full w-auto object-contain"
+									:src="getSelectedImage(product, index)"
+									:alt="product.imageOptions[selectedImageIndices[index]].label"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 
@@ -105,7 +105,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import * as THREE from "three";
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'; // Optional for debugging
@@ -113,6 +113,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGlobalSearch } from "~/composables/useGlobalSearch";
 // import { useHierarchyStore } from '~/stores/hierarchyStore'; // To fetch series data later
+import ButtonCTA from "~/components/common/Button-CTA.vue"; // Import ButtonCTA
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -146,6 +147,83 @@ const {
 // Hierarchy Store (Placeholder for fetching actual series data)
 // const hierarchyStore = useHierarchyStore();
 // const productSeries = ref([]);
+
+// --- Product Categories Data ---
+interface ImageOption {
+	label: string;
+	src: string;
+}
+
+interface Product {
+	number: string;
+	title: string;
+	description: string;
+	colorClass: string;
+	link: string;
+	imageOptions: ImageOption[];
+}
+
+const productCategories = ref<Product[]>([
+	{
+		number: "01",
+		title: "可視對講",
+		description:
+			"結合先進的視訊通訊與門禁控制技術，提供高品質的影像與音訊傳輸，確保訪客識別的準確性與安全性。產品設計人性化，操作簡便，適用於住宅、辦公室、工廠等多種場景，滿足不同用戶的需求。透過APP，每個室內機最多可綁定5個家人使用，實現遠端監控與管理，提升生活便利性與安全性。",
+		colorClass: "bg-[#4DB6AC]",
+		link: "/products/Video-Intercom",
+		imageOptions: [
+			{ label: "管理中心主機", src: "/product/YS-9503.png" },
+			{ label: "門口機", src: "/product/YS-FTC-06.png" },
+			{ label: "室內機", src: "/product/YS-9510-WTE1.jpg" }
+		]
+	},
+	{
+		number: "02",
+		title: "門禁管理",
+		description:
+			"門禁控制產品系列，融合刷卡、指紋識別與人臉識別等多種先進技術，提供高效且安全的出入管理解決方案。產品設計靈活，適用於企業大樓、政府機構、機場、學校等多種場景，滿足不同用戶的需求。透過多樣化的識別方式，提升通行效率，確保場所安全。",
+		colorClass: "bg-[#FFC857]",
+		link: "/products/Access-Control",
+		imageOptions: [
+			{ label: "門禁控制", src: "/product/YS-AC-02F.jpg" },
+			{ label: "通關柵欄", src: "/product/YS-K3Y501SX.png" },
+			{ label: "訪客管理", src: "/product/YS-V50.jpg" }
+		]
+	},
+	{
+		number: "03",
+		title: "影像監控",
+		description:
+			"結合先進的視訊通訊與門禁控制技術，提供高品質的影像與音訊傳輸，確保訪客識別的準確性與安全性。產品設計人性化，操作簡便，適用於住宅、辦公室、工廠等多種場景，滿足不同用戶的需求。透過APP，每個室內機最多可綁定5個家人使用，實現遠端監控與管理，提升生活便利性與安全性。",
+		colorClass: "bg-[#66CCCC]", // Changed color for uniqueness
+		link: "/products/Surveillance-Monitoring",
+		imageOptions: [
+			{ label: "IPC", src: "/product/iYS-2CD7A46G2_P.png" },
+			{ label: "NVR", src: "/product/iYS-BA04.jpg" }
+		]
+	},
+	{
+		number: "04",
+		title: "安全防護",
+		description:
+			"人體測溫產品專注於高精度與高效能，採用先進熱成像技術，能快速進行非接觸式體溫篩檢，有效降低交叉感染風險。適用於辦公場所、工廠、醫院、機場等高人流區域，幫助用戶建立完善的體溫監控體系，提升公共健康與安全保障。",
+		colorClass: "bg-[#5E548E]",
+		link: "/products/Security-Solutions",
+		imageOptions: [
+			{ label: "人體測溫", src: "/product/YS-TTC-01.png" },
+			{ label: "無線警報", src: "/product/YS-PWA-YXPRO.jpg" },
+			{ label: "火災預警", src: "/product/YS-TBC-03.png" }
+		]
+	}
+]);
+
+// Index for selected image in each product card
+const selectedImageIndices = ref(productCategories.value.map(() => 0));
+
+// Get the source of the currently selected image for a product
+const getSelectedImage = (product: Product, productIndex: number) => {
+	return product.imageOptions[selectedImageIndices.value[productIndex]]?.src || ""; // Added fallback
+};
 
 // --- Three.js Setup ---
 function initThree() {
@@ -225,67 +303,10 @@ function onWindowResize() {
 	}
 }
 
-// --- GSAP Scroll Animations ---
-function setupScrollAnimations() {
-	// Example: Basic camera movement on scroll
-	gsap.to(camera.position, {
-		z: 20, // Zoom out further
-		y: 5, // Move camera up slightly
-		scrollTrigger: {
-			trigger: ".product-center-page",
-			start: "top top",
-			end: "bottom bottom",
-			scrub: 1 // Smooth scrubbing effect
-			// markers: true, // Uncomment for debugging
-		}
-	});
-
-	// Example: Animate sections based on scroll (Could involve camera focusing)
-	const sections = gsap.utils.toArray(".series-section");
-	sections.forEach((section, index) => {
-		// Placeholder: Fade in section content
-		gsap.from(section.children, {
-			// Animate direct children (div)
-			opacity: 0,
-			y: 50,
-			duration: 1,
-			stagger: 0.2,
-			scrollTrigger: {
-				trigger: section,
-				start: "top 70%", // Start animation when section is 70% in view
-				// end: "bottom top",
-				toggleActions: "play none none reverse" // Play on enter, reverse on leave
-				// markers: true, // Uncomment for debugging
-				// scrub: true // Optional: scrub animation along with scroll
-			}
-		});
-
-		// --- TODO: Add Three.js camera animations per section ---
-		// Example: Move camera to a specific point when a section is active
-		// ScrollTrigger.create({
-		//   trigger: section,
-		//   start: "top center",
-		//   end: "bottom center",
-		//   onEnter: () => {
-		//       gsap.to(camera.position, { x: index * 5, z: 10, duration: 1.5, ease: 'power2.inOut' });
-		//       gsap.to(camera.rotation, { y: index * Math.PI / 4, duration: 1.5, ease: 'power2.inOut' }); // Rotate camera too
-		//   },
-		//   onLeaveBack: () => { // Handle scrolling back up
-		//      // Determine previous section's target or default
-		//      const prevTargetX = (index > 0) ? (index - 1) * 5 : 0;
-		//      const prevTargetZ = (index > 0) ? 10 : 5; // Default Z
-		//      const prevTargetRotY = (index > 0) ? (index - 1) * Math.PI / 4 : 0;
-		//      gsap.to(camera.position, { x: prevTargetX, z: prevTargetZ, duration: 1.5, ease: 'power2.inOut' });
-		//      gsap.to(camera.rotation, { y: prevTargetRotY, duration: 1.5, ease: 'power2.inOut' });
-		//   }
-		// });
-	});
-}
-
 // --- Lifecycle Hooks ---
 onMounted(async () => {
 	initThree();
-	setupScrollAnimations();
+	// setupScrollAnimations(); // Removed call
 
 	// --- TODO: Fetch actual product series data ---
 	// try {
@@ -328,12 +349,36 @@ onUnmounted(() => {
 	color: #333; /* Default text color for sections */
 }
 
-/* Style the sections */
-.series-section {
-	/* Ensures sections take full viewport height */
-	padding: 4rem 1rem; /* Add padding */
-	position: relative; /* Needed for absolute positioning inside if required */
-	box-sizing: border-box;
+/* Style the product introduction section */
+#products {
+	background-color: rgba(0, 0, 0, 0.1); /* Slightly dim background to make content pop */
+	padding-top: 6rem;
+	padding-bottom: 6rem;
+}
+
+.product-item {
+	/* Add transition for potential future animations */
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-item:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.text-secondary {
+	/* Assuming secondary color is white or light for contrast on dark bg */
+	color: #ffffff;
+}
+
+.text-primary {
+	/* Define your primary text color */
+	color: #333; /* Example: Dark gray */
+}
+
+.bg-secondary {
+	/* Define your secondary background color - adjust as needed */
+	background-color: #f8f9fa; /* Example: Light gray */
 }
 
 /* Clear default link styles within product cards if needed */

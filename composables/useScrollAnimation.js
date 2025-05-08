@@ -76,7 +76,7 @@ export function useScrollAnimation() {
 
 	// 設置基本滾動動畫
 	const createScrollAnimation = (params) => {
-		const { trigger, animation, start = "top 80%", end = "bottom 20%", toggleActions = "play none none reverse" } = params;
+		const { trigger, animation, start = "top 70%", end = "bottom 20%", toggleActions = "play none none reverse" } = params;
 
 		if (!ScrollTrigger.value) return null;
 
@@ -96,9 +96,9 @@ export function useScrollAnimation() {
 	const createPinnedSection = (params) => {
 		const {
 			trigger,
-			start = "top top",
-			end,
-			scrub = 1,
+			start = "top 70%",
+			end = "bottom 20%",
+			scrub = false,
 			markers = false,
 			onUpdate,
 			snap,
@@ -140,7 +140,7 @@ export function useScrollAnimation() {
 		const {
 			selector,
 			trigger,
-			start = "top 80%",
+			start = "top 70%",
 			end = "bottom 20%",
 			staggerAmount = 0.05,
 			duration = 0.7,
@@ -174,8 +174,8 @@ export function useScrollAnimation() {
 		const {
 			elements,
 			trigger,
-			start = "top 80%",
-			end,
+			start = "top 70%",
+			end = "bottom 20%",
 			staggerAmount = 0.2,
 			staggerFrom = "start",
 			fromY = 30,
@@ -213,8 +213,8 @@ export function useScrollAnimation() {
 		const {
 			elements,
 			trigger,
-			start = "top 80%",
-			end,
+			start = "top 70%",
+			end = "bottom 20%",
 			fromY = 30,
 			fromOpacity = 0,
 			fromScale = 1,
@@ -257,7 +257,7 @@ export function useScrollAnimation() {
 		const {
 			elements,
 			trigger,
-			start = "top 80%",
+			start = "top 70%",
 			end = "bottom 20%",
 			fromProps = { opacity: 0, y: 30 },
 			toProps = { opacity: 1, y: 0 },
@@ -296,7 +296,7 @@ export function useScrollAnimation() {
 
 	// 創建時間軸動畫 - 用於更複雜的連續動畫
 	const createTimelineAnimation = (params) => {
-		const { trigger, start = "top 80%", end = "bottom 20%", scrub = false, toggleActions = "play none none reverse", mobileScrubFactor = 1.5 } = params;
+		const { trigger, start = "top 70%", end = "bottom 20%", scrub = false, toggleActions = "play none none reverse", mobileScrubFactor = 1.5 } = params;
 
 		if (!ScrollTrigger.value) return null;
 
@@ -318,8 +318,8 @@ export function useScrollAnimation() {
 		const {
 			element,
 			trigger,
-			start = "top bottom",
-			end = "bottom top",
+			start = "top 70%",
+			end = "bottom 20%",
 			fromProps = { yPercent: 0 },
 			toProps = { yPercent: 30 },
 			scrub = true,

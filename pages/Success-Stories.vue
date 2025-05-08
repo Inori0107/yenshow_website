@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -183,7 +183,9 @@ const public_feature = ref([
 	}
 ]);
 
-onMounted(() => {
+onMounted(async () => {
+	await nextTick();
+
 	// --- Entrance Animation ---
 	if (titleRef.value && heroBlocks.value) {
 		gsap.set(titleRef.value, { autoAlpha: 0, y: 30 });
@@ -195,11 +197,18 @@ onMounted(() => {
 			.to(heroBlocks.value.children, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" }, "-=0.4"); // Start slightly before title finishes
 	}
 
-	// --- ScrollTrigger Animations (Existing Code) ---
-	const businessTitle = businessRef.value.querySelector("h4");
-	const businessFeatures = businessRef.value.querySelectorAll(".feature");
-	const publicTitle = publicRef.value.querySelector("h4");
-	const publicFeatures = publicRef.value.querySelectorAll(".feature");
+	// --- ScrollTrigger Animations ---
+	// 使用可選鏈 ?. 增加安全性
+	const businessTitle = businessRef.value?.querySelector("h4");
+	const businessFeatures = businessRef.value?.querySelectorAll(".feature");
+	const publicTitle = publicRef.value?.querySelector("h4");
+	const publicFeatures = publicRef.value?.querySelectorAll(".feature");
+
+	// 檢查必要的 refs 和元素是否存在
+	if (!sectionRef.value || !businessRef.value || !publicRef.value || !businessTitle || !publicTitle) {
+		console.error("GSAP 動畫所需的元素未在 DOM 中找到。");
+		return; // 如果缺少關鍵元素則退出
+	}
 
 	ScrollTrigger.matchMedia({
 		// --- 大螢幕 (>= 768px) ---
@@ -207,10 +216,11 @@ onMounted(() => {
 			// --- 初始狀態設定 ---
 			gsap.set(businessRef.value, { autoAlpha: 1 });
 			gsap.set(publicRef.value, { autoAlpha: 0 });
-			gsap.set([businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], {
-				autoAlpha: 0,
-				y: 30
-			});
+
+			// 確保 features 存在再設定
+			const allFeaturesExist = businessFeatures?.length && publicFeatures?.length;
+			const elementsToSet = allFeaturesExist ? [businessTitle, ...businessFeatures, publicTitle, ...publicFeatures] : [businessTitle, publicTitle];
+			gsap.set(elementsToSet, { autoAlpha: 0, y: 30 });
 
 			// --- 主時間軸設定 ---
 			const tl = gsap.timeline({
@@ -220,28 +230,48 @@ onMounted(() => {
 					end: "+=350%",
 					scrub: 1,
 					pin: true,
-					markers: false
+					markers: false // 除非需要調試，否則保持 false
 				}
 			});
 
 			// --- 動畫序列編排 ---
-			tl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" })
-				.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5")
-				.to(businessTitle, { autoAlpha: 0, y: -30, duration: 1, ease: "power2.in" }, "+=1")
-				.to(businessFeatures, { autoAlpha: 0, y: -30, stagger: 0.2, duration: 1, ease: "power2.in" }, "<+0.3")
-				.set(businessRef.value, { autoAlpha: 0 }, "<+0.5")
-				.set(publicRef.value, { autoAlpha: 1 }, "<+0.5")
-				.to(publicTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "<+0.2")
-				.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5");
+			// 檢查 features 是否存在
+			if (businessFeatures?.length) {
+				tl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" })
+					.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5")
+					.to(businessTitle, { autoAlpha: 0, y: -30, duration: 1, ease: "power2.in" }, "+=1") // 增加顯示時間
+					.to(businessFeatures, { autoAlpha: 0, y: -30, stagger: 0.2, duration: 1, ease: "power2.in" }, "<"); // 同步開始淡出 features
+			} else {
+				// 如果 features 不存在時的備案
+				tl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }).to(
+					businessTitle,
+					{ autoAlpha: 0, y: -30, duration: 1, ease: "power2.in" },
+					"+=1.5"
+				); // 調整時間
+			}
 
-			// 返回一個清理函數，當條件不再匹配時執行
+			// 將 businessRef 隱藏，publicRef 顯示
+			// 使用 "<" 確保與上一個動畫的結束同步或稍微提前
+			tl.set(businessRef.value, { autoAlpha: 0 }, "<+0.8") // 在 features 完全淡出後再隱藏 businessRef
+				.set(publicRef.value, { autoAlpha: 1 }, "<"); // 同步顯示 publicRef
+
+			// 淡入 Public 區塊
+			if (publicFeatures?.length) {
+				tl.to(publicTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "<") // 與 set 同步開始
+					.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5");
+			} else {
+				tl.to(publicTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "<");
+			}
+
+			// 返回清理函數
 			return () => {
 				if (tl && tl.scrollTrigger) {
 					tl.scrollTrigger.kill();
 				}
-				tl.kill(); // 清理 timeline 本身
+				if (tl) tl.kill();
 				// 重置樣式，避免影響手機版佈局
-				gsap.set([businessRef.value, publicRef.value, businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], { clearProps: "all" });
+				gsap.set(elementsToSet, { clearProps: "all" });
+				gsap.set([businessRef.value, publicRef.value], { clearProps: "all" });
 			};
 		},
 
@@ -251,13 +281,17 @@ onMounted(() => {
 
 			// 初始狀態設定 (手機版)
 			gsap.set([businessRef.value, publicRef.value], { autoAlpha: 1 }); // 容器可見
-			gsap.set([businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], { autoAlpha: 0, y: 20 }); // 內容準備進場
+
+			const allFeaturesExist = businessFeatures?.length && publicFeatures?.length;
+			const elementsToSet = allFeaturesExist ? [businessTitle, ...businessFeatures, publicTitle, ...publicFeatures] : [businessTitle, publicTitle];
+			gsap.set(elementsToSet, { autoAlpha: 0, y: 20 }); // 內容準備進場
 
 			// 為 Business 區塊創建簡單進場動畫
-			const businessTl = gsap
-				.timeline({ paused: true })
-				.to(businessTitle, { autoAlpha: 1, y: 0, duration: 0.6 })
-				.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
+			const businessTl = gsap.timeline({ paused: true });
+			businessTl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 0.6 });
+			if (businessFeatures?.length) {
+				businessTl.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
+			}
 
 			mobileTriggers.push(
 				ScrollTrigger.create({
@@ -270,10 +304,11 @@ onMounted(() => {
 			);
 
 			// 為 Public 區塊創建簡單進場動畫
-			const publicTl = gsap
-				.timeline({ paused: true })
-				.to(publicTitle, { autoAlpha: 1, y: 0, duration: 0.6 })
-				.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
+			const publicTl = gsap.timeline({ paused: true });
+			publicTl.to(publicTitle, { autoAlpha: 1, y: 0, duration: 0.6 });
+			if (publicFeatures?.length) {
+				publicTl.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
+			}
 
 			mobileTriggers.push(
 				ScrollTrigger.create({
@@ -291,7 +326,8 @@ onMounted(() => {
 				if (businessTl) businessTl.kill();
 				if (publicTl) publicTl.kill();
 				// 重置樣式
-				gsap.set([businessRef.value, publicRef.value, businessTitle, ...businessFeatures, publicTitle, ...publicFeatures], { clearProps: "all" });
+				gsap.set(elementsToSet, { clearProps: "all" });
+				gsap.set([businessRef.value, publicRef.value], { clearProps: "all" });
 			};
 		},
 
@@ -300,6 +336,9 @@ onMounted(() => {
 			// 這裡可以放所有螢幕尺寸都需要的設定 (如果有的話)
 		}
 	});
+
+	// 選項：可以在稍後強制刷新 ScrollTrigger，以防動態內容影響佈局
+	// setTimeout(() => ScrollTrigger.refresh(), 500);
 });
 </script>
 

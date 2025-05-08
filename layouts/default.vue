@@ -8,6 +8,7 @@
 	<!-- Footer -->
 	<footer
 		class="container min-h-screen bg-black bg-opacity-25 relative flex flex-col md:flex-row justify-center items-center gap-[24px] text-secondary py-[48px] backdrop-filter backdrop-blur-sm"
+		ref="footerRef"
 	>
 		<!-- 公司資訊區塊 -->
 		<div class="flex items-center flex-col gap-[16px] md:gap-[24px]">
@@ -135,6 +136,7 @@ import { ref, onMounted } from "vue";
 import ButtonCTA from "../components/common/Button-CTA.vue";
 import MenuCTA from "../components/common/Menu-CTA.vue";
 import LanguageSwitcher from "../components/common/LanguageSwitcher.vue";
+import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 // 頁尾導航連結配置
 const linkCTA = ref([
@@ -162,13 +164,35 @@ const linkCTA = ref([
 	}
 ]);
 
-// 添加 onMounted 鉤子來控制滾動恢復
-onMounted(() => {
+const footerRef = ref(null);
+const { initScrollPlugins, gsap } = useScrollAnimation();
+
+// 添加 onMounted 鉤子來控制滾動恢復和動畫
+onMounted(async () => {
 	if ("scrollRestoration" in history) {
 		history.scrollRestoration = "manual";
 	}
 	// 確保頁面載入時滾動到頂部
 	window.scrollTo(0, 0);
+
+	// 初始化 GSAP 插件
+	await initScrollPlugins();
+
+	// 設定 Footer 淡入動畫
+	if (footerRef.value && gsap) {
+		gsap.set(footerRef.value, { opacity: 0, y: 30 });
+		gsap.to(footerRef.value, {
+			opacity: 1,
+			y: 0,
+			duration: 1.2,
+			ease: "power3.out",
+			scrollTrigger: {
+				trigger: footerRef.value,
+				start: "top 95%",
+				toggleActions: "play none none reverse"
+			}
+		});
+	}
 });
 </script>
 
