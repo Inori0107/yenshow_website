@@ -1,64 +1,66 @@
 <template>
-	<section
-		id="cases"
-		class="cases-intro py-[128px] md:py-[160px] bg-gradient-to-b from-primary to-slate-900 text-secondary overflow-hidden my-[128px] md:my-[256px]"
-	>
-		<div class="container mx-auto px-4 relative">
-			<!-- 標題與引文 -->
-			<div class="text-center mb-12 md:mb-20" ref="headerRef">
-				<h2 class="text-3xl md:text-5xl font-bold mb-4">多元應用，深度合作</h2>
-				<p class="text-lg md:text-xl text-secondary/80 max-w-3xl mx-auto">
-					從在地經銷夥伴到大型建案整合，遠岫科技的解決方案廣泛應用於各種場景，滿足不同規模的需求。
-				</p>
-			</div>
+	<div>
+		<section
+			id="cases"
+			class="cases-intro py-[128px] md:py-[160px] bg-gradient-to-b from-primary to-slate-900 text-secondary overflow-hidden my-[128px] md:my-[256px]"
+		>
+			<div class="container mx-auto px-4 relative">
+				<!-- 標題與引文 -->
+				<div class="text-center mb-12 md:mb-20" ref="headerRef">
+					<h2 class="text-3xl md:text-5xl font-bold mb-4">多元應用，深度合作</h2>
+					<p class="text-lg md:text-xl text-secondary/80 max-w-3xl mx-auto">
+						從在地經銷夥伴到大型建案整合，遠岫科技的解決方案廣泛應用於各種場景，滿足不同規模的需求。
+					</p>
+				</div>
 
-			<!-- 區塊 1: 經銷商與中小型應用 -->
-			<div class="mb-16 md:mb-24" ref="dealerSectionRef">
-				<h3 class="text-2xl md:text-3xl font-semibold text-center mb-8 md:mb-12">經銷商與中小型應用</h3>
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-					<div
-						v-for="(area, index) in dealerApplications"
-						:key="'dealer-' + index"
-						class="case-area-card flex flex-col items-center text-center p-6 rounded-2xl bg-black/20 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-300 hover:shadow-secondary/20 hover:-translate-y-2"
-					>
-						<div class="mb-4 p-4 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full inline-block shadow-md">
-							<img :src="area.icon" :alt="area.title" class="w-10 h-10 md:w-12 md:h-12 invert brightness-0" />
+				<!-- 區塊 1: 經銷商與中小型應用 -->
+				<div class="mb-16 md:mb-24" ref="dealerSectionRef">
+					<h3 class="text-2xl md:text-3xl font-semibold text-center mb-8 md:mb-12">經銷商與中小型應用</h3>
+					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+						<div
+							v-for="(area, index) in dealerApplications"
+							:key="'dealer-' + index"
+							class="case-area-card flex flex-col items-center text-center p-6 rounded-2xl bg-black/20 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-300 hover:shadow-secondary/20 hover:-translate-y-2"
+						>
+							<div class="mb-4 p-4 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full inline-block shadow-md">
+								<img :src="area.icon" :alt="area.title" class="w-10 h-10 md:w-12 md:h-12 invert brightness-0" />
+							</div>
+							<h4 class="text-xl md:text-2xl font-semibold mb-2">{{ area.title }}</h4>
+							<p class="text-sm md:text-base text-secondary/70">{{ area.description }}</p>
 						</div>
-						<h4 class="text-xl md:text-2xl font-semibold mb-2">{{ area.title }}</h4>
-						<p class="text-sm md:text-base text-secondary/70">{{ area.description }}</p>
 					</div>
 				</div>
-			</div>
 
-			<!-- 區塊 2: 建案類型與大型商案 -->
-			<div class="mb-12 md:mb-20" ref="projectSectionRef">
-				<h3 class="text-2xl md:text-3xl font-semibold text-center mb-8 md:mb-12">建案類型與大型商案</h3>
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-					<div
-						v-for="(area, index) in projectApplications"
-						:key="'project-' + index"
-						class="case-area-card flex flex-col items-center text-center p-6 rounded-2xl bg-black/20 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-300 hover:shadow-secondary/20 hover:-translate-y-2"
-					>
-						<div class="mb-4 p-4 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full inline-block shadow-md">
-							<img :src="area.icon" :alt="area.title" class="w-10 h-10 md:w-12 md:h-12 invert brightness-0" />
+				<!-- 區塊 2: 建案類型與大型商案 -->
+				<div class="mb-12 md:mb-20" ref="projectSectionRef">
+					<h3 class="text-2xl md:text-3xl font-semibold text-center mb-8 md:mb-12">建案類型與大型商案</h3>
+					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+						<div
+							v-for="(area, index) in projectApplications"
+							:key="'project-' + index"
+							class="case-area-card flex flex-col items-center text-center p-6 rounded-2xl bg-black/20 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-300 hover:shadow-secondary/20 hover:-translate-y-2"
+						>
+							<div class="mb-4 p-4 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full inline-block shadow-md">
+								<img :src="area.icon" :alt="area.title" class="w-10 h-10 md:w-12 md:h-12 invert brightness-0" />
+							</div>
+							<h4 class="text-xl md:text-2xl font-semibold mb-2">{{ area.title }}</h4>
+							<p class="text-sm md:text-base text-secondary/70">{{ area.description }}</p>
 						</div>
-						<h4 class="text-xl md:text-2xl font-semibold mb-2">{{ area.title }}</h4>
-						<p class="text-sm md:text-base text-secondary/70">{{ area.description }}</p>
 					</div>
 				</div>
-			</div>
 
-			<!-- 行動呼籲按鈕 -->
-			<div class="text-center" ref="ctaRef">
-				<NuxtLink
-					to="/Success-Stories"
-					class="inline-block bg-secondary text-primary font-medium px-8 py-3 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-primary"
-				>
-					探索成功案例
-				</NuxtLink>
+				<!-- 行動呼籲按鈕 -->
+				<div class="text-center" ref="ctaRef">
+					<NuxtLink
+						to="/Success-Stories"
+						class="inline-block bg-secondary text-primary font-medium px-8 py-3 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 focus:ring-offset-primary"
+					>
+						探索成功案例
+					</NuxtLink>
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 </template>
 
 <script setup>
@@ -98,18 +100,18 @@ const dealerApplications = ref([
 const projectApplications = ref([
 	{
 		title: "智慧社區建案",
-		description: "整合影像對講、人臉辨識門禁、車牌辨識，打造安全便捷的社區。"
-		// icon: "/corporation/building.svg"
+		description: "整合影像對講、人臉辨識門禁、車牌辨識，打造安全便捷的社區。",
+		icon: "/corporation/building.svg"
 	},
 	{
 		title: "企業總部/廠房",
-		description: "提供大型企業、廠區全方位的安防規劃，包含周界防護與集中管理。"
-		// icon: "/corporation/company.svg"
+		description: "提供大型企業、廠區全方位的安防規劃，包含周界防護與集中管理。",
+		icon: "/corporation/company.svg"
 	},
 	{
 		title: "公共機構/場館",
-		description: "支援政府、學校、醫院等公共場所，應對高人流的安全挑戰。"
-		// icon: "/corporation/government.svg"
+		description: "支援政府、學校、醫院等公共場所，應對高人流的安全挑戰。",
+		icon: "/corporation/government.svg"
 	}
 ]);
 

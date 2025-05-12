@@ -1,6 +1,6 @@
 <template>
 	<div class="hexagon h-[72px] md:h-[128px] lg:h-[200px]">
-		<img :src="imageSrc" :alt="title" class="hexagon-content w-[24px] h-[24px] md:w-[50px] md:h-[50px]" />
+		<img :src="imageSrc" :alt="`${title} 圖示`" class="hexagon-content w-[24px] h-[24px] md:w-[50px] md:h-[50px]" />
 		<span class="hexagon-content text-[8px] md:text-[16px] lg:text-[24px]">{{ title }}</span>
 	</div>
 </template>

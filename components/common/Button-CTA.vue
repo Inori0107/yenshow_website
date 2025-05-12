@@ -63,14 +63,16 @@ const buttonClass = computed(() => ({
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 0;
+	width: 100%;
 	height: 100%;
 	background-color: #212a37;
-	transition: width 0.3s ease-in-out;
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform 0.3s ease-in-out;
 }
 
 .button-black:hover::before {
-	width: 100%;
+	transform: scaleX(1);
 }
 
 .button-black:hover span,
@@ -89,14 +91,16 @@ const buttonClass = computed(() => ({
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 0;
+	width: 100%;
 	height: 100%;
 	background-color: #ffffff;
-	transition: width 0.3s ease-in-out;
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform 0.3s ease-in-out;
 }
 
 .button-white:hover::before {
-	width: 100%;
+	transform: scaleX(1);
 }
 
 .button-white:hover span,

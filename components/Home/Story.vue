@@ -1,73 +1,82 @@
 <template>
-	<section id="story" class="my-[128px] md:my-[256px] space-y-[128px] md:space-y-[256px]">
-		<!-- Block 1: Intro Section -->
-		<div id="story-intro-block" class="min-h-screen relative flex justify-center items-center overflow-hidden">
-			<!-- Centered Intro text container, arranging vertical texts horizontally -->
-			<div ref="introContainerRef" class="flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px] opacity-0">
-				<p v-for="(text, i) in introTexts" :key="i" :ref="(el) => (introTextRefs[i] = el)" class="vertical-text text-[16px] md:text-[24px] lg:text-[36px]">
-					{{ $t(text) }}
-				</p>
+	<div>
+		<section id="story" class="my-[128px] md:my-[256px] space-y-[128px] md:space-y-[256px]">
+			<!-- Block 1: Intro Section -->
+			<div id="story-intro-block" class="min-h-screen relative flex justify-center items-center overflow-hidden">
+				<!-- Centered Intro text container, arranging vertical texts horizontally -->
+				<div ref="introContainerRef" class="flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px] opacity-0">
+					<p v-for="(text, i) in introTexts" :key="i" :ref="(el) => (introTextRefs[i] = el)" class="vertical-text text-[16px] md:text-[24px] lg:text-[36px]">
+						{{ $t(text) }}
+					</p>
+				</div>
 			</div>
-		</div>
 
-		<!-- Block 2: Themes Section -->
-		<div id="story-themes-block" ref="storyThemesBlockRef" class="h-screen relative flex justify-center items-center py-[64px] md:py-[128px] overflow-visible">
-			<!-- Theme Items -->
+			<!-- Block 2: Themes Section -->
 			<div
-				v-for="(theme, key) in themes"
-				:key="key"
-				:ref="(el) => (themeRefs[key].container = el)"
-				class="absolute transition-opacity duration-300"
-				:class="getThemePositionClass(key)"
-				@mouseenter="handleThemeMouseEnter(key)"
-				@mouseleave="handleThemeMouseLeave(key)"
-				@click="handleThemeClick(key)"
+				id="story-themes-block"
+				ref="storyThemesBlockRef"
+				class="h-screen relative flex justify-center items-center py-[64px] md:py-[128px] overflow-visible"
 			>
-				<!-- Aura Effect Div -->
-				<div :class="['theme-aura', `aura-${key}`]" :ref="(el) => (themeRefs[key].aura = el)"></div>
+				<!-- Theme Items -->
+				<div
+					v-for="(theme, key) in themes"
+					:key="key"
+					:ref="(el) => (themeRefs[key].container = el)"
+					class="absolute transition-opacity duration-300"
+					:class="getThemePositionClass(key)"
+					@mouseenter="handleThemeMouseEnter(key)"
+					@mouseleave="handleThemeMouseLeave(key)"
+				>
+					<!-- Aura Effect Div -->
+					<div :class="['theme-aura', `aura-${key}`]" :ref="(el) => (themeRefs[key].aura = el)"></div>
 
-				<h2
-					:ref="(el) => (themeRefs[key].title = el)"
-					class="vertical-title text-[36px] md:text-[60px] lg:text-[80px] p-[8px] rounded-lg opacity-0 cursor-pointer font-semibold"
-					style="position: relative; z-index: 10"
-				>
-					{{ $t(theme.title) }}
-				</h2>
-			</div>
+					<button
+						type="button"
+						:ref="(el) => (themeRefs[key].title = el)"
+						class="vertical-title text-[36px] md:text-[60px] lg:text-[80px] p-[8px] rounded-lg opacity-0 cursor-pointer font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75"
+						style="position: relative; z-index: 10"
+						@click="handleThemeClick(key)"
+						:aria-expanded="activeThemeKey === key ? 'true' : 'false'"
+						:aria-controls="`theme-details-${key}`"
+					>
+						{{ $t(theme.title) }}
+					</button>
+				</div>
 
-			<!-- Unified Details Box - Replaced with individual theme detail containers -->
-			<div ref="cloudDetailsContainerRef" class="details-set">
-				<p
-					v-for="(text, i) in themes.cloud.texts"
-					:key="`cloud-${i}`"
-					:ref="(el) => (cloudDetailParaRefs[i] = el)"
-					class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
-				>
-					{{ $t(text) }}
-				</p>
+				<!-- Unified Details Box - Replaced with individual theme detail containers -->
+				<div ref="cloudDetailsContainerRef" class="details-set" :id="`theme-details-cloud`">
+					<p
+						v-for="(text, i) in themes.cloud.texts"
+						:key="`cloud-${i}`"
+						:ref="(el) => (cloudDetailParaRefs[i] = el)"
+						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
+					>
+						{{ $t(text) }}
+					</p>
+				</div>
+				<div ref="mountainDetailsContainerRef" class="details-set" :id="`theme-details-mountain`">
+					<p
+						v-for="(text, i) in themes.mountain.texts"
+						:key="`mountain-${i}`"
+						:ref="(el) => (mountainDetailParaRefs[i] = el)"
+						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
+					>
+						{{ $t(text) }}
+					</p>
+				</div>
+				<div ref="skyDetailsContainerRef" class="details-set" :id="`theme-details-sky`">
+					<p
+						v-for="(text, i) in themes.sky.texts"
+						:key="`sky-${i}`"
+						:ref="(el) => (skyDetailParaRefs[i] = el)"
+						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
+					>
+						{{ $t(text) }}
+					</p>
+				</div>
 			</div>
-			<div ref="mountainDetailsContainerRef" class="details-set">
-				<p
-					v-for="(text, i) in themes.mountain.texts"
-					:key="`mountain-${i}`"
-					:ref="(el) => (mountainDetailParaRefs[i] = el)"
-					class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
-				>
-					{{ $t(text) }}
-				</p>
-			</div>
-			<div ref="skyDetailsContainerRef" class="details-set">
-				<p
-					v-for="(text, i) in themes.sky.texts"
-					:key="`sky-${i}`"
-					:ref="(el) => (skyDetailParaRefs[i] = el)"
-					class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
-				>
-					{{ $t(text) }}
-				</p>
-			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 </template>
 
 <script setup>
@@ -126,6 +135,8 @@ const AURA_TARGET_SCALE = 1.8;
 const AURA_INITIAL_SCALE = 0.3;
 
 let detailAnimationTl = null;
+let introTl = null;
+let themesTl = null;
 
 const themeElementMap = {
 	cloud: { container: cloudDetailsContainerRef, paras: cloudDetailParaRefs },
@@ -269,10 +280,10 @@ const getThemePositionClass = (key) => {
 };
 
 const setupStoryAnimation = () => {
-	const introTl = scrollAnimation.createTimelineAnimation({
+	introTl = scrollAnimation.createTimelineAnimation({
 		trigger: `#story-intro-block`,
 		start: "top 70%",
-		end: "bottom 80%",
+		end: "bottom 20%",
 		toggleActions: "play none none reverse"
 	});
 
@@ -287,14 +298,15 @@ const setupStoryAnimation = () => {
 			);
 	}
 
-	const themesTl = scrollAnimation.createTimelineAnimation({
+	themesTl = scrollAnimation.createTimelineAnimation({
 		trigger: `#story-themes-block`,
 		start: "top 70%",
-		end: "bottom 80%",
+		end: "bottom 20%",
 		toggleActions: "play none none reverse"
 	});
 
-	const THEME_ANIM_STAGGER = 0.7;
+	const THEME_ANIM_STAGGER = 0.3;
+	const THEME_ANIM_DURATION = 1.0;
 	const themeOrder = ["cloud", "mountain", "sky"];
 	const lastThemeKey = themeOrder[themeOrder.length - 1];
 
@@ -302,10 +314,10 @@ const setupStoryAnimation = () => {
 		const titleEl = themeRefs[themeKey]?.title;
 		if (titleEl) {
 			const startTime = index * THEME_ANIM_STAGGER;
-			themesTl.fromTo(titleEl, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, startTime);
+			themesTl.fromTo(titleEl, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: THEME_ANIM_DURATION, ease: "power3.out" }, startTime);
 			// If this is the last theme's title animation, add a label at its theoretical end point
 			if (themeKey === lastThemeKey) {
-				themesTl.addLabel("lastTitleAnimationEnd", startTime + 0.8); // 1.0 is the duration of the title animation
+				themesTl.addLabel("lastTitleAnimationEnd", startTime + THEME_ANIM_DURATION - 0.2);
 			}
 		}
 	});
@@ -354,6 +366,12 @@ onUnmounted(() => {
 	if (detailAnimationTl) {
 		detailAnimationTl.kill();
 	}
+	if (introTl) {
+		introTl.kill();
+	}
+	if (themesTl) {
+		themesTl.kill();
+	}
 });
 </script>
 
@@ -371,13 +389,12 @@ onUnmounted(() => {
 }
 
 .details-set {
-	position: absolute; /* Ensure they can overlap */
-	display: flex; /* Use flex for internal layout of vertical texts */
-	flex-direction: row-reverse; /* Matches previous layout */
-	gap: 6px; /* Matches previous layout */
-	opacity: 0; /* Start hidden */
-	pointer-events: none; /* Start non-interactive */
-	/* Adjust gap for responsive if needed, similar to previous md:gap lg:gap */
+	position: absolute;
+	display: flex;
+	flex-direction: row-reverse;
+	gap: 6px;
+	opacity: 0;
+	pointer-events: none;
 }
 
 @media (min-width: 768px) {

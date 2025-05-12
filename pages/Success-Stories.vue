@@ -1,129 +1,131 @@
 <template>
-	<!-- Entrance -->
-	<nav class="h-screen container flex flex-col justify-center relative">
-		<!-- 標題 -->
-		<div class="z-10 mb-12" ref="titleRef">
-			<h1 class="text-[36px] md:text-[96px] text-secondary">Success Stories</h1>
-			<h3 class="text-[24px] md:text-[64px] text-secondary">合作案例</h3>
-		</div>
-
-		<!-- 標語區塊 -->
-		<div class="flex flex-col md:flex-row gap-8 md:gap-6 z-10" ref="heroBlocks">
-			<!-- 主標語區塊 -->
-			<div class="block-bg w-full md:w-1/2 rounded-xl p-6 md:p-8 transition-all duration-500">
-				<div class="absolute inset-0 rounded-xl overflow-hidden">
-					<div class="block-pattern pattern-1"></div>
-				</div>
-				<div class="relative z-10">
-					<div class="text-[16px] md:text-[18px] text-white/70 mb-2">OUR MISSION</div>
-					<h4 class="text-[20px] md:text-[28px] text-white font-medium mb-4">見證我們如何為各行各業提供安全可靠的解決方案</h4>
-					<p class="text-[14px] md:text-[16px] text-white/80">我們致力於打造高度安全可靠的門禁系統與監控設備，為您的空間提供全方位的保護，讓安心無所不在。</p>
-				</div>
+	<div>
+		<!-- Entrance -->
+		<nav class="h-screen container flex flex-col justify-center relative">
+			<!-- 標題 -->
+			<div class="z-10 mb-12" ref="titleRef">
+				<h1 class="text-[36px] md:text-[96px] text-secondary">Success Stories</h1>
+				<h3 class="text-[24px] md:text-[64px] text-secondary">合作案例</h3>
 			</div>
 
-			<!-- 數據統計區塊 -->
-			<div class="flex flex-col gap-4 md:w-1/2">
-				<!-- 成功案例 -->
-				<div class="block-bg rounded-xl p-6 transition-all duration-500">
+			<!-- 標語區塊 -->
+			<div class="flex flex-col md:flex-row gap-8 md:gap-6 z-10" ref="heroBlocks">
+				<!-- 主標語區塊 -->
+				<div class="block-bg w-full md:w-1/2 rounded-xl p-6 md:p-8 transition-all duration-500">
 					<div class="absolute inset-0 rounded-xl overflow-hidden">
-						<div class="block-pattern pattern-2"></div>
+						<div class="block-pattern pattern-1"></div>
 					</div>
-					<div class="relative z-10 flex items-center">
-						<div class="mr-4">
-							<div class="text-[32px] md:text-[48px] text-white font-bold">50+</div>
-							<div class="text-[14px] md:text-[16px] text-white/70">成功案例</div>
-						</div>
-						<p class="text-[14px] text-white/80 max-w-[200px]">橫跨不同行業的成功實例，每個案例都是我們實力的見證</p>
+					<div class="relative z-10">
+						<div class="text-[16px] md:text-[18px] text-white/70 mb-2">OUR MISSION</div>
+						<h4 class="text-[20px] md:text-[28px] text-white font-medium mb-4">見證我們如何為各行各業提供安全可靠的解決方案</h4>
+						<p class="text-[14px] md:text-[16px] text-white/80">我們致力於打造高度安全可靠的門禁系統與監控設備，為您的空間提供全方位的保護，讓安心無所不在。</p>
 					</div>
 				</div>
 
-				<!-- 服務年資 -->
-				<div class="block-bg rounded-xl p-6 transition-all duration-500">
-					<div class="absolute inset-0 rounded-xl overflow-hidden">
-						<div class="block-pattern pattern-3"></div>
-					</div>
-					<div class="relative z-10 flex items-center">
-						<div class="mr-4">
-							<div class="text-[32px] md:text-[48px] text-white font-bold">10+</div>
-							<div class="text-[14px] md:text-[16px] text-white/70">服務年資</div>
+				<!-- 數據統計區塊 -->
+				<div class="flex flex-col gap-4 md:w-1/2">
+					<!-- 成功案例 -->
+					<div class="block-bg rounded-xl p-6 transition-all duration-500">
+						<div class="absolute inset-0 rounded-xl overflow-hidden">
+							<div class="block-pattern pattern-2"></div>
 						</div>
-						<p class="text-[14px] text-white/80 max-w-[200px]">十餘年專業經驗，為客戶提供最穩定可靠的解決方案</p>
+						<div class="relative z-10 flex items-center">
+							<div class="mr-4">
+								<div class="text-[32px] md:text-[48px] text-white font-bold">50+</div>
+								<div class="text-[14px] md:text-[16px] text-white/70">成功案例</div>
+							</div>
+							<p class="text-[14px] text-white/80 max-w-[200px]">橫跨不同行業的成功實例，每個案例都是我們實力的見證</p>
+						</div>
+					</div>
+
+					<!-- 服務年資 -->
+					<div class="block-bg rounded-xl p-6 transition-all duration-500">
+						<div class="absolute inset-0 rounded-xl overflow-hidden">
+							<div class="block-pattern pattern-3"></div>
+						</div>
+						<div class="relative z-10 flex items-center">
+							<div class="mr-4">
+								<div class="text-[32px] md:text-[48px] text-white font-bold">10+</div>
+								<div class="text-[14px] md:text-[16px] text-white/70">服務年資</div>
+							</div>
+							<p class="text-[14px] text-white/80 max-w-[200px]">十餘年專業經驗，為客戶提供最穩定可靠的解決方案</p>
+						</div>
 					</div>
 				</div>
 			</div>
+		</nav>
+
+		<!-- 合作夥伴 -->
+		<div class="bg-primary rounded-[100px] p-12">
+			<section ref="sectionRef" class="relative min-h-screen">
+				<!-- 企業與商業合作 -->
+				<article ref="businessRef" class="absolute inset-0 flex flex-col justify-center items-center">
+					<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">企業與商業合作</h4>
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+						<div v-for="(feature, index) in business_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
+							<img :src="feature.image" alt="feature" class="w-[100px] lg:w-[150px] aspect-square" />
+							<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ feature.title }}</h5>
+							<p class="text-[12px] md:text-[16px] lg:text-[24px]">{{ feature.description }}</p>
+						</div>
+					</div>
+				</article>
+
+				<!-- 公共與專業場域支援 -->
+				<article ref="publicRef" class="absolute inset-0 flex flex-col justify-center items-center opacity-0">
+					<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">公共與專業場域支援</h4>
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+						<div v-for="(feature, index) in public_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
+							<img :src="feature.image" alt="feature" class="w-[100px] lg:w-[150px] aspect-square" />
+							<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ feature.title }}</h5>
+							<p class="text-[12px] md:text-[16px] lg:text-[24px]">{{ feature.description }}</p>
+						</div>
+					</div>
+				</article>
+			</section>
 		</div>
-	</nav>
 
-	<!-- 合作夥伴 -->
-	<div class="bg-primary rounded-[100px] p-12">
-		<section ref="sectionRef" class="relative min-h-screen">
-			<!-- 企業與商業合作 -->
-			<article ref="businessRef" class="absolute inset-0 flex flex-col justify-center items-center">
-				<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">企業與商業合作</h4>
-				<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-					<div v-for="(feature, index) in business_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
-						<img :src="feature.image" alt="feature" class="w-[100px] lg:w-[150px] aspect-square" />
-						<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ feature.title }}</h5>
-						<p class="text-[12px] md:text-[16px] lg:text-[24px]">{{ feature.description }}</p>
+		<!-- Success Cases Section -->
+		<section class="min-h-screen flex flex-col justify-center">
+			<!-- Light background -->
+			<div class="container mx-auto px-4">
+				<h2 class="text-3xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-secondary">實績案例</h2>
+
+				<!-- Single Case Example -->
+				<div
+					class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white p-8 md:p-12 rounded-2xl shadow-lg relative overflow-hidden border border-gray-100"
+				>
+					<!-- Left Column: Text Details -->
+					<div class="w-full md:w-1/2 space-y-6 z-10 order-2 md:order-1">
+						<h3 class="text-2xl md:text-3xl font-bold text-neutral-800">合總君悅</h3>
+						<p class="text-lg md:text-xl text-neutral-600">集合式住宅建案</p>
+						<div class="border-l-4 border-blue-500 pl-4 space-y-2 text-gray-700">
+							<p><strong class="font-medium text-gray-800">基地位置：</strong> 雲林縣斗南鎮延平路二段455號旁</p>
+							<p><strong class="font-medium text-gray-800">基地面積：</strong> 541坪</p>
+							<p><strong class="font-medium text-gray-800">產品類型：</strong> 電梯大樓</p>
+							<p><strong class="font-medium text-gray-800">坪數規劃：</strong> 23-34坪</p>
+							<p><strong class="font-medium text-gray-800">戶數：</strong> 91戶、2戶店鋪</p>
+						</div>
+						<p class="text-sm md:text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-md border border-gray-200">
+							該項目使用遠岫全住可視對講系統，採用10寸室內機YS-9510，4.3吋人臉辨識住戶門口機，整社區人臉辨識通行不須再攜帶磁卡。其他配套產品包含：視頻監控前後端產品、傳輸、門禁、集中管理平臺軟體。
+						</p>
+					</div>
+
+					<!-- Right Column: Image -->
+					<div class="w-full md:w-1/2 z-10 order-1 md:order-2">
+						<!-- TODO: Replace with actual image path -->
+						<!-- <img src="/success_cases/case_01.jpg" alt="合總君悅 建案外觀" class="rounded-lg shadow-md w-full h-auto object-cover aspect-[4/3]" /> -->
+					</div>
+
+					<!-- Pagination Dots (Simple) -->
+					<div class="absolute bottom-6 right-8 flex space-x-2 z-10">
+						<span class="w-3 h-3 bg-blue-500 rounded-full cursor-pointer"></span>
+						<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
+						<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
 					</div>
 				</div>
-			</article>
-
-			<!-- 公共與專業場域支援 -->
-			<article ref="publicRef" class="absolute inset-0 flex flex-col justify-center items-center opacity-0">
-				<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">公共與專業場域支援</h4>
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-					<div v-for="(feature, index) in public_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
-						<img :src="feature.image" alt="feature" class="w-[100px] lg:w-[150px] aspect-square" />
-						<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ feature.title }}</h5>
-						<p class="text-[12px] md:text-[16px] lg:text-[24px]">{{ feature.description }}</p>
-					</div>
-				</div>
-			</article>
+			</div>
 		</section>
 	</div>
-
-	<!-- Success Cases Section -->
-	<section class="min-h-screen flex flex-col justify-center">
-		<!-- Light background -->
-		<div class="container mx-auto px-4">
-			<h2 class="text-3xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-secondary">實績案例</h2>
-
-			<!-- Single Case Example -->
-			<div
-				class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white p-8 md:p-12 rounded-2xl shadow-lg relative overflow-hidden border border-gray-100"
-			>
-				<!-- Left Column: Text Details -->
-				<div class="w-full md:w-1/2 space-y-6 z-10 order-2 md:order-1">
-					<h3 class="text-2xl md:text-3xl font-bold text-neutral-800">合總君悅</h3>
-					<p class="text-lg md:text-xl text-neutral-600">集合式住宅建案</p>
-					<div class="border-l-4 border-blue-500 pl-4 space-y-2 text-gray-700">
-						<p><strong class="font-medium text-gray-800">基地位置：</strong> 雲林縣斗南鎮延平路二段455號旁</p>
-						<p><strong class="font-medium text-gray-800">基地面積：</strong> 541坪</p>
-						<p><strong class="font-medium text-gray-800">產品類型：</strong> 電梯大樓</p>
-						<p><strong class="font-medium text-gray-800">坪數規劃：</strong> 23-34坪</p>
-						<p><strong class="font-medium text-gray-800">戶數：</strong> 91戶、2戶店鋪</p>
-					</div>
-					<p class="text-sm md:text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-md border border-gray-200">
-						該項目使用遠岫全住可視對講系統，採用10寸室內機YS-9510，4.3吋人臉辨識住戶門口機，整社區人臉辨識通行不須再攜帶磁卡。其他配套產品包含：視頻監控前後端產品、傳輸、門禁、集中管理平臺軟體。
-					</p>
-				</div>
-
-				<!-- Right Column: Image -->
-				<div class="w-full md:w-1/2 z-10 order-1 md:order-2">
-					<!-- TODO: Replace with actual image path -->
-					<!-- <img src="/success_cases/case_01.jpg" alt="合總君悅 建案外觀" class="rounded-lg shadow-md w-full h-auto object-cover aspect-[4/3]" /> -->
-				</div>
-
-				<!-- Pagination Dots (Simple) -->
-				<div class="absolute bottom-6 right-8 flex space-x-2 z-10">
-					<span class="w-3 h-3 bg-blue-500 rounded-full cursor-pointer"></span>
-					<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
-					<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
-				</div>
-			</div>
-		</div>
-	</section>
 </template>
 
 <script setup>

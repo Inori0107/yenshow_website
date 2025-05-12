@@ -1,73 +1,75 @@
 <template>
-	<!-- 系列介紹 -->
-	<section class="bg-white relative max-h-screen overflow-hidden">
-		<div class="w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3">
-			<span class="text-[24px] md:text-[36px] lg:text-[48px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">暢銷商品</span>
-			<svg viewBox="0 0 800 800" class="circles">
-				<circle cx="400" cy="400" r="200" class="circle-inline" />
-				<circle cx="400" cy="400" r="400" class="circle-outline" />
-			</svg>
-		</div>
-		<!-- content -->
-		<div class="min-h-screen flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
-			<!-- title -->
-			<h1 class="text-[48px] md:text-[64px] lg:text-[96px] xl:text-[128px] opacity-50 mt-[24px] md:mt-[48px] ms-[32px] md:ms-[48px] lg:ms-[64px] font-bold">
-				影像監控
-			</h1>
-			<!-- List CTA -->
-			<div>
-				<div v-if="navError" class="text-red-500">{{ navError }}</div>
-				<NavList
-					v-show="!isLoadingNav && !navError"
-					ref="navListRef"
-					:categories="productCategories"
-					@category-selected="handleCategorySelected"
-					@subitem-selected="handleSubItemSelected"
-				/>
+	<div>
+		<!-- 系列介紹 -->
+		<section class="bg-white relative max-h-screen overflow-hidden">
+			<div class="w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3">
+				<span class="text-[24px] md:text-[36px] lg:text-[48px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">暢銷商品</span>
+				<svg viewBox="0 0 800 800" class="circles">
+					<circle cx="400" cy="400" r="200" class="circle-inline" />
+					<circle cx="400" cy="400" r="400" class="circle-outline" />
+				</svg>
 			</div>
-		</div>
-	</section>
-
-	<!-- 產品列表 -->
-	<section class="bg-gray-50">
-		<div class="container mx-auto px-4 py-16 space-y-[24px] md:space-y-[48px] lg:space-y-[144px]">
-			<!-- 載入狀態和錯誤處理 -->
-			<div v-if="isLoadingProducts" class="text-center py-12">
-				<!-- Skeleton Loader -->
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-					<SkeletonProductCard v-for="n in 8" :key="n" />
+			<!-- content -->
+			<div class="min-h-screen flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
+				<!-- title -->
+				<h1 class="text-[48px] md:text-[64px] lg:text-[96px] xl:text-[128px] opacity-50 mt-[24px] md:mt-[48px] ms-[32px] md:ms-[48px] lg:ms-[64px] font-bold">
+					影像監控
+				</h1>
+				<!-- List CTA -->
+				<div>
+					<div v-if="navError" class="text-red-500">{{ navError }}</div>
+					<NavList
+						v-show="!isLoadingNav && !navError"
+						ref="navListRef"
+						:categories="productCategories"
+						@category-selected="handleCategorySelected"
+						@subitem-selected="handleSubItemSelected"
+					/>
 				</div>
 			</div>
-			<div v-else-if="productsError" class="bg-red-50 text-red-500 p-4 rounded-lg my-4">{{ productsError }}</div>
-			<div v-else>
-				<!-- 各分類區塊 -->
-				<div v-for="category in computedDisplayCategories" :key="category._id" class="space-y-[12px] md:space-y-[24px] lg:space-y-[48px]">
-					<!-- 分類標題 -->
-					<h2 class="text-[32px] md:text-[48px] font-bold py-[24px] text-center border-b-2 border-primary/50">{{ getCategoryName(category) }}</h2>
-					<!-- 子分類內容 -->
-					<div v-for="subCategory in category.subCategories || []" :key="subCategory._id" class="mb-16 space-y-6">
-						<div class="flex flex-col md:flex-row justify-between items-center gap-4">
-							<!-- 子分類標題 -->
-							<h3 class="text-[24px] md:text-[36px] font-semibold text-primary/80 flex-shrink-0">{{ getCategoryName(subCategory) }}</h3>
-							<!-- 規格篩選器 (只在子分類級別有規格時顯示) -->
-							<div v-if="hasSpecifications(subCategory)" class="w-fit">
-								<FilterSection
-									:options="getSpecifications(subCategory)"
-									v-model="filterValues[subCategory._id]"
-									:filter-key="String(subCategory._id)"
-									:is-localized-options="true"
-								/>
-							</div>
-						</div>
-						<!-- 產品展示 (使用 ProductList) -->
-						<ProductList :products="prepareProductsForList(getFilteredProducts(subCategory))" :loading="false" @view-product="handleViewProduct" />
+		</section>
+
+		<!-- 產品列表 -->
+		<section class="bg-gray-50">
+			<div class="container mx-auto px-4 py-16 space-y-[24px] md:space-y-[48px] lg:space-y-[144px]">
+				<!-- 載入狀態和錯誤處理 -->
+				<div v-if="isLoadingProducts" class="text-center py-12">
+					<!-- Skeleton Loader -->
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+						<SkeletonProductCard v-for="n in 8" :key="n" />
 					</div>
 				</div>
-				<!-- 如果 computedDisplayCategories 為空 -->
-				<div v-if="computedDisplayCategories.length === 0 && !isLoadingProducts" class="text-center py-12 text-gray-500">沒有找到符合條件的分類或產品。</div>
+				<div v-else-if="productsError" class="bg-red-50 text-red-500 p-4 rounded-lg my-4">{{ productsError }}</div>
+				<div v-else>
+					<!-- 各分類區塊 -->
+					<div v-for="category in computedDisplayCategories" :key="category._id" class="space-y-[12px] md:space-y-[24px] lg:space-y-[48px]">
+						<!-- 分類標題 -->
+						<h2 class="text-[32px] md:text-[48px] font-bold py-[24px] text-center border-b-2 border-primary/50">{{ getCategoryName(category) }}</h2>
+						<!-- 子分類內容 -->
+						<div v-for="subCategory in category.subCategories || []" :key="subCategory._id" class="mb-16 space-y-6">
+							<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+								<!-- 子分類標題 -->
+								<h3 class="text-[24px] md:text-[36px] font-semibold text-primary/80 flex-shrink-0">{{ getCategoryName(subCategory) }}</h3>
+								<!-- 規格篩選器 (只在子分類級別有規格時顯示) -->
+								<div v-if="hasSpecifications(subCategory)" class="w-fit">
+									<FilterSection
+										:options="getSpecifications(subCategory)"
+										v-model="filterValues[subCategory._id]"
+										:filter-key="String(subCategory._id)"
+										:is-localized-options="true"
+									/>
+								</div>
+							</div>
+							<!-- 產品展示 (使用 ProductList) -->
+							<ProductList :products="prepareProductsForList(getFilteredProducts(subCategory))" :loading="false" @view-product="handleViewProduct" />
+						</div>
+					</div>
+					<!-- 如果 computedDisplayCategories 為空 -->
+					<div v-if="computedDisplayCategories.length === 0 && !isLoadingProducts" class="text-center py-12 text-gray-500">沒有找到符合條件的分類或產品。</div>
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 </template>
 
 <script setup>

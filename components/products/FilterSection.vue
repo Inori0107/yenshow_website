@@ -1,6 +1,6 @@
 <template>
 	<!-- Filter Buttons -->
-	<div class="flex flex-wrap bg-[#F1F5F9] p-[2px] rounded-[10px] z-30">
+	<div class="flex flex-wrap bg-[#F1F5F9] p-[2px] rounded-[10px] z-30" role="group" :aria-label="props.name || '篩選選項'">
 		<button
 			v-for="option in processedOptions"
 			:key="option.value"
@@ -9,6 +9,7 @@
 				'text-[12px] md:text-[16px] px-[8px] md:px-[14px] lg:px-[18px] py-[6px] md:py-[12px] lg:py-[16px] rounded-[10px]',
 				selectedOption === option.value ? 'bg-white shadow-md' : 'bg-[#F1F5F9]'
 			]"
+			:aria-pressed="selectedOption === option.value ? 'true' : 'false'"
 		>
 			{{ option.label }}
 		</button>

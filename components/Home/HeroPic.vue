@@ -1,63 +1,56 @@
 <template>
-	<section class="relative min-h-screen overflow-hidden flex flex-col justify-center items-center gap-[24px] md:gap-[48px]">
-		<!-- Three.js 背景 -->
-		<canvas ref="threeCanvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
+	<div>
+		<section class="relative min-h-screen overflow-hidden flex flex-col justify-center items-center gap-[24px] md:gap-[48px]">
+			<!-- Three.js 背景 -->
+			<canvas ref="threeCanvas" class="absolute top-0 left-0 w-full h-full z-0"></canvas>
 
-		<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
-		<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10">
-			<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px]" src="/public/yenshow.png" alt="遠岫科技" />
-		</div>
+			<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
+			<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10">
+				<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px]" src="/public/yenshow.png" alt="遠岫科技" />
+			</div>
 
-		<!-- 主標語 -->
-		<div ref="heroText" class="text-center text-secondary opacity-0 transform translate-y-10 z-10 px-4">
-			<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold leading-tight">
-				遠岫科技
-				<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] mt-2">讓安心無所不在</span>
-			</h1>
-		</div>
+			<!-- 主標語 -->
+			<div ref="heroText" class="text-center text-secondary opacity-0 transform translate-y-10 z-10 px-4">
+				<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold leading-tight">
+					遠岫科技
+					<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] mt-2">讓安心無所不在</span>
+				</h1>
+			</div>
 
-		<!-- 互動導航區塊 -->
-		<div ref="navContainer" class="flex flex-col lg:flex-row justify-center gap-[12px] md:gap-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4">
-			<div
-				v-for="(block, index) in blocks"
-				:key="block.id"
-				class="nav-block relative cursor-pointer"
-				@mouseenter="activateBlock(index)"
-				@mouseleave="resetBlocks"
-				@click="navigateToSection(block.id)"
-			>
-				<!-- 區塊背景 -->
-				<div
-					class="block-bg w-[280px] h-[200px] sm:h-[230px] md:w-[300px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-xl transition-all duration-500"
-					:class="{
-						'shadow-2xl': activeIndex === index,
-						'scale-100 opacity-80': activeIndex !== index
-					}"
+			<!-- 互動導航區塊 -->
+			<div ref="navContainer" class="flex flex-col lg:flex-row justify-center gap-[12px] md:gap-[24px] items-center w-full max-w-6xl opacity-0 z-10 px-4">
+				<button
+					type="button"
+					v-for="(block, index) in blocks"
+					:key="block.id"
+					class="nav-block relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75 rounded-xl"
+					@mouseenter="activateBlock(index)"
+					@mouseleave="resetBlocks"
+					@click="navigateToSection(block.id)"
+					:aria-label="`導航至 ${block.title} 區塊`"
 				>
-					<div class="absolute inset-0 rounded-xl overflow-hidden">
-						<div class="block-pattern" :class="`pattern-${index + 1}`"></div>
-					</div>
+					<!-- 區塊背景 -->
+					<div
+						class="block-bg w-[280px] h-[200px] sm:h-[230px] md:w-[300px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-xl transition-all duration-500"
+						:class="{
+							'shadow-2xl': activeIndex === index,
+							'scale-100 opacity-80': activeIndex !== index
+						}"
+					>
+						<div class="absolute inset-0 rounded-xl overflow-hidden">
+							<div class="block-pattern" :class="`pattern-${index + 1}`"></div>
+						</div>
 
-					<div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 sm:p-6 z-10">
-						<div class="text-[16px] sm:text-[18px] md:text-[20px] font-bold opacity-60 mb-1 sm:mb-2">0{{ block.number }}</div>
-						<h3 class="text-[22px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-4">{{ block.title }}</h3>
-						<p class="text-[14px] sm:text-[15px] md:text-[16px] text-center opacity-80 line-clamp-3">{{ block.description }}</p>
-						<div
-							class="mt-4 sm:mt-6 md:mt-8 inline-block px-4 sm:px-5 py-1.5 sm:py-2 border border-white rounded-full text-xs sm:text-sm transition-all duration-300 nav-button"
-							:class="{
-								'bg-white text-primary': activeIndex === index,
-								'bg-transparent text-white': activeIndex !== index
-							}"
-						>
-							<span class="flex items-center">
-								<span>探索更多</span>
-							</span>
+						<div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 sm:p-6 z-10">
+							<div class="text-[16px] sm:text-[18px] md:text-[20px] font-bold opacity-60 mb-1 sm:mb-2">0{{ block.number }}</div>
+							<h3 class="text-[22px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-4">{{ block.title }}</h3>
+							<p class="text-[14px] sm:text-[15px] md:text-[16px] text-center opacity-80 line-clamp-3">{{ block.description }}</p>
 						</div>
 					</div>
-				</div>
+				</button>
 			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 </template>
 
 <script setup>
@@ -178,7 +171,7 @@ const createNetworkSphere = () => {
 	const lineMaterial = new THREE.LineBasicMaterial({
 		color: 0x00d4ff,
 		transparent: true,
-		opacity: 0 // 初始透明度設為 0
+		opacity: 0
 	});
 
 	// 生成球體上的粒子位置
@@ -323,27 +316,24 @@ const handleResize = () => {
 
 // Scroll to - 使用 composable 的方法
 const navigateToSection = (id) => {
-	// 先淡出導航區塊
+	// 1. 立即開始滾動動畫
+	scrollAnimation.scrollToSection(id, 0);
+
+	// 2. 同時，讓導航區塊淡出
 	gsap.to(".nav-block", {
 		opacity: 0,
-		y: 10,
 		stagger: 0.1,
-		duration: 0.5,
-		ease: "power2.inOut",
-		onComplete: () => {
-			// 使用較長的動畫時間和更平滑的緩動效果
-			scrollAnimation.scrollToSection(id, 0);
+		duration: 1,
+		ease: "power2.inOut"
+	});
 
-			// 滾動完成後淡入導航區塊
-			gsap.to(".nav-block", {
-				opacity: 1,
-				y: 0,
-				stagger: 0.1,
-				duration: 0.8,
-				delay: 0.5,
-				ease: "power2.out"
-			});
-		}
+	// 3. 在點擊/滾動開始 1 秒後，讓導航區塊淡入 (根據您上次的 delay: 1 調整)
+	gsap.to(".nav-block", {
+		opacity: 1,
+		stagger: 0.1,
+		duration: 1,
+		delay: 1.6,
+		ease: "power2.out"
 	});
 };
 

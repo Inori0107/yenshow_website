@@ -13,6 +13,9 @@ export function useScrollAnimation() {
 		if (typeof window !== "undefined") {
 			const mediaQuery = window.matchMedia("(max-width: 767px)"); // Assume md breakpoint is 768px
 			isMobile.value = mediaQuery.matches;
+			if (ScrollTrigger.value) {
+				ScrollTrigger.value.refresh();
+			}
 		}
 	};
 
@@ -55,7 +58,7 @@ export function useScrollAnimation() {
 		const target = document.getElementById(id);
 		if (target && ScrollToPlugin.value) {
 			gsap.to(window, {
-				duration: 2.5,
+				duration: 1.5,
 				scrollTo: {
 					y: target,
 					offsetY: offset,

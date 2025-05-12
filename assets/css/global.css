@@ -196,3 +196,17 @@ html {
 	justify-content: center;
 	align-items: end;
 }
+
+/* assets/css/global.css 或相應的樣式檔案 */
+.page-enter-active,
+.page-leave-active {
+	transition: all 0.5s ease-out; /* 舊: opacity 0.5s ease-out; */
+}
+.page-enter-from {
+	opacity: 0;
+	transform: translateY(50px);
+}
+.page-leave-to {
+	opacity: 0;
+	transform: translateY(-50px);
+}

@@ -1,126 +1,155 @@
 <template>
-	<!-- 主容器 -->
-	<div class="bg-secondary">
-		<SkeletonProductDetail v-if="isLoading" />
-		<div v-else-if="error" class="min-h-screen flex items-center justify-center">
-			<div class="bg-red-50 text-red-500 p-8 rounded-lg text-center">
-				<h2 class="text-2xl font-bold mb-4">無法載入產品資訊</h2>
-				<p>{{ error }}</p>
-				<NuxtLink to="/Products" class="text-blue-600 hover:underline">返回產品列表</NuxtLink>
+	<div>
+		<!-- 主容器 -->
+		<div class="bg-secondary">
+			<SkeletonProductDetail v-if="isLoading" />
+			<div v-else-if="error" class="min-h-screen flex items-center justify-center">
+				<div class="bg-red-50 text-red-500 p-8 rounded-lg text-center">
+					<h2 class="text-2xl font-bold mb-4">無法載入產品資訊</h2>
+					<p>{{ error }}</p>
+					<NuxtLink to="/Products" class="text-blue-600 hover:underline">返回產品列表</NuxtLink>
+				</div>
 			</div>
-		</div>
-		<div v-else-if="product">
-			<!-- 麵包屑導航 -->
-			<div class="p-4 md:p-6 lg:p-8">
-				<nav class="text-[12px] md:text-[16px] lg:text-[21px] text-gray-500">
-					<ol class="flex flex-wrap items-center">
-						<li><NuxtLink to="/" class="hover:text-primary">首頁</NuxtLink></li>
-						<li class="mx-2">/</li>
-						<li><NuxtLink to="/products" class="hover:text-primary">產品</NuxtLink></li>
-						<li class="mx-2">/</li>
-						<li><NuxtLink :to="parentCategoryLink" class="hover:text-primary">可視對講</NuxtLink></li>
-						<li class="mx-2">/</li>
-						<li class="text-gray-700 font-medium truncate">{{ getLocalizedName(product) }}</li>
-					</ol>
-				</nav>
-			</div>
-
-			<!-- 產品主體區塊 -->
-			<section class="container flex flex-col md:flex-row py-4 md:py-6 lg:py-8 justify-center items-center gap-4 md:gap-8 lg:gap-12">
-				<!-- 產品圖片區 -->
-				<div class="bg-white rounded-lg overflow-hidden flex items-center justify-center aspect-square w-[282px] md:w-[384px]">
-					<NuxtImg
-						v-if="currentImage"
-						:src="currentImage"
-						:alt="getLocalizedName(product)"
-						class="w-3/4 aspect-square object-contain cursor-pointer"
-						loading="lazy"
-						format="webp"
-						sizes="288px md:384px"
-						@click="openImageModal(currentImage)"
-					/>
-					<div v-else class="text-gray-500 py-20">尚無圖片</div>
+			<div v-else-if="product">
+				<!-- 麵包屑導航 -->
+				<div class="p-4 md:p-6 lg:p-8">
+					<nav class="text-[12px] md:text-[16px] lg:text-[21px] text-gray-500" aria-label="breadcrumb">
+						<ol class="flex flex-wrap items-center">
+							<li><NuxtLink to="/" class="hover:text-primary">首頁</NuxtLink></li>
+							<li class="mx-2">/</li>
+							<li><NuxtLink to="/products" class="hover:text-primary">產品</NuxtLink></li>
+							<li class="mx-2">/</li>
+							<li><NuxtLink :to="parentCategoryLink" class="hover:text-primary">可視對講</NuxtLink></li>
+							<li class="mx-2">/</li>
+							<li class="text-gray-700 font-medium truncate" aria-current="page">{{ getLocalizedName(product) }}</li>
+						</ol>
+					</nav>
 				</div>
 
-				<!-- 產品信息區 -->
-				<div class="text-gray-800 space-y-2 md:space-y-4 lg:space-y-6 py-4 md:py-6 lg:py-8 w-1/2">
-					<!-- 產品基本信息 -->
-					<h1 class="text-[21px] md:text-[28px] lg:text-[36px] font-bold text-gray-900">{{ getLocalizedName(product) }}</h1>
-					<p v-if="product.code" class="text-gray-500 text-[12px] md:text-[16px] lg:text-[21px]">產品編號：{{ product.code }}</p>
-
-					<!-- 產品說明 -->
-					<div v-if="getLocalizedDescription(product)">
-						<h2 class="text-[12px] md:text-[16px] lg:text-[21px] font-semibold">產品說明</h2>
-						<p class="text-gray-700 text-[12px] md:text-[16px] lg:text-[21px]">{{ getLocalizedDescription(product) }}</p>
+				<!-- 產品主體區塊 -->
+				<section class="container flex flex-col md:flex-row py-4 md:py-6 lg:py-8 justify-center items-center gap-4 md:gap-8 lg:gap-12">
+					<!-- 產品圖片區 -->
+					<div class="bg-white rounded-lg overflow-hidden flex items-center justify-center aspect-square w-[282px] md:w-[384px]">
+						<NuxtImg
+							v-if="currentImage"
+							:src="currentImage"
+							:alt="getLocalizedName(product)"
+							class="w-3/4 aspect-square object-contain cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded"
+							loading="lazy"
+							format="webp"
+							sizes="288px md:384px"
+							@click="openImageModal(currentImage, $event.target)"
+							tabindex="0"
+							role="button"
+							@keydown.enter="openImageModal(currentImage, $event.target)"
+							@keydown.space.prevent="openImageModal(currentImage, $event.target)"
+						/>
+						<div v-else class="text-gray-500 py-20">尚無圖片</div>
 					</div>
 
-					<Button-CTA label="免費諮詢" to="/contact" class="w-fit mx-auto"></Button-CTA>
-				</div>
-			</section>
+					<!-- 產品信息區 -->
+					<div class="text-gray-800 space-y-2 md:space-y-4 lg:space-y-6 py-4 md:py-6 lg:py-8 w-1/2">
+						<!-- 產品基本信息 -->
+						<h1 class="text-[21px] md:text-[28px] lg:text-[36px] font-bold text-gray-900">{{ getLocalizedName(product) }}</h1>
+						<p v-if="product.code" class="text-gray-500 text-[12px] md:text-[16px] lg:text-[21px]">產品編號：{{ product.code }}</p>
 
-			<!-- 詳細特點與規格區塊 -->
-			<section class="bg-gray-50 py-8 md:py-12 lg:py-16">
-				<div class="container">
-					<!-- 特點區塊 -->
-					<div v-show="activeTab === 'features'" class="space-y-6 md:space-y-8">
-						<h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 md:mb-8 text-center">產品特點</h2>
+						<!-- 產品說明 -->
+						<div v-if="getLocalizedDescription(product)">
+							<h2 class="text-[12px] md:text-[16px] lg:text-[21px] font-semibold">產品說明</h2>
+							<p class="text-gray-700 text-[12px] md:text-[16px] lg:text-[21px]">{{ getLocalizedDescription(product) }}</p>
+						</div>
 
-						<div v-if="product.features && product.features.length > 0">
-							<ul class="mx-auto feature-list space-y-4 md:space-y-6 md:max-w-4xl">
-								<li v-for="feature in product.features" :key="feature._id" class="flex items-start bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-									<span class="feature-marker shrink-0 text-primary text-lg md:text-xl mr-3 mt-0.5">◎</span>
-									<div>
-										<h3 class="text-base md:text-lg font-medium text-gray-800">
-											{{ getLocalizedFeature(feature) }}
-										</h3>
-									</div>
-								</li>
-							</ul>
+						<Button-CTA label="免費諮詢" to="/contact" class="w-fit mx-auto"></Button-CTA>
+					</div>
+				</section>
+
+				<!-- 詳細特點與規格區塊 -->
+				<section class="bg-gray-50 py-8 md:py-12 lg:py-16">
+					<div class="container">
+						<!-- 特點區塊 -->
+						<div v-show="activeTab === 'features'" class="space-y-6 md:space-y-8">
+							<h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 md:mb-8 text-center">產品特點</h2>
+
+							<div v-if="product.features && product.features.length > 0">
+								<ul class="mx-auto feature-list space-y-4 md:space-y-6 md:max-w-4xl">
+									<li v-for="feature in product.features" :key="feature._id" class="flex items-start bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+										<span class="feature-marker shrink-0 text-primary text-lg md:text-xl mr-3 mt-0.5">◎</span>
+										<div>
+											<h3 class="text-base md:text-lg font-medium text-gray-800">
+												{{ getLocalizedFeature(feature) }}
+											</h3>
+										</div>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-			</section>
+				</section>
 
-			<!-- 諮詢區塊 -->
-			<section class="bg-primary bg-opacity-5 py-8 md:py-12 space-y-2 md:space-y-4 lg:space-y-6 text-center">
-				<h2 class="text-[24px] md:text-[28px] lg:text-[36px] font-bold text-gray-800">了解更多產品資訊？</h2>
-				<p class="text-[16px] md:text-[21px] lg:text-[24px] text-gray-600">我們的專業團隊隨時為您提供諮詢服務，解答所有關於產品的疑問</p>
-				<div class="flex justify-center gap-3 md:gap-4">
-					<Button-CTA label="立即諮詢" to="/contact" class="w-fit"></Button-CTA>
-					<Button-CTA label="產品一覽" to="/Products" class="w-fit"></Button-CTA>
-				</div>
-			</section>
-		</div>
-		<div v-else class="min-h-screen flex items-center justify-center">
-			<div class="text-center py-12 text-gray-500">
-				<h2 class="text-2xl font-bold mb-4">找不到指定的產品</h2>
-				<NuxtLink to="/products" class="mt-4 inline-block text-blue-600 hover:underline">返回產品列表</NuxtLink>
+				<!-- 諮詢區塊 -->
+				<section class="bg-primary bg-opacity-5 py-8 md:py-12 space-y-2 md:space-y-4 lg:space-y-6 text-center">
+					<h2 class="text-[24px] md:text-[28px] lg:text-[36px] font-bold text-gray-800">了解更多產品資訊？</h2>
+					<p class="text-[16px] md:text-[21px] lg:text-[24px] text-gray-600">我們的專業團隊隨時為您提供諮詢服務，解答所有關於產品的疑問</p>
+					<div class="flex justify-center gap-3 md:gap-4">
+						<Button-CTA label="立即諮詢" to="/contact" class="w-fit"></Button-CTA>
+						<Button-CTA label="產品一覽" to="/Products" class="w-fit"></Button-CTA>
+					</div>
+				</section>
 			</div>
-		</div>
+			<div v-else class="min-h-screen flex items-center justify-center">
+				<div class="text-center py-12 text-gray-500">
+					<h2 class="text-2xl font-bold mb-4">找不到指定的產品</h2>
+					<NuxtLink to="/products" class="mt-4 inline-block text-blue-600 hover:underline">返回產品列表</NuxtLink>
+				</div>
+			</div>
 
-		<!-- 圖片預覽彈窗 -->
-		<div v-if="isImageModalOpen" class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" @click="closeImageModal">
-			<button class="absolute top-4 right-4 text-white hover:text-gray-300">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 md:w-8 md:h-8">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-				</svg>
-			</button>
-			<div class="max-w-5xl max-h-[90vh]">
-				<NuxtImg
-					:src="modalImage"
-					:alt="getLocalizedName(product)"
-					class="max-w-full max-h-[90vh] object-contain"
-					loading="lazy"
-					format="webp"
-					sizes="90vw lg:1280px"
-				/>
+			<!-- 圖片預覽彈窗 -->
+			<div
+				v-if="isImageModalOpen"
+				class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+				role="dialog"
+				aria-modal="true"
+				:aria-labelledby="`product-modal-title-${product._id}`"
+				@click.self="closeImageModal"
+				@keydown.esc="closeImageModal"
+			>
+				<h2 :id="`product-modal-title-${product._id}`" class="sr-only">{{ getLocalizedName(product) }} 圖片預覽</h2>
+				<button
+					ref="closeModalButtonRef"
+					@click="closeImageModal"
+					class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
+					aria-label="關閉圖片預覽"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-6 h-6 md:w-8 md:h-8"
+						aria-hidden="true"
+					>
+						<title>關閉圖示</title>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+					</svg>
+				</button>
+				<div class="max-w-5xl max-h-[90vh]">
+					<NuxtImg
+						:src="modalImage"
+						:alt="getLocalizedName(product)"
+						class="max-w-full max-h-[90vh] object-contain"
+						loading="lazy"
+						format="webp"
+						sizes="90vw lg:1280px"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useLanguageStore } from "~/stores/core/languageStore";
 import { useProductsStore } from "~/stores/models/products";
@@ -141,6 +170,8 @@ const relatedProducts = ref([]);
 const currentImage = ref(null);
 const isImageModalOpen = ref(false);
 const modalImage = ref(null);
+const closeModalButtonRef = ref(null);
+let triggerElement = null;
 
 // 標籤頁相關
 const tabs = [
@@ -173,15 +204,25 @@ const getLocalizedFeature = (feature) => {
 const parentCategoryLink = "/products/video-intercom";
 
 // 圖片預覽功能
-const openImageModal = (image) => {
+const openImageModal = (image, eventTarget) => {
 	modalImage.value = image;
 	isImageModalOpen.value = true;
 	document.body.style.overflow = "hidden";
+	triggerElement = eventTarget || document.activeElement;
+	nextTick(() => {
+		if (closeModalButtonRef.value) {
+			closeModalButtonRef.value.focus();
+		}
+	});
 };
 
 const closeImageModal = () => {
 	isImageModalOpen.value = false;
 	document.body.style.overflow = "";
+	if (triggerElement && typeof triggerElement.focus === "function") {
+		triggerElement.focus();
+	}
+	triggerElement = null;
 };
 
 // 推薦語輪播
@@ -232,3 +273,17 @@ onMounted(async () => {
 	}
 });
 </script>
+
+<style scoped>
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+</style>

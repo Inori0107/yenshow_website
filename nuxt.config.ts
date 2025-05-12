@@ -10,7 +10,8 @@ export default defineNuxtConfig({
 			htmlAttrs: {
 				style: "scroll-behavior: smooth"
 			}
-		}
+		},
+		pageTransition: { name: "page", mode: "out-in" }
 	},
 	css: ["~/assets/css/global.css"],
 	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@pinia/nuxt", "@nuxtjs/sitemap", "@nuxtjs/device", "@nuxt/image"],

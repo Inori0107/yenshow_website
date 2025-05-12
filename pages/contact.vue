@@ -1,292 +1,336 @@
 <template>
-	<!-- 頁面容器 -->
-	<section class="relative min-h-screen py-[80px] md:py-[120px] overflow-hidden">
-		<!-- 背景元素 -->
-		<div class="bg-gradient-to-r from-[#0f172a] to-[#1e293b] absolute inset-0 z-0"></div>
-		<div class="tech-grid absolute inset-0 z-1 opacity-10"></div>
+	<div>
+		<!-- 頁面容器 -->
+		<section class="relative min-h-screen py-[80px] md:py-[120px] overflow-hidden">
+			<!-- 背景元素 -->
+			<div class="bg-gradient-to-r from-[#0f172a] to-[#1e293b] absolute inset-0 z-0"></div>
+			<div class="tech-grid absolute inset-0 z-1 opacity-10"></div>
 
-		<div class="container relative z-10">
-			<!-- 頁面標題 -->
-			<div class="mb-[24px] md:mb-[48px]">
-				<h1 class="text-[36px] md:text-[64px] lg:text-[80px] text-center font-bold text-secondary animate-title">聯絡我們</h1>
-				<p class="text-[16px] md:text-[24px] text-center text-secondary opacity-80 mt-[12px] animate-subtitle">
-					我們期待與您合作，<br />
-					共同打造智慧防護解決方案
-				</p>
-			</div>
-
-			<!-- 表單步驟指示器 -->
-			<div class="flex justify-center mb-[48px] animate-steps">
-				<div class="flex items-center">
-					<div class="step-indicator" :class="{ active: step === 1, completed: step > 1 }" @click="step > 1 ? (step = 1) : null">
-						<span v-if="step === 1">1</span>
-						<span v-else-if="step > 1" class="step-check">✓</span>
-					</div>
-					<div class="step-line" :class="{ 'step-line-active': step > 1 }"></div>
-					<div class="step-indicator" :class="{ active: step === 2, completed: step > 2 }" @click="step > 2 ? (step = 2) : null">
-						<span v-if="step <= 2">2</span>
-						<span v-else class="step-check">✓</span>
-					</div>
-					<div class="step-line" :class="{ 'step-line-active': step > 2 }"></div>
-					<div class="step-indicator" :class="{ active: step === 3 }">3</div>
-				</div>
-			</div>
-
-			<!-- 表單容器 -->
-			<div class="max-w-[800px] mx-auto">
-				<!-- 步驟1：需求說明 -->
-				<div v-if="step === 1" class="form-container animate-form">
-					<div class="form-card">
-						<h2 class="form-title">需求說明</h2>
-						<div class="form-body">
-							<!-- 需求類型 -->
-							<div class="form-group">
-								<label>需求類型 <span class="text-cyan-400">*</span></label>
-								<div class="grid grid-cols-2 md:grid-cols-4 gap-[12px] mt-[12px]">
-									<div
-										v-for="option in typeOptions"
-										:key="option"
-										class="option-box"
-										:class="{ selected: form.type.includes(option) }"
-										@click="toggleOption(option)"
-									>
-										{{ option }}
-									</div>
-								</div>
-								<p v-if="errors.type" class="form-error">{{ errors.type }}</p>
-							</div>
-
-							<!-- 聯絡主旨 -->
-							<div class="form-group">
-								<label>聯絡主旨 <span class="text-cyan-400">*</span></label>
-								<div class="input-wrapper">
-									<input v-model="form.subject" class="form-input" type="text" placeholder="請輸入聯絡主旨" :class="{ 'has-error': errors.subject }" />
-									<span class="input-line"></span>
-								</div>
-								<p v-if="errors.subject" class="form-error">{{ errors.subject }}</p>
-							</div>
-
-							<!-- 詳細說明 -->
-							<div class="form-group">
-								<label>詳細說明 <span class="text-cyan-400">*</span></label>
-								<div class="input-wrapper">
-									<textarea
-										v-model="form.details"
-										class="form-input form-textarea"
-										rows="4"
-										placeholder="請詳細描述您的需求"
-										:class="{ 'has-error': errors.details }"
-									></textarea>
-									<span class="input-line"></span>
-								</div>
-								<p v-if="errors.details" class="form-error">{{ errors.details }}</p>
-							</div>
-
-							<!-- 文件上傳 -->
-							<div class="form-group">
-								<label>附加檔案 <span class="text-gray-400 text-sm">(最多3個檔案，每個不超過5MB)</span></label>
-								<div class="mt-[12px]">
-									<!-- 上傳區域 -->
-									<div
-										class="upload-area"
-										@dragover.prevent="dragover = true"
-										@dragleave.prevent="dragover = false"
-										@drop.prevent="onDrop"
-										:class="{ dragover: dragover }"
-										@click="openFileDialog"
-									>
-										<input type="file" ref="fileInput" @change="onFileSelected" multiple class="hidden" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" />
-										<div class="flex flex-col items-center justify-center h-full">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												width="48"
-												height="48"
-												viewBox="0 0 24 24"
-												fill="none"
-												stroke="currentColor"
-												stroke-width="1.5"
-												class="text-cyan-400"
-											>
-												<path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5"></path>
-												<polyline points="17 8 12 3 7 8"></polyline>
-												<line x1="12" y1="3" x2="12" y2="15"></line>
-											</svg>
-											<p class="mt-2 text-sm text-cyan-400 cursor-pointer">選擇檔案</p>
-										</div>
-									</div>
-
-									<!-- 預覽上傳的檔案 -->
-									<div v-if="form.files.length > 0" class="mt-4">
-										<div v-for="(file, index) in form.files" :key="index" class="file-preview">
-											<div class="flex items-center space-x-2">
-												<!-- 文件類型圖標 -->
-												<div class="file-icon">
-													<svg
-														v-if="isImageFile(file)"
-														xmlns="http://www.w3.org/2000/svg"
-														width="20"
-														height="20"
-														viewBox="0 0 24 24"
-														fill="none"
-														stroke="currentColor"
-														stroke-width="1.5"
-													>
-														<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-														<circle cx="8.5" cy="8.5" r="1.5"></circle>
-														<polyline points="21 15 16 10 5 21"></polyline>
-													</svg>
-													<svg
-														v-else
-														xmlns="http://www.w3.org/2000/svg"
-														width="20"
-														height="20"
-														viewBox="0 0 24 24"
-														fill="none"
-														stroke="currentColor"
-														stroke-width="1.5"
-													>
-														<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-														<polyline points="14 2 14 8 20 8"></polyline>
-														<line x1="16" y1="13" x2="8" y2="13"></line>
-														<line x1="16" y1="17" x2="8" y2="17"></line>
-														<polyline points="10 9 9 9 8 9"></polyline>
-													</svg>
-												</div>
-
-												<!-- 文件名和大小 -->
-												<div class="flex-1 min-w-0">
-													<p class="text-sm truncate">{{ file.name }}</p>
-													<p class="text-xs text-gray-400">{{ formatFileSize(file.size) }}</p>
-												</div>
-
-												<!-- 刪除按鈕 -->
-												<button @click="removeFile(index)" class="text-red-400 hover:text-red-500">
-													<svg
-														xmlns="http://www.w3.org/2000/svg"
-														width="18"
-														height="18"
-														viewBox="0 0 24 24"
-														fill="none"
-														stroke="currentColor"
-														stroke-width="1.5"
-													>
-														<path d="M3 6h18"></path>
-														<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-														<line x1="10" y1="11" x2="10" y2="17"></line>
-														<line x1="14" y1="11" x2="14" y2="17"></line>
-													</svg>
-												</button>
-											</div>
-
-											<!-- 圖片預覽 -->
-											<div v-if="isImageFile(file)" class="image-preview mt-2">
-												<img :src="getFilePreviewUrl(file)" alt="Preview" class="rounded-md" />
-											</div>
-										</div>
-									</div>
-								</div>
-								<p v-if="errors.files" class="form-error">{{ errors.files }}</p>
-							</div>
-
-							<!-- 步驟按鈕 -->
-							<div class="mt-[32px] flex justify-end">
-								<button @click="goToStep(2)" class="next-btn">下一步</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- 步驟2：聯絡資訊 -->
-				<div v-if="step === 2" class="form-container animate-form">
-					<div class="form-card">
-						<h2 class="form-title">聯絡資訊</h2>
-						<div class="form-body">
-							<!-- 姓名 -->
-							<div class="form-group">
-								<label>聯絡人姓名 <span class="text-cyan-400">*</span></label>
-								<div class="input-wrapper">
-									<input v-model="form.name" class="form-input" type="text" placeholder="請輸入您的姓名" :class="{ 'has-error': errors.name }" />
-									<span class="input-line"></span>
-								</div>
-								<p v-if="errors.name" class="form-error">{{ errors.name }}</p>
-							</div>
-
-							<!-- 聯絡電話 -->
-							<div class="form-group">
-								<label>聯絡電話 <span class="text-cyan-400">*</span></label>
-								<div class="input-wrapper">
-									<input v-model="form.phone" class="form-input" type="tel" placeholder="0912-345-678" :class="{ 'has-error': errors.phone }" />
-									<span class="input-line"></span>
-								</div>
-								<p v-if="errors.phone" class="form-error">{{ errors.phone }}</p>
-							</div>
-
-							<!-- 電子信箱 -->
-							<div class="form-group">
-								<label>電子信箱 <span class="text-cyan-400">*</span></label>
-								<div class="input-wrapper">
-									<input v-model="form.email" class="form-input" type="email" placeholder="example@mail.com" :class="{ 'has-error': errors.email }" />
-									<span class="input-line"></span>
-								</div>
-								<p v-if="errors.email" class="form-error">{{ errors.email }}</p>
-							</div>
-
-							<!-- 公司 / 部門 -->
-							<div class="form-group">
-								<label>公司 / 部門</label>
-								<div class="input-wrapper">
-									<input v-model="form.company" class="form-input" type="text" placeholder="請輸入貴公司名稱" />
-									<span class="input-line"></span>
-								</div>
-							</div>
-
-							<!-- 步驟按鈕 -->
-							<div class="mt-[32px] flex justify-between">
-								<button @click="goToStep(1)" class="back-btn">返回上一步</button>
-								<button @click="submitForm" class="submit-btn" :class="{ loading: isSubmitting }">
-									<span v-if="!isSubmitting">提交</span>
-									<span v-else class="btn-loader"></span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- 步驟3：提交成功 -->
-				<div v-if="step === 3" class="success-container animate-success">
-					<div class="success-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-							<polyline points="22 4 12 14.01 9 11.01"></polyline>
-						</svg>
-					</div>
-					<h2 class="text-[32px] font-bold text-secondary mt-[24px]">感謝您的聯繫！</h2>
-					<p class="text-[16px] md:text-[18px] text-secondary opacity-80 mt-[12px] text-center">
-						我們的團隊將在幾個工作日內回覆您，敬請耐心等候。<br />
-						如有其他需求，歡迎隨時與我們聯繫。
+			<div class="container relative z-10">
+				<!-- 頁面標題 -->
+				<div class="mb-[24px] md:mb-[48px]">
+					<h1 class="text-[36px] md:text-[64px] lg:text-[80px] text-center font-bold text-secondary animate-title">聯絡我們</h1>
+					<p class="text-[16px] md:text-[24px] text-center text-secondary opacity-80 mt-[12px] animate-subtitle">
+						我們期待與您合作，<br />
+						共同打造智慧防護解決方案
 					</p>
-					<div class="mt-[32px] p-[24px] rounded-[16px] bg-white bg-opacity-10 backdrop-blur-sm">
-						<p class="flex justify-center items-center gap-[12px] text-cyan-400">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-								<polyline points="22,6 12,13 2,6"></polyline>
-							</svg>
-							Mail: jerry@yenshow.com
-						</p>
-						<p class="flex justify-center items-center gap-[12px] text-cyan-400 mt-[12px]">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path
-									d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-								></path>
-							</svg>
-							聯絡電話: +886-2-222-333-55
-						</p>
+				</div>
+
+				<!-- 表單步驟指示器 -->
+				<div class="flex justify-center mb-[48px] animate-steps">
+					<div class="flex items-center">
+						<div class="step-indicator" :class="{ active: step === 1, completed: step > 1 }" @click="step > 1 ? (step = 1) : null">
+							<span v-if="step === 1">1</span>
+							<span v-else-if="step > 1" class="step-check">✓</span>
+						</div>
+						<div class="step-line" :class="{ 'step-line-active': step > 1 }"></div>
+						<div class="step-indicator" :class="{ active: step === 2, completed: step > 2 }" @click="step > 2 ? (step = 2) : null">
+							<span v-if="step <= 2">2</span>
+							<span v-else class="step-check">✓</span>
+						</div>
+						<div class="step-line" :class="{ 'step-line-active': step > 2 }"></div>
+						<div class="step-indicator" :class="{ active: step === 3 }">3</div>
 					</div>
-					<button @click="goHome" class="home-btn mt-[48px]">回首頁</button>
+				</div>
+
+				<!-- 表單容器 -->
+				<div class="max-w-[800px] mx-auto">
+					<!-- 步驟1：需求說明 -->
+					<div v-if="step === 1" class="form-container animate-form">
+						<div class="form-card">
+							<h2 class="form-title">需求說明</h2>
+							<div class="form-body">
+								<!-- 需求類型 -->
+								<div class="form-group">
+									<label id="label-type">需求類型 <span class="text-cyan-400">*</span></label>
+									<div class="grid grid-cols-2 md:grid-cols-4 gap-[12px] mt-[12px]" role="group" aria-labelledby="label-type">
+										<div
+											v-for="option in typeOptions"
+											:key="option"
+											class="option-box"
+											:class="{ selected: form.type.includes(option) }"
+											@click="toggleOption(option)"
+										>
+											{{ option }}
+										</div>
+									</div>
+									<p v-if="errors.type" class="form-error">{{ errors.type }}</p>
+								</div>
+
+								<!-- 聯絡主旨 -->
+								<div class="form-group">
+									<label for="contact-subject">聯絡主旨 <span class="text-cyan-400">*</span></label>
+									<div class="input-wrapper">
+										<input
+											id="contact-subject"
+											v-model="form.subject"
+											class="form-input"
+											type="text"
+											placeholder="請輸入聯絡主旨"
+											:class="{ 'has-error': errors.subject }"
+											aria-required="true"
+										/>
+										<span class="input-line"></span>
+									</div>
+									<p v-if="errors.subject" class="form-error">{{ errors.subject }}</p>
+								</div>
+
+								<!-- 詳細說明 -->
+								<div class="form-group">
+									<label for="contact-details">詳細說明 <span class="text-cyan-400">*</span></label>
+									<div class="input-wrapper">
+										<textarea
+											id="contact-details"
+											v-model="form.details"
+											class="form-input form-textarea"
+											rows="4"
+											placeholder="請詳細描述您的需求"
+											:class="{ 'has-error': errors.details }"
+											aria-required="true"
+										></textarea>
+										<span class="input-line"></span>
+									</div>
+									<p v-if="errors.details" class="form-error">{{ errors.details }}</p>
+								</div>
+
+								<!-- 文件上傳 -->
+								<div class="form-group">
+									<label for="contact-files">附加檔案 <span class="text-gray-400 text-sm">(最多3個檔案，每個不超過5MB)</span></label>
+									<div class="mt-[12px]">
+										<!-- 上傳區域 -->
+										<div
+											class="upload-area"
+											@dragover.prevent="dragover = true"
+											@dragleave.prevent="dragover = false"
+											@drop.prevent="onDrop"
+											:class="{ dragover: dragover }"
+											@click="openFileDialog"
+										>
+											<input
+												type="file"
+												ref="fileInput"
+												@change="onFileSelected"
+												multiple
+												class="hidden"
+												accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+												id="contact-files-input"
+											/>
+											<div class="flex flex-col items-center justify-center h-full">
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													width="48"
+													height="48"
+													viewBox="0 0 24 24"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="1.5"
+													class="text-cyan-400"
+												>
+													<path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5"></path>
+													<polyline points="17 8 12 3 7 8"></polyline>
+													<line x1="12" y1="3" x2="12" y2="15"></line>
+												</svg>
+												<p class="mt-2 text-sm text-cyan-400 cursor-pointer">選擇檔案</p>
+											</div>
+										</div>
+
+										<!-- 預覽上傳的檔案 -->
+										<div v-if="form.files.length > 0" class="mt-4">
+											<div v-for="(file, index) in form.files" :key="index" class="file-preview">
+												<div class="flex items-center space-x-2">
+													<!-- 文件類型圖標 -->
+													<div class="file-icon">
+														<svg
+															v-if="isImageFile(file)"
+															xmlns="http://www.w3.org/2000/svg"
+															width="20"
+															height="20"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1.5"
+														>
+															<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+															<circle cx="8.5" cy="8.5" r="1.5"></circle>
+															<polyline points="21 15 16 10 5 21"></polyline>
+														</svg>
+														<svg
+															v-else
+															xmlns="http://www.w3.org/2000/svg"
+															width="20"
+															height="20"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1.5"
+														>
+															<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+															<polyline points="14 2 14 8 20 8"></polyline>
+															<line x1="16" y1="13" x2="8" y2="13"></line>
+															<line x1="16" y1="17" x2="8" y2="17"></line>
+															<polyline points="10 9 9 9 8 9"></polyline>
+														</svg>
+													</div>
+
+													<!-- 文件名和大小 -->
+													<div class="flex-1 min-w-0">
+														<p class="text-sm truncate">{{ file.name }}</p>
+														<p class="text-xs text-gray-400">{{ formatFileSize(file.size) }}</p>
+													</div>
+
+													<!-- 刪除按鈕 -->
+													<button @click="removeFile(index)" class="text-red-400 hover:text-red-500">
+														<svg
+															xmlns="http://www.w3.org/2000/svg"
+															width="18"
+															height="18"
+															viewBox="0 0 24 24"
+															fill="none"
+															stroke="currentColor"
+															stroke-width="1.5"
+														>
+															<path d="M3 6h18"></path>
+															<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+															<line x1="10" y1="11" x2="10" y2="17"></line>
+															<line x1="14" y1="11" x2="14" y2="17"></line>
+														</svg>
+													</button>
+												</div>
+
+												<!-- 圖片預覽 -->
+												<div v-if="isImageFile(file)" class="image-preview mt-2">
+													<img :src="getFilePreviewUrl(file)" alt="Preview" class="rounded-md" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<p v-if="errors.files" class="form-error">{{ errors.files }}</p>
+								</div>
+
+								<!-- 步驟按鈕 -->
+								<div class="mt-[32px] flex justify-end">
+									<button @click="goToStep(2)" class="next-btn">下一步</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- 步驟2：聯絡資訊 -->
+					<div v-if="step === 2" class="form-container animate-form">
+						<div class="form-card">
+							<h2 class="form-title">聯絡資訊</h2>
+							<div class="form-body">
+								<!-- 姓名 -->
+								<div class="form-group">
+									<label for="contact-name">聯絡人姓名 <span class="text-cyan-400">*</span></label>
+									<div class="input-wrapper">
+										<input
+											id="contact-name"
+											v-model="form.name"
+											class="form-input"
+											type="text"
+											placeholder="請輸入您的姓名"
+											:class="{ 'has-error': errors.name }"
+											aria-required="true"
+										/>
+										<span class="input-line"></span>
+									</div>
+									<p v-if="errors.name" class="form-error">{{ errors.name }}</p>
+								</div>
+
+								<!-- 聯絡電話 -->
+								<div class="form-group">
+									<label for="contact-phone">聯絡電話 <span class="text-cyan-400">*</span></label>
+									<div class="input-wrapper">
+										<input
+											id="contact-phone"
+											v-model="form.phone"
+											class="form-input"
+											type="tel"
+											placeholder="0912-345-678"
+											:class="{ 'has-error': errors.phone }"
+											aria-required="true"
+										/>
+										<span class="input-line"></span>
+									</div>
+									<p v-if="errors.phone" class="form-error">{{ errors.phone }}</p>
+								</div>
+
+								<!-- 電子信箱 -->
+								<div class="form-group">
+									<label for="contact-email">電子信箱 <span class="text-cyan-400">*</span></label>
+									<div class="input-wrapper">
+										<input
+											id="contact-email"
+											v-model="form.email"
+											class="form-input"
+											type="email"
+											placeholder="example@mail.com"
+											:class="{ 'has-error': errors.email }"
+											aria-required="true"
+										/>
+										<span class="input-line"></span>
+									</div>
+									<p v-if="errors.email" class="form-error">{{ errors.email }}</p>
+								</div>
+
+								<!-- 公司 / 部門 -->
+								<div class="form-group">
+									<label for="contact-company">公司 / 部門</label>
+									<div class="input-wrapper">
+										<input id="contact-company" v-model="form.company" class="form-input" type="text" placeholder="請輸入貴公司名稱" />
+										<span class="input-line"></span>
+									</div>
+								</div>
+
+								<!-- 步驟按鈕 -->
+								<div class="mt-[32px] flex justify-between">
+									<button @click="goToStep(1)" class="back-btn">返回上一步</button>
+									<button @click="submitForm" class="submit-btn" :class="{ loading: isSubmitting }">
+										<span v-if="!isSubmitting">提交</span>
+										<span v-else class="btn-loader"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- 步驟3：提交成功 -->
+					<div v-if="step === 3" class="success-container animate-success">
+						<div class="success-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+								<polyline points="22 4 12 14.01 9 11.01"></polyline>
+							</svg>
+						</div>
+						<h2 class="text-[32px] font-bold text-secondary mt-[24px]">感謝您的聯繫！</h2>
+						<p class="text-[16px] md:text-[18px] text-secondary opacity-80 mt-[12px] text-center">
+							我們的團隊將在幾個工作日內回覆您，敬請耐心等候。<br />
+							如有其他需求，歡迎隨時與我們聯繫。
+						</p>
+						<div class="mt-[32px] p-[24px] rounded-[16px] bg-white bg-opacity-10 backdrop-blur-sm">
+							<p class="flex justify-center items-center gap-[12px] text-cyan-400">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+									<polyline points="22,6 12,13 2,6"></polyline>
+								</svg>
+								Mail: jerry@yenshow.com
+							</p>
+							<p class="flex justify-center items-center gap-[12px] text-cyan-400 mt-[12px]">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path
+										d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+									></path>
+								</svg>
+								聯絡電話: +886-2-222-333-55
+							</p>
+						</div>
+						<button @click="goHome" class="home-btn mt-[48px]">回首頁</button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</div>
 </template>
 
 <script setup>

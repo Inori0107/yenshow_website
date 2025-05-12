@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-gray-50 p-4 rounded-lg animate-pulse">
+	<div class="bg-gray-50 p-4 rounded-lg animate-pulse" aria-hidden="true">
 		<!-- Skeleton for image -->
 		<div class="aspect-square bg-gray-200 rounded-md mb-4"></div>
 		<!-- Skeleton for product name -->

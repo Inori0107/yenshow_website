@@ -1,98 +1,103 @@
 <template>
-	<section id="intro-section" ref="introSection" class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
-		<!-- 服務特點區 -->
-		<article class="relative min-h-[70vh] md:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
-			<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
-			<!-- 頂部功能列 -->
-			<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
-				<Hexagon imageSrc="/YSCP/board-game.png" title="數位看板" />
-				<Hexagon imageSrc="/YSCP/intelligent-analytics.png" title="智慧分析" />
-				<Hexagon imageSrc="/YSCP/vehicle.png" title="車輛" />
-				<Hexagon imageSrc="/YSCP/visitor.png" title="訪客" />
-			</div>
-
-			<!-- 中間功能列 -->
-			<div ref="hexagonRow2" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]">
-				<Hexagon imageSrc="/YSCP/image.png" title="影像" />
-				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
-				<div class="w-full flex flex-col gap-[4px] items-center text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</div>
-				<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
-				<Hexagon imageSrc="/YSCP/guarded-entrance.png" title="門禁" />
-			</div>
-
-			<!-- 底部功能列 -->
-			<div ref="hexagonRow3" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-3 z-10 opacity-0">
-				<Hexagon imageSrc="/YSCP/route.png" title="路線管理" />
-				<Hexagon imageSrc="/YSCP/attendance.png" title="考勤管理" />
-				<Hexagon imageSrc="/YSCP/alarm.png" title="警報" />
-				<Hexagon imageSrc="/YSCP/maintain.png" title="維護" />
-			</div>
-		</article>
-
-		<!-- YSCP 產品介紹 -->
-		<article
-			id="yscp-article"
-			ref="yscpSection"
-			class="relative container min-h-[70vh] md:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
-		>
-			<!-- 左側內容說明 -->
-			<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
-				<h3 class="text-[21px] sm:text-[24px] md:text-[36px] lg:text-[48px] product-title">YSCentral Professional</h3>
-				<div class="title-decoration w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
-
-				<div class="feature-tag-container">
-					<span class="feature-tag">整合性</span>
-					<span class="feature-tag">安全性</span>
-					<span class="feature-tag">高效能</span>
-					<span class="feature-tag">易用性</span>
+	<div>
+		<section id="intro-section" ref="introSection" class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
+			<!-- 服務特點區 -->
+			<article class="relative min-h-[70vh] md:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
+				<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
+				<!-- 頂部功能列 -->
+				<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
+					<Hexagon imageSrc="/YSCP/board-game.png" title="數位看板" />
+					<Hexagon imageSrc="/YSCP/intelligent-analytics.png" title="智慧分析" />
+					<Hexagon imageSrc="/YSCP/vehicle.png" title="車輛" />
+					<Hexagon imageSrc="/YSCP/visitor.png" title="訪客" />
 				</div>
 
-				<h5 class="text-[10px] sm:text-[12px] md:text-[18px] lg:text-[24px] opacity-80">
-					一款整合式安全性軟體，<br />
-					旨在透過一個「直覺」的平台來應對多種安全挑戰。
-				</h5>
-
-				<div class="relative benefit-section">
-					<div class="benefit-decorative-line"></div>
-					<h4 class="text-[14px] sm:text-[16px] md:text-[24px] lg:text-[36px]">
-						在保護人員和財產安全的同時，<br />
-						讓日常營運更有效率，<br />
-						幫助使用者做出更明智的決策。
-					</h4>
-				</div>
-			</div>
-
-			<!-- 右側功能圓圈 -->
-			<div ref="featureCircles" class="grid grid-cols-2 relative feature-circles">
-				<!-- 功能特點 1 -->
+				<!-- 中間功能列 -->
 				<div
-					ref="circleOne"
-					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] ml-[-15px] sm:ml-[-25px] md:ml-0 YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+					ref="hexagonRow2"
+					class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]"
 				>
-					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">01</h4>
-					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">中央管理平台</h4>
+					<Hexagon imageSrc="/YSCP/image.png" title="影像" />
+					<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
+					<div class="w-full flex flex-col gap-[4px] items-center text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</div>
+					<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
+					<Hexagon imageSrc="/YSCP/guarded-entrance.png" title="門禁" />
 				</div>
 
-				<!-- 功能特點 2 -->
-				<div
-					ref="circleTwo"
-					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
-				>
-					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">02</h4>
-					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">軟體與硬體整合</h4>
+				<!-- 底部功能列 -->
+				<div ref="hexagonRow3" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-3 z-10 opacity-0">
+					<Hexagon imageSrc="/YSCP/route.png" title="路線管理" />
+					<Hexagon imageSrc="/YSCP/attendance.png" title="考勤管理" />
+					<Hexagon imageSrc="/YSCP/alarm.png" title="警報" />
+					<Hexagon imageSrc="/YSCP/maintain.png" title="維護" />
+				</div>
+			</article>
+
+			<!-- YSCP 產品介紹 -->
+			<article
+				id="yscp-article"
+				ref="yscpSection"
+				class="relative container min-h-[70vh] md:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
+			>
+				<!-- 左側內容說明 -->
+				<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
+					<h3 class="text-[21px] sm:text-[24px] md:text-[36px] lg:text-[48px] product-title">YSCentral Professional</h3>
+					<div class="title-decoration w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
+
+					<div class="feature-tag-container">
+						<span class="feature-tag">整合性</span>
+						<span class="feature-tag">安全性</span>
+						<span class="feature-tag">高效能</span>
+						<span class="feature-tag">易用性</span>
+					</div>
+
+					<h5 class="text-[10px] sm:text-[12px] md:text-[18px] lg:text-[24px] opacity-80">
+						一款整合式安全性軟體，<br />
+						旨在透過一個「直覺」的平台來應對多種安全挑戰。
+					</h5>
+
+					<div class="relative benefit-section">
+						<div class="benefit-decorative-line"></div>
+						<h4 class="text-[14px] sm:text-[16px] md:text-[24px] lg:text-[36px]">
+							在保護人員和財產安全的同時，<br />
+							讓日常營運更有效率，<br />
+							幫助使用者做出更明智的決策。
+						</h4>
+					</div>
 				</div>
 
-				<!-- 功能特點 3 -->
-				<div
-					ref="circleThree"
-					class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-95px] sm:mt-[-125px] md:mt-[-175px] ml-[-15px] sm:ml-[-25px] md:ml-[-25px] YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
-				>
-					<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">03</h4>
-					<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">完整的解決方案</h4>
+				<!-- 右側功能圓圈 -->
+				<div ref="featureCircles" class="grid grid-cols-2 relative feature-circles">
+					<!-- 功能特點 1 -->
+					<div
+						ref="circleOne"
+						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] ml-[-15px] sm:ml-[-25px] md:ml-0 YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+					>
+						<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">01</h4>
+						<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">中央管理平台</h4>
+					</div>
+
+					<!-- 功能特點 2 -->
+					<div
+						ref="circleTwo"
+						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
+					>
+						<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">02</h4>
+						<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">軟體與硬體整合</h4>
+					</div>
+
+					<!-- 功能特點 3 -->
+					<div
+						ref="circleThree"
+						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-95px] sm:mt-[-125px] md:mt-[-175px] ml-[-15px] sm:ml-[-25px] md:ml-[-25px] YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+					>
+						<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">03</h4>
+						<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">完整的解決方案</h4>
+					</div>
 				</div>
-			</div>
-		</article>
-	</section>
+			</article>
+		</section>
+	</div>
 </template>
 
 <script setup>
@@ -135,6 +140,8 @@ let featureTl,
 	circlesMasterTl,
 	waveTls = []; // waveTls needs to be populated in createWaveAnimation
 
+let hexGridAnimationTl = null; // <-- 為六角網格動畫時間軸聲明變量
+
 // 初始化 Three.js
 const initThree = () => {
 	scene = new THREE.Scene();
@@ -155,8 +162,6 @@ const initThree = () => {
 
 	// 初始設置所有六角形為隱藏狀態
 	resetHexagons();
-
-	window.addEventListener("resize", onWindowResize);
 };
 
 // 重置六角形網格，用於反覆觸發動畫
@@ -209,9 +214,9 @@ const animate = () => {
 	renderer.render(scene, camera);
 };
 
-// 處理窗口大小變化
+// 處理窗口大小變化 (此函數專注於 Three.js 更新)
 const onWindowResize = () => {
-	if (!threeCanvas.value) return;
+	if (!threeCanvas.value || !camera || !renderer) return; // 添加保護，確保 threeCanvas, camera, renderer 已初始化
 
 	const width = threeCanvas.value.clientWidth;
 	const height = threeCanvas.value.clientHeight;
@@ -223,11 +228,6 @@ const onWindowResize = () => {
 	// 重新創建六角形網格以適應新的螢幕尺寸
 	createHexagonGrid();
 	resetHexagons();
-
-	// 重設動畫觸發器
-	if (scrollAnimation && scrollAnimation.ScrollTrigger) {
-		scrollAnimation.ScrollTrigger.value.refresh();
-	}
 };
 
 // 設置 section 背景轉場動畫
@@ -247,7 +247,7 @@ const setupSectionBgAnimation = () => {
 		},
 		duration: 1.8,
 		ease: "power3.out",
-		toggleActions: "play none none reverse" // 確保可以反覆觸發
+		toggleActions: "play none none none"
 	});
 };
 
@@ -273,7 +273,7 @@ const setupHexagonRowAnimations = async () => {
 			trigger: ".feature-section",
 			start: "top 70%",
 			end: "bottom 20%",
-			toggleActions: "play none none reverse"
+			toggleActions: "play none none none"
 		}
 	});
 
@@ -382,10 +382,8 @@ const createWaveAnimation = (container) => {
 
 // 設置 YSCP 部分的滾動觸發動畫
 const setupYSCPAnimations = async () => {
-	// 檢測是否為移動設備
-	const animationDelay = isMobile.value ? 0.3 : 0.5; // 使用 isMobile.value
+	const animationDelay = isMobile.value ? 0.3 : 0.5;
 
-	// --- 添加 gsap.set 設定初始狀態 ---
 	gsap.set(yscpSection.value, { opacity: 0, y: 40 });
 	gsap.set(".product-title", { opacity: 0, scale: 0.9, textShadow: "0 0 0px rgba(221, 28, 28, 0)", color: "#770f0f" });
 	gsap.set(".title-decoration", { scaleX: 0, opacity: 0 });
@@ -393,14 +391,12 @@ const setupYSCPAnimations = async () => {
 	gsap.set("h5", { y: 20, opacity: 0 });
 	gsap.set(".benefit-decorative-line", { height: 0 });
 	gsap.set(".benefit-section h4", { y: 30, opacity: 0 });
-	// ---------------------------------
 
-	// Store the timeline instances
 	yscpTextTl = scrollAnimation.createTimelineAnimation({
 		trigger: "#yscp-article",
 		start: "top 70%",
 		end: "bottom 20%",
-		toggleActions: "play none none reverse"
+		toggleActions: "play none none none"
 	});
 
 	// 1. 整個區塊淡入 (使用 to，因為 gsap.set 已設 from)
@@ -435,18 +431,15 @@ const setupYSCPAnimations = async () => {
 	// 7. 主要描述文字 (使用 to)
 	yscpTextTl.to(".benefit-section h4", { y: 0, opacity: 1, duration: 1, ease: "power2.out" }, "-=0.8");
 
-	// --- 為右側圓圈添加 gsap.set ---
 	const circlesArray = [circleOne.value, circleTwo.value, circleThree.value];
 	gsap.set(circlesArray, { scale: 0.7, opacity: 0, y: 30 });
-	// -----------------------------
 
-	// Store the timeline instances
 	circlesMasterTl = gsap.timeline({
 		scrollTrigger: {
 			trigger: ".feature-circles",
 			start: "top 70%",
 			end: "bottom 20%",
-			toggleActions: "play none none reverse"
+			toggleActions: "play none none none"
 		},
 		delay: animationDelay
 	});
@@ -482,26 +475,21 @@ const setupHexGridAnimation = () => {
 	if (hexagons.length > 0) {
 		hexagons.sort((a, b) => a.distance - b.distance);
 
-		const tl = gsap.timeline({
+		hexGridAnimationTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: "#intro-section",
 				start: "top 70%",
 				end: "bottom 20%",
-				toggleActions: "play none none reverse",
+				toggleActions: "play none none none",
 				onEnter: () => {
 					// 當進入觸發區域時播放動畫
-					console.log("Three.js animation triggered - enter");
-				},
-				onLeaveBack: () => {
-					// 當離開觸發區域時重置動畫
-					console.log("Three.js animation reset - leave back");
-					resetHexagons();
+					console.log("Three.js hex grid animation triggered - enter");
 				}
 			}
 		});
 
 		// 為每個六角形添加動畫
-		tl.to(
+		hexGridAnimationTl.to(
 			hexagons.map((h) => h.mesh.scale),
 			{
 				x: 1,
@@ -628,23 +616,8 @@ onMounted(async () => {
 		// 設置產品介紹動畫
 		await setupYSCPAnimations();
 
-		// 初始刷新 ScrollTrigger，確保所有動畫在正確位置觸發
-		if (scrollAnimation && scrollAnimation.ScrollTrigger && scrollAnimation.ScrollTrigger.value) {
-			scrollAnimation.ScrollTrigger.value.refresh(); // 移除 setTimeout，立即執行
-		}
-
-		// 監聽窗口大小變化事件，確保動畫在不同尺寸下正確顯示
-		window.addEventListener("resize", () => {
-			if (scrollAnimation && scrollAnimation.ScrollTrigger) {
-				// 延遲更新以避免滾動觸發器在窗口調整大小時重複觸發 (保留此處延遲)
-				setTimeout(() => {
-					if (scrollAnimation.ScrollTrigger.value) {
-						// 再次檢查確保存在
-						scrollAnimation.ScrollTrigger.value.refresh();
-					}
-				}, 200);
-			}
-		});
+		// 添加針對 Three.js 的 resize 監聽器
+		window.addEventListener("resize", onWindowResize);
 	}
 });
 
@@ -652,26 +625,22 @@ onUnmounted(() => {
 	if (animationId) {
 		cancelAnimationFrame(animationId);
 	}
+	// 移除為 Three.js 添加的 resize 監聽器
 	window.removeEventListener("resize", onWindowResize);
 
 	// --- More specific GSAP cleanup ---
 	// Kill specific timelines created in this component
 	if (featureTl) featureTl.kill();
-	if (yscpTextTl) yscpTextTl.kill(); // Assuming scrollAnimation helper returns the timeline or handles its own cleanup
+	if (yscpTextTl) yscpTextTl.kill();
 	if (circlesMasterTl) circlesMasterTl.kill();
-	waveTls.forEach((tl) => tl.kill()); // Kill wave timelines
+	waveTls.forEach((tl) => tl.kill());
+	if (hexGridAnimationTl) {
+		hexGridAnimationTl.kill();
+	}
 
-	// It's generally safer to kill triggers associated with elements in this component
-	// rather than killing all triggers globally, unless you are sure.
-	// The scrollAnimation helper might handle this, or you can kill triggers based on their element:
-	// Example: ScrollTrigger.killAll(true, true, true); // This is still broad
-	// Or find specific triggers if needed:
 	if (scrollAnimation && scrollAnimation.ScrollTrigger && scrollAnimation.ScrollTrigger.value) {
-		// Let's stick to the previous method which seems robust if the helper manages triggers well
 		const triggers = scrollAnimation.ScrollTrigger.value.getAll();
-		// Filter triggers related to this component if possible, otherwise kill all managed by the helper instance
 		triggers.forEach((trigger) => {
-			// You could potentially check trigger.vars.trigger element if needed
 			trigger.kill();
 		});
 	}

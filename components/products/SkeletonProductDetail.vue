@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-secondary animate-pulse">
+	<div class="bg-secondary animate-pulse" aria-hidden="true">
 		<!-- Skeleton for Breadcrumbs -->
 		<div class="p-4 md:p-6 lg:p-8">
 			<div class="h-4 bg-gray-200 rounded w-1/2 md:w-1/3"></div>

@@ -2,11 +2,14 @@
 	<div class="space-y-[12px] md:space-y-[16px] lg:space-y-[24px]">
 		<div v-for="category in categories" :key="getCategoryId(category)">
 			<button
+				type="button"
 				@click="toggleActive(getCategoryId(category))"
 				:class="[
-					'trapezoid py-2 md:py-3 text-left ps-4 md:ps-6 transition-all duration-300 ease-in-out relative',
+					'trapezoid py-2 md:py-3 text-left ps-4 md:ps-6 transition-all duration-300 ease-in-out relative focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1',
 					isCategoryActive(category) ? 'bg-primary text-white w-[300px] lg:w-[504px]' : 'bg-gray-100 hover:bg-gray-200 text-gray-600 w-[185px] lg:w-[300px]'
 				]"
+				:aria-expanded="isCategoryActive(category) ? 'true' : 'false'"
+				:aria-controls="`sublist-${getCategoryId(category)}`"
 			>
 				<span :class="['transition-all duration-300', isCategoryActive(category) ? 'text-[24px] md:text-[36px]' : 'text-[16px] md:text-[24px]']">{{
 					getCategoryName(category)
@@ -15,13 +18,20 @@
 			<div
 				v-if="isCategoryActive(category) && getSubItems(category)"
 				class="mt-3 md:mt-4 lg:mt-6 ms-6 ps-4 py-2 border-l-2 border-primary-light w-[300px] lg:w-[504px]"
+				:id="`sublist-${getCategoryId(category)}`"
+				role="region"
+				:aria-labelledby="getCategoryId(category)"
 			>
 				<ul class="list-none space-y-[8px] md:space-y-[12px] lg:space-y-[16px]">
 					<li
 						v-for="item in getSubItems(category)"
 						:key="item._id || item"
-						class="text-[16px] md:text-[24px] text-gray-700 cursor-default hover:text-primary transition-all duration-200 group"
+						class="text-[16px] md:text-[24px] text-gray-700 hover:text-primary transition-all duration-200 group"
+						role="button"
+						tabindex="0"
 						@click="selectSubItem(category, item)"
+						@keydown.enter="selectSubItem(category, item)"
+						@keydown.space.prevent="selectSubItem(category, item)"
 					>
 						<span class="opacity-60 group-hover:opacity-100 transition-opacity">-&nbsp;</span>
 						{{ typeof item === "string" ? item : getCategoryName(item) }}

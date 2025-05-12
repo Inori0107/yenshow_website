@@ -77,7 +77,7 @@
 
 			<!-- 聯絡資訊卡片 -->
 			<div
-				class="contact-card flex flex-col items-center gap-[16px] max-w-[354px] p-[24px] text-center text-primary bg-white bg-opacity-95 rounded-[50px] shadow-lg transition-all duration-300 hover:shadow-2xl hover:bg-opacity-100 border border-gray-200 border-opacity-50"
+				class="contact-card flex flex-col items-center gap-[16px] max-w-[354px] p-[24px] text-center text-primary bg-white rounded-[50px] shadow-lg transition-all duration-300"
 			>
 				<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium text-darkBlue">Contact Us</h3>
 				<p class="text-[12px] lg:text-[16px]">

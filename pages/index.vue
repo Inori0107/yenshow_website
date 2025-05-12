@@ -1,21 +1,23 @@
 <template>
-	<!-- HeroPic -->
-	<HeroPic />
+	<div>
+		<!-- HeroPic -->
+		<HeroPic />
 
-	<!-- Story -->
-	<Story id="story" />
+		<!-- Story -->
+		<Story id="story" />
 
-	<!-- Intro -->
-	<Intro />
+		<!-- Intro -->
+		<Intro />
 
-	<!-- Product -->
-	<ProductIntro id="products" />
+		<!-- Product -->
+		<ProductIntro id="products" />
 
-	<!-- Cooperation -->
-	<SuccessCasesIntro id="cases" />
+		<!-- Cooperation -->
+		<SuccessCasesIntro id="cases" />
 
-	<!-- News & Events -->
-	<NewsEvents />
+		<!-- News & Events -->
+		<NewsEvents />
+	</div>
 </template>
 
 <script setup>
@@ -43,18 +45,12 @@ onMounted(async () => {
 	try {
 		// 初始化 ScrollTrigger
 		await scrollAnimation.initScrollPlugins();
-
-		// 監聽窗口大小變化
-		window.addEventListener("resize", scrollAnimation.handleResize);
 	} catch (error) {
 		console.error("初始化錯誤:", error);
 	}
 });
 
 onUnmounted(() => {
-	// 清理全局事件監聽
-	window.removeEventListener("resize", scrollAnimation.handleResize);
-
 	// 清理所有 ScrollTrigger 實例
 	scrollAnimation.cleanupScrollTriggers();
 });

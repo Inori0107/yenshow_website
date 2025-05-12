@@ -3,29 +3,42 @@
 		<button
 			v-if="showLeftArrow"
 			@click="scrollLeft"
-			class="absolute left-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300"
-			aria-label="Scroll Left"
+			class="absolute left-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
+			aria-label="向左滾動產品"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-6 h-6 text-gray-700"
+				aria-hidden="true"
+			>
+				<title>向左箭頭</title>
 				<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
 			</svg>
 		</button>
 
-		<div v-if="loading" class="flex justify-center items-center p-8">
+		<div v-if="loading" class="flex justify-center items-center p-8" role="status" aria-live="polite">
 			<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+			<span class="sr-only">正在載入產品...</span>
 		</div>
-		<div v-else-if="!products || products.length === 0" class="text-center py-8 text-gray-500">目前沒有符合條件的產品</div>
+		<div v-else-if="!products || products.length === 0" class="text-center py-8 text-gray-500" aria-live="polite">目前沒有符合條件的產品</div>
 		<div
 			v-else
 			ref="scrollContainerRef"
 			class="flex overflow-x-auto whitespace-nowrap space-x-6 px-4 py-4 horizontal-scroll-container"
 			@scroll="updateArrowVisibility"
+			role="list"
 		>
-			<div
+			<a
 				v-for="product in products"
 				:key="product._id"
-				class="bg-white p-4 rounded-lg hover:shadow-lg transition-all duration-300 w-72 flex-shrink-0 cursor-pointer"
-				@click="viewProduct(product)"
+				:href="`/products/${product._id}`"
+				@click.prevent="viewProduct(product)"
+				class="bg-white p-4 rounded-lg hover:shadow-lg transition-all duration-300 w-72 flex-shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+				role="listitem"
 			>
 				<div class="aspect-square rounded-md mb-4 flex items-center justify-center">
 					<NuxtImg
@@ -43,16 +56,25 @@
 					{{ product.displayName || product.model || "未命名產品" }}
 				</h4>
 				<p v-if="product.model" class="text-[14px] text-gray-500 overflow-hidden text-ellipsis">{{ product.model }}</p>
-			</div>
+			</a>
 		</div>
 
 		<button
 			v-if="showRightArrow"
 			@click="scrollRight"
-			class="absolute right-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300"
-			aria-label="Scroll Right"
+			class="absolute right-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
+			aria-label="向右滾動產品"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="currentColor"
+				class="w-6 h-6 text-gray-700"
+				aria-hidden="true"
+			>
+				<title>向右箭頭</title>
 				<path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
 			</svg>
 		</button>
@@ -139,6 +161,17 @@ watch(
 </script>
 
 <style scoped>
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
 /* Target the container to hide scrollbar */
 .horizontal-scroll-container {
 	scrollbar-width: none; /* For Firefox */
