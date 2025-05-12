@@ -143,24 +143,20 @@ export const useApi = () => {
 	const entityApi = (entityType, options = {}) => {
 		const responseKey = options.responseKey || `${entityType}List`;
 
-		// 判斷是否需要認證，默認為 true
 		const requiresAuth = options.requiresAuth !== false;
 		const instance = requiresAuth ? apiAuth : api;
 
 		return {
-			// 獲取所有項目 (對應 BaseController.getAllItems)
 			getAll: async (params = {}) => {
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}`, { params }));
 				return response?.data?.result?.[responseKey] || [];
 			},
 
-			// 獲取單個項目 (對應 BaseController.getItemById)
 			getById: async (id, params = {}) => {
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}/${id}`, { params }));
-				return response?.data?.result?.[entityType] || null;
+				return response?.data?.result || null;
 			},
 
-			// 搜索項目 (對應 BaseController.searchItems)
 			search: async (params = {}) => {
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}/search`, { params }));
 				return {

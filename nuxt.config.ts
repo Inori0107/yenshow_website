@@ -16,8 +16,8 @@ export default defineNuxtConfig({
 	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@pinia/nuxt", "@nuxtjs/sitemap", "@nuxtjs/device", "@nuxt/image"],
 	i18n: {
 		locales: [
-			{ code: "zh", iso: "zh-TW", name: "繁體中文", file: "zh.json" },
-			{ code: "en", iso: "en-US", name: "English", file: "en.json" }
+			{ code: "zh", iso: "zh-TW", name: "TW", file: "zh.json" },
+			{ code: "en", iso: "en-US", name: "EN", file: "en.json" }
 		],
 		defaultLocale: "zh",
 		strategy: "prefix_except_default", // 預設語言無前綴

@@ -8,7 +8,7 @@
 					<h3 class="text-[24px] md:text-[36px] lg:text-[64px]">{{ $t("news title") }}</h3>
 					<span class="text-[12px] md:text-[16px] lg:text-[24px] opacity-80">{{ $t("latest news") }}</span>
 				</div>
-				<ButtonCTA class="w-fit h-fit" :label="$t('view all')" to="/news"></ButtonCTA>
+				<ButtonCTA class="w-fit h-fit" :label="$t('view all')" to="/News"></ButtonCTA>
 			</nav>
 			<!-- Content -->
 			<div class="w-full max-w-[880px] border-y-2 border-primary divide-y-2 divide-primary">
