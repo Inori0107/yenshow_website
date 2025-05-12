@@ -14,9 +14,6 @@
 
 		<!-- Cooperation -->
 		<SuccessCasesIntro id="cases" />
-
-		<!-- News & Events -->
-		<NewsEvents />
 	</div>
 </template>
 
@@ -25,7 +22,6 @@ import { provide, onMounted, onUnmounted } from "vue";
 import HeroPic from "~/components/Home/HeroPic.vue";
 import Story from "~/components/Home/Story.vue";
 import Intro from "~/components/Home/Intro.vue";
-import NewsEvents from "~/components/Home/NewsEvents.vue";
 import ProductIntro from "~/components/Home/ProductIntro.vue";
 import SuccessCasesIntro from "~/components/Home/SuccessCasesIntro.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
