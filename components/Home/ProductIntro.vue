@@ -1,8 +1,10 @@
 <template>
 	<div>
 		<!-- ProductIntro -->
-		<section class="marquee-background bg-primary relative overflow-hidden my-[128px] md:my-[512px] flex items-center min-h-screen">
-			<article class="search-overlay absolute inset-0 z-50 flex flex-col justify-center items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary">
+		<section class="marquee-background bg-primary relative my-[128px] md:my-[512px] min-h-screen overflow-hidden">
+			<article
+				class="search-overlay absolute inset-0 z-50 pt-[32px] md:pt-[128px] flex flex-col items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary"
+			>
 				<div class="search-container w-full max-w-[80%] md:max-w-[60%] lg:max-w-[40%] z-10 transition-all duration-300 relative">
 					<div class="text-center space-y-[12px] md:space-y-[24px] mb-[24px] md:mb-[48px]">
 						<h2 class="text-secondary text-[24px] md:text-[36px] lg:text-[64px] font-bold">探索產品</h2>
@@ -180,13 +182,13 @@
 					<div class="marquee" :class="rowIndex % 2 === 0 ? '' : 'marquee--reverse'">
 						<div class="marquee__group">
 							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
-								<img class="w-[200px] h-[150px] lg:w-[400px] lg:h-[300px]" :src="image" alt="" />
+								<img class="w-[300px] h-[225px] lg:w-[400px] lg:h-[300px]" :src="image" alt="" />
 							</div>
 						</div>
 
 						<div aria-hidden="true" class="marquee__group">
 							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
-								<img class="w-[200px] h-[150px] lg:w-[400px] lg:h-[300px]" :src="image" alt="" />
+								<img class="w-[300px] h-[225px] lg:w-[400px] lg:h-[300px]" :src="image" alt="" />
 							</div>
 						</div>
 					</div>

@@ -6,7 +6,7 @@
 			:key="option.value"
 			@click="setFilter(option.value)"
 			:class="[
-				'text-[12px] md:text-[16px] px-[8px] md:px-[14px] lg:px-[18px] py-[6px] md:py-[12px] lg:py-[16px] rounded-[10px]',
+				'text-[16px] px-[8px] md:px-[14px] lg:px-[18px] py-[6px] md:py-[12px] lg:py-[16px] rounded-[10px]',
 				selectedOption === option.value ? 'bg-white shadow-md' : 'bg-[#F1F5F9]'
 			]"
 			:aria-pressed="selectedOption === option.value ? 'true' : 'false'"

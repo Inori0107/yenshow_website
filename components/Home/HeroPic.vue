@@ -82,7 +82,8 @@ const navContainer = ref(null);
 // Three.js vars
 let scene, camera, renderer;
 let networkSphere;
-let animationId;
+let animationId = null;
+let observer = null;
 
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
@@ -137,9 +138,6 @@ const initThree = () => {
 
 	// 執行淡入動畫
 	fadeInNetworkSphere();
-
-	// 啟動動畫
-	animate();
 
 	// 相機動畫效果
 	animateCamera();
@@ -344,10 +342,41 @@ onMounted(async () => {
 	// 確保 ScrollTrigger 已初始化
 	await scrollAnimation.initScrollPlugins();
 
-	// 初始化三維背景
-	initThree();
+	// Don't init Three.js on mobile to save performance
+	if (!scrollAnimation.isMobile.value) {
+		initThree();
 
-	// 設置進場動畫
+		// Setup Intersection Observer after canvas is ready
+		if (threeCanvas.value) {
+			observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							// Start animation only if it's not already running
+							if (!animationId) {
+								console.log("HeroPic Canvas intersecting, starting animation.");
+								animate(); // Start the loop
+							}
+						} else {
+							// Stop animation only if it's running
+							if (animationId) {
+								console.log("HeroPic Canvas not intersecting, stopping animation.");
+								cancelAnimationFrame(animationId);
+								animationId = null; // Reset animationId
+							}
+						}
+					});
+				},
+				{ threshold: 0.1 } // Trigger when 10% is visible
+			);
+			observer.observe(threeCanvas.value);
+		}
+	} else {
+		// Optional: Maybe set a static background for mobile here
+		console.log("Skipping Three.js initialization on mobile for HeroPic.");
+	}
+
+	// 設置進場動畫 (Runs regardless of Three.js)
 	setupEntranceAnimation();
 
 	// 添加窗口大小變化監聽器
@@ -355,17 +384,30 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-	cancelAnimationFrame(animationId);
+	// Disconnect observer if it exists
+	if (observer) {
+		observer.disconnect();
+		observer = null;
+	}
+
+	// Stop animation frame if it's somehow still running
+	if (animationId) {
+		cancelAnimationFrame(animationId);
+		animationId = null;
+	}
+
 	window.removeEventListener("resize", handleResize);
 
-	// 釋放Three.js資源
+	// 釋放Three.js資源 (check if scene/renderer exist before disposing)
 	if (scene) {
 		scene.clear();
+		scene = null; // Help GC
 	}
-
 	if (renderer) {
 		renderer.dispose();
+		renderer = null; // Help GC
 	}
+	networkSphere = null; // Help GC
 });
 </script>
 

@@ -3,7 +3,7 @@
 		<button
 			v-if="showLeftArrow"
 			@click="scrollLeft"
-			class="absolute left-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
+			class="absolute left-0 md:left-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
 			aria-label="向左滾動產品"
 		>
 			<svg
@@ -62,7 +62,7 @@
 		<button
 			v-if="showRightArrow"
 			@click="scrollRight"
-			class="absolute right-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
+			class="absolute right-0 md:right-[-5%] top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary"
 			aria-label="向右滾動產品"
 		>
 			<svg
