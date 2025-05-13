@@ -3,7 +3,7 @@
 		<section id="intro-section" ref="introSection" class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
 			<!-- 服務特點區 -->
 			<article class="relative min-h-[70vh] md:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
-				<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0"></canvas>
+				<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0 pointer-events: none"></canvas>
 				<!-- 頂部功能列 -->
 				<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
 					<Hexagon imageSrc="/YSCP/board-game.png" title="數位看板" />
@@ -722,6 +722,7 @@ canvas {
 	width: 100%;
 	height: 100%;
 	z-index: 0;
+	pointer-events: none;
 }
 
 .hexagon-row-1,

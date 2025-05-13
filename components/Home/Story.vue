@@ -12,11 +12,7 @@
 			</div>
 
 			<!-- Block 2: Themes Section -->
-			<div
-				id="story-themes-block"
-				ref="storyThemesBlockRef"
-				class="h-screen relative flex justify-center items-center py-[64px] md:py-[128px] overflow-visible"
-			>
+			<div id="story-themes-block" ref="storyThemesBlockRef" class="h-screen relative flex justify-center items-center py-[64px] md:py-[128px] overflow-hidden">
 				<!-- Theme Items -->
 				<div
 					v-for="(theme, key) in themes"
@@ -33,7 +29,7 @@
 					<button
 						type="button"
 						:ref="(el) => (themeRefs[key].title = el)"
-						class="vertical-title text-[36px] md:text-[60px] lg:text-[80px] p-[8px] rounded-lg opacity-0 cursor-pointer font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75"
+						class="vertical-title text-[36px] md:text-[60px] lg:text-[80px] p-[8px] rounded-lg opacity-0 cursor-pointer font-semibold focus:outline-none"
 						style="position: relative; z-index: 10"
 						@click="handleThemeClick(key)"
 						:aria-expanded="activeThemeKey === key ? 'true' : 'false'"
@@ -166,8 +162,29 @@ watch(activeThemeKey, async (newKey, oldKey) => {
 
 	if (detailAnimationTl) detailAnimationTl.kill();
 
-	if (oldKey) hideAura(oldKey);
-	if (newKey) showAura(newKey);
+	// Handle old theme's title styling and aura
+	if (oldKey) {
+		hideAura(oldKey);
+		const oldTitleEl = themeRefs[oldKey]?.title;
+		if (oldTitleEl) {
+			oldTitleEl.classList.remove("theme-title-active");
+			oldTitleEl.style.removeProperty("--theme-glow-color");
+		}
+	}
+
+	// Handle new theme's title styling and aura
+	if (newKey) {
+		showAura(newKey);
+		const newTitleEl = themeRefs[newKey]?.title;
+		if (newTitleEl) {
+			newTitleEl.classList.add("theme-title-active");
+			let glowColor = "rgba(255, 255, 255, 0.7)"; // Default white glow
+			if (newKey === "cloud") glowColor = "rgba(200, 220, 255, 0.8)"; // Light blueish
+			else if (newKey === "mountain") glowColor = "rgba(230, 240, 235, 0.8)"; // Light greenish/white for contrast
+			else if (newKey === "sky") glowColor = "rgba(180, 230, 220, 0.8)"; // Light cyanish
+			newTitleEl.style.setProperty("--theme-glow-color", glowColor);
+		}
+	}
 
 	const oldElements = oldKey ? themeElementMap[oldKey] : null;
 	const newElements = newKey ? themeElementMap[newKey] : null;
@@ -376,8 +393,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.vertical-text,
-.vertical-title {
+.vertical-text {
 	writing-mode: vertical-lr;
 	height: fit-content;
 	padding-top: 10px;
@@ -386,6 +402,16 @@ onUnmounted(() => {
 	background: linear-gradient(45deg, transparent, #f2f2f2);
 	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 	font-family: "LXGW WenKai Mono TC";
+}
+
+.vertical-title {
+	writing-mode: vertical-lr;
+	height: fit-content;
+	padding-top: 10px;
+	letter-spacing: 10px;
+	text-orientation: upright;
+	font-family: "LXGW WenKai Mono TC";
+	color: rgba(0, 0, 0, 0.7);
 }
 
 .details-set {
@@ -425,18 +451,11 @@ onUnmounted(() => {
 	height: 100px;
 }
 
-@media (min-width: 448px) {
-	.theme-aura {
-		width: 100px;
-		height: 100px;
-	}
-}
-
 /* Medium screens (md) aura size adjustment */
 @media (min-width: 768px) {
 	.theme-aura {
-		width: 200px;
-		height: 200px;
+		width: 100px;
+		height: 100px;
 	}
 }
 
@@ -462,5 +481,10 @@ onUnmounted(() => {
 .aura-sky {
 	background: radial-gradient(circle, rgba(120, 220, 180, 0.55) 15%, rgba(80, 180, 150, 0) 70%);
 	box-shadow: 0 0 30px 15px rgba(100, 200, 160, 0.25);
+}
+
+.theme-title-active {
+	text-shadow: 0 0 5px var(--theme-glow-color, #fff), 0 0 10px var(--theme-glow-color, #fff);
+	transition: text-shadow 0.3s ease-out;
 }
 </style>

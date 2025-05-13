@@ -202,6 +202,17 @@ onUnmounted(() => {
 .case-area-card {
 	will-change: transform, box-shadow, opacity;
 	transform: translateZ(0); /* 提升性能 */
+	/* Default fallback for mobile */
+	background-color: rgba(0, 0, 0, 0.3);
+	transition: all duration-300; /* Simplify transition */
+}
+
+/* Apply backdrop-filter only on larger screens */
+@media (min-width: 768px) {
+	.case-area-card {
+		background-color: rgba(0, 0, 0, 0.2); /* Slightly different base for desktop */
+		backdrop-filter: blur(4px); /* Reduced blur slightly */
+	}
 }
 
 /* 可以為圖標添加更多樣式 */

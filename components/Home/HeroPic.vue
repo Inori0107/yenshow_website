@@ -371,10 +371,18 @@ onUnmounted(() => {
 
 <style scoped>
 .block-bg {
-	background-color: rgba(0, 0, 0, 0.3);
-	backdrop-filter: blur(10px);
+	/* Default fallback for mobile */
+	background-color: rgba(0, 0, 0, 0.5);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Apply backdrop-filter only on larger screens */
+@media (min-width: 768px) {
+	.block-bg {
+		background-color: rgba(0, 0, 0, 0.3); /* Slightly different base for desktop */
+		backdrop-filter: blur(10px);
+	}
 }
 
 .block-pattern {
@@ -393,6 +401,11 @@ onUnmounted(() => {
 
 .pattern-3 {
 	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Add pointer-events: none to canvas */
+canvas {
+	pointer-events: none;
 }
 
 /* 限制導航區塊描述文字的行數 */
