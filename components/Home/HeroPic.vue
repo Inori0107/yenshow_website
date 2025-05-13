@@ -47,7 +47,7 @@
 						<div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 sm:p-6 z-10">
 							<div class="text-[16px] sm:text-[18px] md:text-[20px] font-bold opacity-60 mb-1 sm:mb-2">0{{ block.number }}</div>
 							<h3 class="text-[22px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-4">{{ block.title }}</h3>
-							<p class="text-[14px] sm:text-[15px] md:text-[16px] text-center opacity-80 line-clamp-3">{{ block.description }}</p>
+							<p class="text-[14px] sm:text-[15px] md:text-[16px] text-center opacity-80">{{ block.description }}</p>
 						</div>
 					</div>
 				</button>
@@ -82,8 +82,7 @@ const navContainer = ref(null);
 // Three.js vars
 let scene, camera, renderer;
 let networkSphere;
-let animationId = null;
-let observer = null;
+let animationId;
 
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
@@ -138,6 +137,9 @@ const initThree = () => {
 
 	// 執行淡入動畫
 	fadeInNetworkSphere();
+
+	// 啟動動畫
+	animate();
 
 	// 相機動畫效果
 	animateCamera();
@@ -342,41 +344,10 @@ onMounted(async () => {
 	// 確保 ScrollTrigger 已初始化
 	await scrollAnimation.initScrollPlugins();
 
-	// Don't init Three.js on mobile to save performance
-	if (!scrollAnimation.isMobile.value) {
-		initThree();
+	// 初始化三維背景
+	initThree();
 
-		// Setup Intersection Observer after canvas is ready
-		if (threeCanvas.value) {
-			observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							// Start animation only if it's not already running
-							if (!animationId) {
-								console.log("HeroPic Canvas intersecting, starting animation.");
-								animate(); // Start the loop
-							}
-						} else {
-							// Stop animation only if it's running
-							if (animationId) {
-								console.log("HeroPic Canvas not intersecting, stopping animation.");
-								cancelAnimationFrame(animationId);
-								animationId = null; // Reset animationId
-							}
-						}
-					});
-				},
-				{ threshold: 0.1 } // Trigger when 10% is visible
-			);
-			observer.observe(threeCanvas.value);
-		}
-	} else {
-		// Optional: Maybe set a static background for mobile here
-		console.log("Skipping Three.js initialization on mobile for HeroPic.");
-	}
-
-	// 設置進場動畫 (Runs regardless of Three.js)
+	// 設置進場動畫
 	setupEntranceAnimation();
 
 	// 添加窗口大小變化監聽器
@@ -384,30 +355,17 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-	// Disconnect observer if it exists
-	if (observer) {
-		observer.disconnect();
-		observer = null;
-	}
-
-	// Stop animation frame if it's somehow still running
-	if (animationId) {
-		cancelAnimationFrame(animationId);
-		animationId = null;
-	}
-
+	cancelAnimationFrame(animationId);
 	window.removeEventListener("resize", handleResize);
 
-	// 釋放Three.js資源 (check if scene/renderer exist before disposing)
+	// 釋放Three.js資源
 	if (scene) {
 		scene.clear();
-		scene = null; // Help GC
 	}
+
 	if (renderer) {
 		renderer.dispose();
-		renderer = null; // Help GC
 	}
-	networkSphere = null; // Help GC
 });
 </script>
 
@@ -448,12 +406,5 @@ onUnmounted(() => {
 /* Add pointer-events: none to canvas */
 canvas {
 	pointer-events: none;
-}
-
-/* 限制導航區塊描述文字的行數 */
-.line-clamp-3 {
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
 }
 </style>

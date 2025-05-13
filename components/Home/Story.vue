@@ -231,9 +231,13 @@ watch(activeThemeKey, async (newKey, oldKey) => {
 				{
 					opacity: 1,
 					y: 0,
-					duration: 0.7,
-					ease: "power3.out",
-					stagger: { each: 0.2, from: "start" }
+					// Mobile optimization: faster duration, less/no stagger, simpler ease
+					duration: scrollAnimation.isMobile.value ? 0.4 : 0.7,
+					ease: scrollAnimation.isMobile.value ? "power2.out" : "power3.out",
+					stagger: {
+						each: scrollAnimation.isMobile.value ? 0.08 : 0.2,
+						from: "start"
+					}
 				},
 				oldElements && oldKey !== newKey ? "+=0.2" : "+=0.1"
 			); // Delay based on whether an old element was present
@@ -301,18 +305,27 @@ const setupStoryAnimation = () => {
 		trigger: `#story-intro-block`,
 		start: "top 70%",
 		end: "bottom 20%",
-		toggleActions: "play none none reverse"
+		toggleActions: "play none none none" // Keep as play once
 	});
 
 	if (introContainerRef.value && introTextRefs.value.length) {
-		introTl
-			.fromTo(introContainerRef.value, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" })
-			.fromTo(
-				introTextRefs.value,
-				{ opacity: 0, y: 20 },
-				{ opacity: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: { each: 0.4, from: "start" } },
-				"-=0.5"
-			);
+		introTl.fromTo(introContainerRef.value, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }); // Slightly shorter container animation
+		// Mobile optimization: Animate texts faster and with much less stagger
+		introTl.fromTo(
+			introTextRefs.value,
+			{ opacity: 0, y: 20 },
+			{
+				opacity: 1,
+				y: 0,
+				duration: scrollAnimation.isMobile.value ? 0.5 : 0.9,
+				ease: "power3.out",
+				stagger: {
+					each: scrollAnimation.isMobile.value ? 0.1 : 0.4,
+					from: "start"
+				}
+			},
+			"-=0.4" // Adjust timing slightly if needed
+		);
 	}
 
 	themesTl = scrollAnimation.createTimelineAnimation({
@@ -322,8 +335,9 @@ const setupStoryAnimation = () => {
 		toggleActions: "play none none reverse"
 	});
 
-	const THEME_ANIM_STAGGER = 0.3;
-	const THEME_ANIM_DURATION = 1.0;
+	// Mobile optimization: Adjust theme title animation timing
+	const THEME_ANIM_STAGGER = scrollAnimation.isMobile.value ? 0.15 : 0.3;
+	const THEME_ANIM_DURATION = scrollAnimation.isMobile.value ? 0.7 : 1.0;
 	const themeOrder = ["cloud", "mountain", "sky"];
 	const lastThemeKey = themeOrder[themeOrder.length - 1];
 
@@ -464,6 +478,20 @@ onUnmounted(() => {
 	.theme-aura {
 		width: 300px;
 		height: 300px;
+	}
+}
+
+/* Mobile optimization: Remove heavy styles */
+@media (max-width: 767px) {
+	.theme-aura {
+		box-shadow: none;
+		/* Optionally, use a simpler background or just keep the gradient */
+	}
+	.theme-title-active {
+		text-shadow: none;
+	}
+	.vertical-text {
+		box-shadow: none; /* Also remove shadow from vertical text on mobile */
 	}
 }
 
