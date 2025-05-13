@@ -52,10 +52,9 @@ export const useNewsStore = defineStore("news", () => {
 		try {
 			const item = await newsService.getById(id, params);
 			currentNewsItem.value = item;
-			return item;
+			return { News: item };
 		} catch (e) {
 			error.value = e.message || `無法獲取 ID 為 ${id} 的新聞`;
-			console.error(`Error fetching news by ID ${id}:`, e);
 			return null;
 		} finally {
 			isLoading.value = false;

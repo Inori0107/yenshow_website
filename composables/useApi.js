@@ -157,7 +157,8 @@ export const useApi = () => {
 			// 獲取單個項目 (對應 BaseController.getItemById)
 			getById: async (id, params = {}) => {
 				const response = await safeApiCall(() => instance.get(`/api/${entityType}/${id}`, { params }));
-				return response?.data?.result?.[entityType] || null;
+				// 兼容大小寫
+				return response?.data?.result?.[entityType] || response?.data?.result?.[entityType.charAt(0).toUpperCase() + entityType.slice(1)] || null;
 			},
 
 			// 搜索項目 (對應 BaseController.searchItems)

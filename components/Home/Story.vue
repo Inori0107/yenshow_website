@@ -425,11 +425,18 @@ onUnmounted(() => {
 	height: 100px;
 }
 
+@media (min-width: 448px) {
+	.theme-aura {
+		width: 100px;
+		height: 100px;
+	}
+}
+
 /* Medium screens (md) aura size adjustment */
 @media (min-width: 768px) {
 	.theme-aura {
-		width: 150px;
-		height: 150px;
+		width: 200px;
+		height: 200px;
 	}
 }
 

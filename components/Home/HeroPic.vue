@@ -10,10 +10,13 @@
 			</div>
 
 			<!-- 主標語 -->
-			<div ref="heroText" class="text-center text-secondary opacity-0 transform translate-y-10 z-10 px-4">
-				<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold leading-tight">
+			<div
+				ref="heroText"
+				class="text-center text-transparent bg-gradient-to-b from-[#015C31] to-[#A8E6A3] bg-clip-text opacity-0 transform translate-y-10 z-10 px-4"
+			>
+				<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold">
 					遠岫科技
-					<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] mt-2">讓安心無所不在</span>
+					<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px]">讓安心無所不在</span>
 				</h1>
 			</div>
 
