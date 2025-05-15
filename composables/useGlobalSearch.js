@@ -81,50 +81,52 @@ export function useGlobalSearch() {
 
 		if (!item || !item._id) return;
 
-		let seriesSlug = null;
-		let targetPath = "/products"; // 預設回退路徑
+		// let seriesSlug = null; // seriesSlug 的聲明和使用最好在各自 case 內部，避免混淆
+		// let targetPath = "/products"; // 移除此處的預設 targetPath，因為它可能不適用所有情況
 
 		// 根據實體類型跳轉到不同頁面
 		switch (entityType) {
-			case "products":
-				targetPath = `/products/${item._id}`;
-				router.push({ path: targetPath });
+			case "products": {
+				const productTargetPath = `/products/${item._id}`;
+				router.push({ path: productTargetPath });
 				break;
-			case "series":
-				seriesSlug = getSeriesSlug(item._id);
+			}
+			case "series": {
+				const seriesSlug = getSeriesSlug(item._id);
 				if (seriesSlug) {
-					targetPath = `/products/${seriesSlug}`;
-					router.push({ path: targetPath });
+					const seriesTargetPath = `/products/${seriesSlug}`;
+					router.push({ path: seriesTargetPath });
 				} else {
-					console.warn(`找不到系列 ID ${item._id} 對應的 slug，跳轉至產品列表`);
-					router.push({ path: targetPath });
+					console.warn(`找不到系列 ID ${item._id} 對應的 slug，將跳轉至首頁`);
+					router.push({ path: "/" }); // 改為首頁
 				}
 				break;
+			}
 			case "categories":
 			case "subCategories":
-			case "specifications":
-				// 假設 item 中包含 series._id 來找到所屬系列
-				// 注意：這需要後端 API 返回結果中包含 series._id
-				const seriesId = item.series?._id;
-				if (seriesId) {
-					seriesSlug = getSeriesSlug(seriesId);
-					if (seriesSlug) {
-						targetPath = `/products/${seriesSlug}`;
-						// 可以考慮添加 hash 或 query 以便在目標頁面定位
-						// 例如：router.push({ path: targetPath, hash: `#${item._id}` });
-						router.push({ path: targetPath });
+			case "specifications": {
+				const entitySeriesId = item.series?._id;
+				if (entitySeriesId) {
+					const resolvedSeriesSlug = getSeriesSlug(entitySeriesId);
+					if (resolvedSeriesSlug) {
+						const seriesTargetPath = `/products/${resolvedSeriesSlug}`;
+						router.push({
+							path: seriesTargetPath,
+							query: { entityId: item._id, entityType: entityType }
+						});
 					} else {
-						console.warn(`找不到項目 ${item._id} (${entityType}) 所屬系列 ID ${seriesId} 對應的 slug，跳轉至產品列表`);
-						router.push({ path: targetPath });
+						console.warn(`找不到項目 ${item._id} (${entityType}) 所屬系列 ID ${entitySeriesId} 對應的 slug，將跳轉至首頁。`);
+						router.push({ path: "/" }); // 改為首頁
 					}
 				} else {
-					console.warn(`項目 ${item._id} (${entityType}) 缺少 series._id 信息，無法跳轉至系列頁面，跳轉至產品列表`);
-					router.push({ path: targetPath });
+					console.warn(`項目 ${item._id} (${entityType}) 缺少 series._id 信息，無法跳轉至系列頁面，將跳轉至首頁。`);
+					router.push({ path: "/" }); // 改為首頁
 				}
 				break;
+			}
 			default:
-				console.warn(`未知的實體類型: ${entityType}，跳轉至產品列表`);
-				router.push({ path: targetPath });
+				console.warn(`未知的實體類型: ${entityType}，將跳轉至首頁`);
+				router.push({ path: "/" }); // 預設情況也跳轉到首頁
 		}
 	}
 

@@ -14,7 +14,7 @@
 		<!-- News 列表 -->
 		<div v-else-if="newsStore.newsList && newsStore.newsList.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
 			<NuxtLink
-				:to="`/News/${newsItem.slug || newsItem._id}`"
+				:to="`/News/${newsItem._id}`"
 				v-for="newsItem in newsStore.newsList"
 				:key="newsItem._id || newsItem.id"
 				class="rounded-lg bg-white/90 backdrop-blur-sm overflow-hidden flex flex-col no-underline shadow-md hover:shadow-xl transition-shadow duration-300 group"

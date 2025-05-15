@@ -59,7 +59,16 @@
 							<p class="text-gray-700 text-[12px] md:text-[16px] lg:text-[21px]">{{ getLocalizedDescription(product) }}</p>
 						</div>
 
-						<Button-CTA label="免費諮詢" to="/contact" class="w-fit mx-auto"></Button-CTA>
+						<!-- 按鈕組 -->
+						<div class="flex flex-col sm:flex-row justify-center items-center gap-3 md:gap-4 pt-4">
+							<Button-CTA label="免費諮詢" to="/contact" class="w-full sm:w-auto"></Button-CTA>
+							<Button-CTA
+								v-if="product?.documents && product.documents.length > 0"
+								label="下載規格"
+								@click="handleDownloadSpecsClick"
+								class="w-full sm:w-auto"
+							></Button-CTA>
+						</div>
 					</div>
 				</section>
 
@@ -84,6 +93,25 @@
 							</div>
 						</div>
 					</div>
+				</section>
+
+				<!-- 產品影片區塊 -->
+				<section v-if="product && product.videos && product.videos.length > 0" class="container py-8 md:py-12 lg:py-16">
+					<h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 md:mb-8 text-center">產品影片</h2>
+					<div class="flex justify-center">
+						<video
+							:src="`${config.public.fileServiceBaseUrl}${product.videos[0].startsWith('/') ? '' : '/'}${product.videos[0]}`"
+							controls
+							class="max-w-full md:max-w-2xl lg:max-w-3xl rounded-lg shadow-lg"
+							preload="metadata"
+						>
+							您的瀏覽器不支援影片播放。
+						</video>
+					</div>
+				</section>
+				<section v-else-if="product" class="container py-8 md:py-12 lg:py-16 text-center">
+					<h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 md:mb-8">產品影片</h2>
+					<p class="text-gray-600">目前尚無相關影片。</p>
 				</section>
 
 				<!-- 諮詢區塊 -->
@@ -145,6 +173,9 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- 登入對話框 -->
+		<LoginDialog v-model="isLoginDialogOpen" @login-success="handleLoginSuccessAndDownload" />
 	</div>
 </template>
 
@@ -153,18 +184,29 @@ import { ref, onMounted, computed, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useLanguageStore } from "~/stores/core/languageStore";
 import { useProductsStore } from "~/stores/models/products";
+import { useUserStore } from "~/stores/userStore";
 import ButtonCTA from "~/components/common/Button-CTA.vue";
 import SkeletonProductDetail from "~/components/products/SkeletonProductDetail.vue";
+import LoginDialog from "~/components/LoginDialog.vue";
+import { useRuntimeConfig } from "#app";
 
 const route = useRoute();
 const languageStore = useLanguageStore();
 const productsStore = useProductsStore();
+const userStore = useUserStore();
+const config = useRuntimeConfig();
 
 const productId = ref(route.params.id);
 const product = ref(null);
-const isLoading = ref(false);
+const isLoading = ref(true);
 const error = ref(null);
 const relatedProducts = ref([]);
+
+// 登入狀態
+const isLogin = computed(() => userStore.isLogin);
+
+// 登入對話框狀態
+const isLoginDialogOpen = ref(false);
 
 // 圖片展示相關
 const currentImage = ref(null);
@@ -234,6 +276,60 @@ const nextTestimonial = () => {
 const prevTestimonial = () => {
 	if (!product.value?.testimonials?.length) return;
 	testimonialIndex.value = testimonialIndex.value === 0 ? product.value.testimonials.length - 1 : testimonialIndex.value - 1;
+};
+
+// 實際執行下載的函數
+const triggerActualDownload = () => {
+	if (product.value?.documents && product.value.documents.length > 0) {
+		let specUrlRelative = product.value.documents[0]; // 原始的 "/storage/..."
+
+		// 確保 specUrlRelative 是以 / 開頭的相對路徑 (例如 /storage/...)
+		// 如果它不是以 / 開頭，我們補上。如果它已經是 /storage/... 這樣的形式，則不變。
+		if (!specUrlRelative.startsWith("/")) {
+			specUrlRelative = `/${specUrlRelative}`;
+		}
+
+		// 從 runtimeConfig 獲取檔案服務的基礎 URL
+		const fileServiceBase = config.public.fileServiceBaseUrl;
+
+		if (!fileServiceBase) {
+			console.error("File service base URL is not configured in runtimeConfig.public.fileServiceBaseUrl");
+			alert("下載功能配置錯誤，請聯繫管理員。");
+			return;
+		}
+		const fullSpecUrl = `${fileServiceBase}${specUrlRelative}`;
+
+		// 修改為在新分頁開啟連結
+		window.open(fullSpecUrl, "_blank");
+	} else {
+		// 理論上，如果按鈕可見，這裡不應觸發，但作為防護
+		alert("目前尚無規格文件可供下載，請聯繫我們以獲取更多資訊。");
+	}
+};
+
+// 處理「下載規格」按鈕點擊事件
+const handleDownloadSpecsClick = () => {
+	if (!product.value?.documents || product.value.documents.length === 0) {
+		alert("目前尚無規格文件可供下載，請聯繫我們以獲取更多資訊。");
+		return;
+	}
+
+	if (isLogin.value) {
+		triggerActualDownload();
+	} else {
+		isLoginDialogOpen.value = true; // 開啟登入對話框
+	}
+};
+
+// 處理登入成功後的下載
+const handleLoginSuccessAndDownload = () => {
+	isLoginDialogOpen.value = false; // 關閉登入對話框
+	// 確保產品資料仍然存在且有文件
+	if (product.value?.documents && product.value.documents.length > 0) {
+		triggerActualDownload();
+	} else {
+		alert("產品規格資訊似乎已變更或無法取得，請重試。");
+	}
 };
 
 // 型錄下載功能

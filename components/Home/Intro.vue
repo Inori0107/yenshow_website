@@ -122,7 +122,8 @@ const circleThree = ref(null);
 // Three.js 變數
 let scene, camera, renderer;
 let hexGrid;
-let animationId;
+let animationId = null;
+let observer = null;
 let hexagons = [];
 let hexMaterial = null;
 let sharedGeometry = null;
@@ -158,7 +159,6 @@ const initThree = () => {
 
 	// 調整移動設備上的六角形網格密度
 	createHexagonGrid();
-	animate();
 
 	// 初始設置所有六角形為隱藏狀態
 	resetHexagons();
@@ -325,8 +325,8 @@ const createWaveAnimation = (container) => {
 	const waveCount = 4;
 	const containerRect = container.getBoundingClientRect();
 	const maxSize = containerRect.width * 1.2;
-	const totalDuration = 5; // 縮短總持續時間
-	const visibleDuration = 3; // 縮短可見持續時間
+	const totalDuration = 6; // 縮短總持續時間
+	const visibleDuration = 4; // 縮短可見持續時間
 
 	// 創建波紋元素陣列以便追蹤
 	const waves = [];
@@ -525,14 +525,13 @@ const createHexagonGrid = () => {
 	});
 
 	hexGrid = new THREE.Group();
-	// 設置初始位置
 	hexGrid.position.y = -4;
 
-	// 根據螢幕寬度調整網格密度 - Further reduced for mobile
-	const isMobile = window.innerWidth < 768;
-	const hexRadius = isMobile ? 1.0 : 1.5; // Smaller radius on mobile
-	const rows = isMobile ? 8 : 15; // Fewer rows on mobile
-	const cols = isMobile ? 10 : 20; // Fewer cols on mobile
+	// Use injected isMobile from scrollAnimation
+	const mobileCheck = scrollAnimation.isMobile.value; // Use the injected reactive ref value
+	const hexRadius = mobileCheck ? 1.0 : 1.5;
+	const rows = mobileCheck ? 8 : 15;
+	const cols = mobileCheck ? 10 : 20;
 	const vertDist = hexRadius * Math.sqrt(3);
 	const horizDist = hexRadius * 1.5;
 
@@ -598,32 +597,51 @@ onMounted(async () => {
 	if (typeof window !== "undefined") {
 		await nextTick();
 
-		// 確保 ScrollTrigger 已初始化
 		await scrollAnimation.initScrollPlugins();
-
-		// 設置 section 背景轉場動畫
 		setupSectionBgAnimation();
 
-		// 初始化三維場景 - 確保在section動畫的同時出現
+		// Initialize Three.js (will run on mobile and desktop based on current logic)
 		initThree();
 
-		// 設置網格動畫 - 獨立函數便於管理
+		// Setup Intersection Observer for Three.js canvas
+		if (threeCanvas.value) {
+			observer = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							if (!animationId) {
+								console.log("Intro Canvas intersecting, starting animation.");
+								animate();
+							}
+						} else {
+							if (animationId) {
+								console.log("Intro Canvas not intersecting, stopping animation.");
+								cancelAnimationFrame(animationId);
+								animationId = null;
+							}
+						}
+					});
+				},
+				{ threshold: 0.1 } // Trigger when 10% of the canvas is visible
+			);
+			observer.observe(threeCanvas.value);
+		}
+
 		setupHexGridAnimation();
-
-		// 設置六角形動畫 - 在網格動畫後觸發
 		setupHexagonRowAnimations();
-
-		// 設置產品介紹動畫
 		await setupYSCPAnimations();
-
-		// 添加針對 Three.js 的 resize 監聽器
 		window.addEventListener("resize", onWindowResize);
 	}
 });
 
 onUnmounted(() => {
+	if (observer) {
+		observer.disconnect();
+		observer = null;
+	}
 	if (animationId) {
 		cancelAnimationFrame(animationId);
+		animationId = null;
 	}
 	// 移除為 Three.js 添加的 resize 監聽器
 	window.removeEventListener("resize", onWindowResize);

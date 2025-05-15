@@ -1,61 +1,63 @@
 <template>
-	<div v-if="modelValue" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50" @click.self="closeDialog">
-		<div class="login-box relative">
-			<button @click="closeDialog" class="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl">&times;</button>
-			<div class="title-container">
-				<h2 class="title-text text-[24px] lg:text-[36px] font-semibold text-center mb-[12px] lg:mb-[24px]">登入系統</h2>
-				<div class="title-decoration"></div>
-			</div>
-			<form @submit.prevent="handleLogin" class="flex flex-col gap-[24px]">
-				<!-- 帳號 -->
-				<div>
-					<label for="dialog-account" class="text-white">帳號</label>
-					<div class="relative">
-						<input
-							type="text"
-							id="dialog-account"
-							v-model="account"
-							required
-							placeholder="請輸入帳號"
-							class="bg-white/10 text-white placeholder-white/50 w-full"
-						/>
+	<div v-if="modelValue" class="fixed inset-0 bg-black/10 backdrop-blur-sm flex justify-center items-center z-50" @click.self="closeDialog">
+		<transition name="slide-up">
+			<div v-if="modelValue" class="login-box relative">
+				<button @click="closeDialog" class="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl">&times;</button>
+				<div class="title-container">
+					<h2 class="title-text text-[24px] lg:text-[36px] font-semibold text-center mb-[12px] lg:mb-[24px]">登入系統</h2>
+					<div class="title-decoration"></div>
+				</div>
+				<form @submit.prevent="handleLogin" class="flex flex-col gap-[24px]">
+					<!-- 帳號 -->
+					<div>
+						<label for="dialog-account" class="text-white">帳號</label>
+						<div class="relative">
+							<input
+								type="text"
+								id="dialog-account"
+								v-model="account"
+								required
+								placeholder="請輸入帳號"
+								class="bg-white/10 text-white placeholder-white/50 w-full"
+							/>
+						</div>
 					</div>
-				</div>
-				<!-- 密碼 -->
-				<div>
-					<label for="dialog-password" class="text-white">密碼</label>
-					<div class="relative">
-						<input
-							type="password"
-							id="dialog-password"
-							v-model="password"
-							required
-							placeholder="請輸入密碼"
-							class="bg-white/10 text-white placeholder-white/50 w-full"
-						/>
+					<!-- 密碼 -->
+					<div>
+						<label for="dialog-password" class="text-white">密碼</label>
+						<div class="relative">
+							<input
+								type="password"
+								id="dialog-password"
+								v-model="password"
+								required
+								placeholder="請輸入密碼"
+								class="bg-white/10 text-white placeholder-white/50 w-full"
+							/>
+						</div>
 					</div>
-				</div>
-				<!-- 錯誤訊息 -->
-				<div v-if="error" class="error-message">
-					{{ error }}
-				</div>
+					<!-- 錯誤訊息 -->
+					<div v-if="error" class="error-message">
+						{{ error }}
+					</div>
 
-				<!-- 登入按鈕 -->
-				<button type="submit" :disabled="loading" class="bg-white text-[#212a37] hover:bg-white/90 flex items-center justify-center">
-					<span v-if="loading" class="mr-2">
-						<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-							<path
-								class="opacity-75"
-								fill="currentColor"
-								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-							></path>
-						</svg>
-					</span>
-					{{ loading ? "登入中..." : "登入" }}
-				</button>
-			</form>
-		</div>
+					<!-- 登入按鈕 -->
+					<button type="submit" :disabled="loading" class="bg-white text-[#212a37] hover:bg-white/90 flex items-center justify-center">
+						<span v-if="loading" class="mr-2">
+							<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path
+									class="opacity-75"
+									fill="currentColor"
+									d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+								></path>
+							</svg>
+						</span>
+						{{ loading ? "登入中..." : "登入" }}
+					</button>
+				</form>
+			</div>
+		</transition>
 	</div>
 </template>
 
@@ -144,6 +146,7 @@ watch(
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	position: relative; /* 確保關閉按鈕定位 */
+	z-index: 50;
 }
 
 .title-container {
@@ -268,5 +271,21 @@ label {
 .text-2xl {
 	font-size: 1.5rem; /* 24px */
 	line-height: 2rem; /* 32px */
+}
+
+/* Slide-up transition */
+.slide-up-enter-active,
+.slide-up-leave-active {
+	transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+.slide-up-enter-from,
+.slide-up-leave-to {
+	opacity: 0;
+	transform: translateY(30px);
+}
+.slide-up-enter-to,
+.slide-up-leave-from {
+	opacity: 1;
+	transform: translateY(0);
 }
 </style>

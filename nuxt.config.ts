@@ -35,7 +35,8 @@ export default defineNuxtConfig({
 		apiKey: process.env.API_KEY || "",
 		public: {
 			apiBaseUrl: process.env.API_BASE_URL || "/api",
-			storagePath: process.env.STORAGE_PATH || "/storage"
+			storagePath: process.env.STORAGE_PATH || "/storage",
+			fileServiceBaseUrl: process.env.NUXT_PUBLIC_FILE_SERVICE_BASE_URL || "https://api.yenshow.com"
 		}
 	},
 	nitro: {
@@ -46,7 +47,7 @@ export default defineNuxtConfig({
 				prependPath: false
 			},
 			"/storage": {
-				target: process.env.STORAGE_PATH || "http://localhost:4000/storage",
+				target: process.env.NUXT_DEV_STORAGE_PROXY_TARGET || "http://localhost:4000/storage",
 				changeOrigin: true
 			}
 		}
