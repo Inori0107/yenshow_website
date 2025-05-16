@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-slate-100 dark:bg-slate-900">
+	<div class="bg-slate-100">
 		<SkeletonNewsDetail v-if="loading" />
 		<div v-else-if="error" class="min-h-screen flex items-center justify-center">
 			<div class="bg-red-50 text-red-500 p-8 rounded-lg text-center">
@@ -11,7 +11,7 @@
 		<article v-else-if="newsDetail" class="pb-8 md:pb-12 lg:pb-16">
 			<!-- 麵包屑導航 -->
 			<div class="p-4 md:p-6 lg:p-8">
-				<nav class="text-[12px] md:text-[16px] lg:text-[21px] text-gray-500 dark:text-gray-400">
+				<nav class="text-[12px] md:text-[16px] lg:text-[21px] text-gray-500">
 					<ol class="flex flex-wrap items-center">
 						<li><NuxtLink to="/" class="hover:text-primary">首頁</NuxtLink></li>
 						<li class="mx-2">/</li>
@@ -25,11 +25,11 @@
 			<!-- 新聞主體區塊 -->
 			<div class="container space-y-6 md:space-y-8">
 				<!-- 1. 標題 / 作者 / 發佈日期 -->
-				<section class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
+				<section class="bg-white p-6 rounded-lg shadow-lg border border-slate-200">
 					<h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 theme-text">
 						{{ getLocalizedText(newsDetail.title) }}
 					</h1>
-					<div class="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400 gap-3">
+					<div class="flex flex-wrap items-center text-sm text-gray-500 gap-3">
 						<span v-if="newsDetail.author">作者: {{ newsDetail.author }}</span>
 						<span>發布於: {{ formatDate(newsDetail.publishDate) }}</span>
 						<span v-if="newsDetail.category">分類: {{ newsDetail.category }}</span>
@@ -37,22 +37,27 @@
 				</section>
 
 				<!-- 2. 封面圖片 -->
-				<section v-if="newsDetail.coverImageUrl" class="rounded-lg overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700">
-					<img :src="getImageUrl(newsDetail.coverImageUrl)" :alt="getLocalizedText(newsDetail.title)" class="w-full h-auto max-h-[600px] object-cover" />
+				<section v-if="newsDetail.coverImageUrl" class="rounded-lg overflow-hidden shadow-lg border border-slate-200">
+					<NuxtImg
+						:src="getImageUrl(newsDetail.coverImageUrl)"
+						:alt="getLocalizedText(newsDetail.title)"
+						class="w-full h-auto max-h-[600px] object-cover"
+						format="webp"
+						loading="lazy"
+						:placeholder="[50, 28, 75, 5]"
+						sizes="sm:100vw md:100vw lg:800px"
+					/>
 				</section>
 
 				<!-- 3. 摘要 -->
-				<section
-					v-if="getLocalizedText(newsDetail.summary)"
-					class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700"
-				>
-					<div class="prose dark:prose-invert max-w-none border-l-4 border-primary pl-4 italic text-gray-700 dark:text-gray-300">
+				<section v-if="getLocalizedText(newsDetail.summary)" class="bg-white p-6 rounded-lg shadow-lg border border-slate-200">
+					<div class="prose max-w-none border-l-4 border-primary pl-4 italic text-gray-700">
 						{{ getLocalizedText(newsDetail.summary) }}
 					</div>
 				</section>
 
 				<!-- 4. 主要內容渲染 -->
-				<section class="bg-white dark:bg-slate-800 p-4 md:p-6 lg:p-8 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
+				<section class="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-lg border border-slate-200">
 					<div class="news-content-render">
 						<template v-for="(block, index) in newsDetail.content" :key="block._id || `block-${index}`">
 							<!-- 富文本區塊 -->
@@ -62,12 +67,16 @@
 
 							<!-- 圖片區塊 -->
 							<div v-else-if="block.itemType === 'image'" :class="getImageBlockWrapperClasses(index)">
-								<img
+								<NuxtImg
 									:src="getImageUrl(block.imageUrl)"
 									:alt="getLocalizedText(block.imageAltText)"
-									class="w-full h-auto rounded-md object-contain max-h-[600px] bg-gray-100 dark:bg-gray-800"
+									class="w-full h-auto rounded-md object-contain max-h-[600px] bg-gray-100"
+									format="webp"
+									loading="lazy"
+									:placeholder="[50, 50, 75, 5]"
+									sizes="sm:100vw md:50vw lg:600px"
 								/>
-								<p v-if="getLocalizedText(block.imageCaption)" class="text-center text-sm italic mt-2 text-gray-600 dark:text-gray-400">
+								<p v-if="getLocalizedText(block.imageCaption)" class="text-center text-sm italic mt-2 text-gray-600">
 									{{ getLocalizedText(block.imageCaption) }}
 								</p>
 							</div>
@@ -84,7 +93,7 @@
 									class="rounded-md"
 									:title="getLocalizedText(block.videoCaption) || '嵌入影片'"
 								></iframe>
-								<p v-if="getLocalizedText(block.videoCaption)" class="text-center text-sm italic mt-2 text-gray-600 dark:text-gray-400">
+								<p v-if="getLocalizedText(block.videoCaption)" class="text-center text-sm italic mt-2 text-gray-600">
 									{{ getLocalizedText(block.videoCaption) }}
 								</p>
 							</div>

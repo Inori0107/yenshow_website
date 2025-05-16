@@ -18,7 +18,6 @@ export function useGlobalSearch() {
 		"67ed0512296210e234e0df00": "devices-accessories", // 其他設備
 		"67ed0512296210e234e0deb2": "security-solutions", // 安全防護
 		"67ed0512296210e234e0de64": "surveillance-monitoring" // 影像監控
-		// 可以根據需要添加更多映射
 	};
 
 	// 從 series ID 獲取 slug 的輔助函數

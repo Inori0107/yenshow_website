@@ -38,6 +38,7 @@
 							loading="lazy"
 							format="webp"
 							sizes="288px md:384px"
+							:placeholder="[20, 20, 75, 5]"
 							@click="openImageModal(currentImage, $event.target)"
 							tabindex="0"
 							role="button"
@@ -109,10 +110,6 @@
 						</video>
 					</div>
 				</section>
-				<section v-else-if="product" class="container py-8 md:py-12 lg:py-16 text-center">
-					<h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 md:mb-8">產品影片</h2>
-					<p class="text-gray-600">目前尚無相關影片。</p>
-				</section>
 
 				<!-- 諮詢區塊 -->
 				<section class="bg-primary bg-opacity-5 py-8 md:py-12 space-y-2 md:space-y-4 lg:space-y-6 text-center">
@@ -169,6 +166,7 @@
 						loading="lazy"
 						format="webp"
 						sizes="90vw lg:1280px"
+						:placeholder="[50, 50, 75, 5]"
 					/>
 				</div>
 			</div>

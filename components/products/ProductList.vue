@@ -49,6 +49,7 @@
 						loading="lazy"
 						format="webp"
 						sizes="288px"
+						:placeholder="[20, 20, 75, 5]"
 					/>
 					<div v-else class="w-full h-full flex items-center justify-center text-gray-400">尚無圖片</div>
 				</div>

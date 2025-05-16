@@ -19,10 +19,14 @@
 				:key="newsItem._id || newsItem.id"
 				class="rounded-lg bg-white/90 backdrop-blur-sm overflow-hidden flex flex-col no-underline shadow-md hover:shadow-xl transition-shadow duration-300 group"
 			>
-				<img
+				<NuxtImg
 					class="w-full h-48 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-105"
 					:src="getImageUrl(newsItem.coverImageUrl)"
 					:alt="getLocalizedText(newsItem.title, languageStore.currentLang)"
+					format="webp"
+					loading="lazy"
+					:placeholder="[50, 27, 75, 5]"
+					sizes="sm:100vw md:50vw lg:300px"
 				/>
 				<div class="flex flex-col gap-[12px] p-[20px] flex-grow">
 					<h4 class="text-[18px] md:text-[22px] font-bold text-primary overflow-hidden whitespace-nowrap text-ellipsis">

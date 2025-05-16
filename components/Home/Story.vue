@@ -12,7 +12,7 @@
 			</div>
 
 			<!-- Block 2: Themes Section -->
-			<div id="story-themes-block" ref="storyThemesBlockRef" class="h-screen relative flex justify-center items-center py-[64px] md:py-[128px] overflow-hidden">
+			<div id="story-themes-block" ref="storyThemesBlockRef" class="h-screen relative flex justify-center items-center py-[64px] md:py-[128px]">
 				<!-- Theme Items -->
 				<div
 					v-for="(theme, key) in themes"
