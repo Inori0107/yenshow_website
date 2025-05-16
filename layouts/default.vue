@@ -78,7 +78,7 @@
 			<div
 				class="contact-card flex flex-col items-center gap-[16px] max-w-[354px] p-[24px] text-center text-primary bg-white rounded-[50px] shadow-lg transition-all duration-300"
 			>
-				<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium text-darkBlue">Contact Us</h3>
+				<h3 class="text-[21px] md:text-[28px] lg:text-[36px] text-primary/80">聯絡我們</h3>
 				<p class="text-[12px] lg:text-[16px]">
 					{{ $t("contact us") }}
 				</p>
@@ -93,9 +93,8 @@
 		<!-- 連結區塊 -->
 		<div class="w-full flex flex-row justify-center md:justify-evenly gap-[24px] max-w-[1024px]">
 			<div v-for="(section, index) in linkCTA" :key="index" class="flex flex-col gap-[16px] md:gap-[32px]">
-				<h3 class="text-[32px] md:text-[36px] lg:text-[48px] font-medium relative overflow-hidden group">
+				<h3 class="text-[21px] md:text-[28px] lg:text-[36px] font-medium relative overflow-hidden group">
 					{{ section.title }}
-					<span class="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-500 group-hover:w-full"></span>
 				</h3>
 
 				<!-- 導航連結 -->
@@ -139,18 +138,18 @@ import LanguageSwitcher from "../components/common/LanguageSwitcher.vue";
 // 頁尾導航連結配置
 const linkCTA = ref([
 	{
-		title: "Company",
+		title: "關於遠岫",
 		links: [
 			{ label: "About us", to: "/" },
 			{ label: "Success Stories", to: "/Success-Stories" },
-			{ label: "Products", to: "/Products" },
+			{ label: "Members", to: "/Members" },
 			{ label: "News", to: "/News" },
 			{ label: "Faq", to: "/Faq" }
 		],
 		copyright: true
 	},
 	{
-		title: "Products",
+		title: "產品中心",
 		links: [
 			{ label: "Video Intercom", to: "/Products/Video-Intercom" },
 			{ label: "Access Control", to: "/Products/Access-Control" },

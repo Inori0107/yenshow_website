@@ -207,7 +207,6 @@ const public_feature = ref([
 const partnerLogos = ref([
 	{ src: "/logo/Chung king logo 1.png", alt: "Chung King" },
 	{ src: "/logo/familyMart logo 1.png", alt: "FamilyMart" },
-	{ src: "/logo/shingtech logo 1.png", alt: "Shingtech" },
 	{ src: "/logo/fetnet-logo 1.png", alt: "Fetnet" },
 	{ src: "/logo/greatg logo 1.png", alt: "GreatG" },
 	{ src: "/logo/he-tzung logo 1.png", alt: "He Tzung" },

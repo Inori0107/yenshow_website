@@ -3,7 +3,7 @@
 		<!-- ProductIntro -->
 		<section class="marquee-background bg-primary relative my-[128px] md:my-[512px] min-h-screen overflow-hidden">
 			<article
-				class="search-overlay absolute inset-0 z-50 pt-[32px] md:pt-[128px] flex flex-col items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary"
+				class="search-overlay absolute inset-0 z-50 pt-[64px] md:pt-[128px] flex flex-col items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary"
 			>
 				<div class="search-container w-full max-w-[80%] md:max-w-[60%] lg:max-w-[40%] z-10 transition-all duration-300 relative">
 					<div class="text-center space-y-[12px] md:space-y-[24px] mb-[24px] md:mb-[48px]">
@@ -234,6 +234,7 @@ const {
 const showResults = ref(false);
 let blurTimeout = null;
 let mainTl = null;
+let searchTriggeredBySubmit = false;
 
 // --- 搜尋事件處理 ---
 const handleInput = () => {
@@ -243,6 +244,7 @@ const handleInput = () => {
 
 const handleFocus = () => {
 	showResults.value = true;
+	searchTriggeredBySubmit = false;
 	if (!keyword.value) {
 		// Composable 會處理顯示最近搜尋
 	}
@@ -250,7 +252,11 @@ const handleFocus = () => {
 
 const handleBlur = () => {
 	blurTimeout = setTimeout(() => {
-		showResults.value = false;
+		if (searchTriggeredBySubmit) {
+			searchTriggeredBySubmit = false;
+		} else {
+			showResults.value = false;
+		}
 	}, 150);
 };
 
@@ -261,6 +267,7 @@ const closeResultsPanel = () => {
 
 const handleResultClick = (entityType, item) => {
 	if (blurTimeout) clearTimeout(blurTimeout);
+	searchTriggeredBySubmit = false;
 	navigateToResult(entityType, item);
 	closeResultsPanel();
 };
@@ -286,7 +293,10 @@ const clearRecentSearchesAndClose = () => {
 
 const triggerSearchFromEnter = () => {
 	if (keyword.value.trim()) {
+		if (blurTimeout) clearTimeout(blurTimeout);
+		searchTriggeredBySubmit = true;
 		search(keyword.value.trim());
+		showResults.value = true;
 	} else {
 		closeResultsPanel();
 	}

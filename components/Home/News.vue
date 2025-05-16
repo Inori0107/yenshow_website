@@ -7,7 +7,6 @@
 				<nav class="min-w-[328px] flex items-end lg:items-start lg:flex-col gap-[12px] lg:gap-[24px]">
 					<div class="flex flex-col gap-[12px] lg:gap-[24px] me-auto">
 						<h3 class="text-[24px] md:text-[36px] lg:text-[64px]">{{ $t("news title") }}</h3>
-						<span class="text-[12px] md:text-[16px] lg:text-[24px] opacity-80">{{ $t("latest news") }}</span>
 					</div>
 					<ButtonCTA class="w-fit h-fit" :label="$t('view all')" to="/news"></ButtonCTA>
 				</nav>
@@ -28,7 +27,6 @@
 				<nav class="min-w-[328px] flex items-end lg:items-start lg:flex-col gap-[12px] lg:gap-[24px]">
 					<div class="flex flex-col gap-[12px] lg:gap-[24px] me-auto">
 						<h3 class="text-[24px] md:text-[36px] lg:text-[64px]">{{ $t("problems title") }}</h3>
-						<span class="text-[12px] md:text-[16px] lg:text-[24px] opacity-80">{{ $t("faq") }}</span>
 					</div>
 					<ButtonCTA class="w-fit h-fit" :label="$t('view all')" to="/faq"></ButtonCTA>
 				</nav>
