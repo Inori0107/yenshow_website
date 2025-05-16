@@ -1,5 +1,5 @@
 <template>
-	<div v-if="modelValue" class="fixed inset-0 bg-black/10 backdrop-blur-sm flex justify-center items-center z-50" @click.self="closeDialog">
+	<div v-if="modelValue" class="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex justify-center items-center z-50" @click.self="closeDialog">
 		<transition name="slide-up">
 			<div v-if="modelValue" class="login-box relative">
 				<button @click="closeDialog" class="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl">&times;</button>
@@ -55,6 +55,13 @@
 						</span>
 						{{ loading ? "登入中..." : "登入" }}
 					</button>
+					<!-- 導航到聯絡頁面 -->
+					<div class="mt-4 text-center">
+						<p class="text-sm text-white/80">
+							沒有帳號或遇到問題？
+							<a @click="navigateToContact" class="text-white hover:underline cursor-pointer">點此聯繫我們</a>
+						</p>
+					</div>
 				</form>
 			</div>
 		</transition>
@@ -64,6 +71,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useUserStore } from "~/stores/userStore";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
 	modelValue: {
@@ -75,6 +83,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "login-success"]);
 
 const userStore = useUserStore();
+const router = useRouter();
 
 // 表單狀態
 const account = ref("");
@@ -120,6 +129,12 @@ const closeDialog = () => {
 	emit("update:modelValue", false);
 };
 
+// 導航到聯絡頁面
+const navigateToContact = () => {
+	closeDialog(); // 關閉對話框
+	router.push("/contact"); // 導航到聯絡頁面
+};
+
 // 當對話框關閉時重置表單狀態
 watch(
 	() => props.modelValue,
@@ -137,7 +152,7 @@ watch(
 <style scoped>
 /* 沿用 login.vue 的樣式 */
 .login-box {
-	background: rgba(33, 42, 55, 0.7);
+	background: rgb(33, 42, 55);
 	padding: 48px;
 	border-radius: 50px; /* 可調整 */
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);

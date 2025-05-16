@@ -6,6 +6,14 @@ export default defineNuxtConfig({
 		head: {
 			charset: "utf-8",
 			viewport: "width=device-width, initial-scale=1",
+			titleTemplate: "%s - 遠岫科技",
+			meta: [
+				{ name: "description", content: "遠岫科技專注於提供創新的軟體解決方案與專業的技術諮詢服務。" },
+				{ property: "og:title", content: "遠岫科技" },
+				{ property: "og:description", content: "遠岫科技專注於提供創新的軟體解決方案與專業的技術諮詢服務。" },
+				{ property: "og:url", content: "https://www.yenshow.com" },
+				{ name: "twitter:card", content: "summary_large_image" }
+			],
 			// 添加平滑滾動效果
 			htmlAttrs: {
 				style: "scroll-behavior: smooth"
