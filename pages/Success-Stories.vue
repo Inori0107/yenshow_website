@@ -17,38 +17,56 @@
 					</div>
 					<div class="relative z-10">
 						<div class="text-[16px] md:text-[18px] text-white/70 mb-2">OUR MISSION</div>
-						<h4 class="text-[20px] md:text-[28px] text-white font-medium mb-4">見證我們如何為各行各業提供安全可靠的解決方案</h4>
-						<p class="text-[14px] md:text-[16px] text-white/80">我們致力於打造高度安全可靠的門禁系統與監控設備，為您的空間提供全方位的保護，讓安心無所不在。</p>
+						<h4 class="text-[20px] md:text-[28px] text-white font-medium mb-4">以創新科技提供多元解決方案<br />推動智能安全與管理系統的全面應用</h4>
+						<p class="text-[14px] md:text-[16px] lg:text-[18px] text-white/80">
+							我們致力於結合先進技術和本地化服務，為客戶提供高度整合、高效且可靠的系統支持。通過不斷提升技術能力和深入了解客戶需求，遠岫科技目標成為亞太地區值得信賴的夥伴，推動產業轉型，提升整體安全與管理效能，並為社會創造更安全、更智慧的生活環境。
+						</p>
 					</div>
 				</div>
 
 				<!-- 數據統計區塊 -->
 				<div class="flex flex-col gap-4 md:w-1/2">
+					<!-- 合作夥伴 -->
+					<div class="block-bg rounded-xl p-6 transition-all duration-500" ref="partnersSectionRef">
+						<div class="absolute inset-0 rounded-xl overflow-hidden">
+							<div class="block-pattern"></div>
+						</div>
+						<div class="relative z-10">
+							<div>
+								<div class="text-[24px] md:text-[32px] text-white font-bold text-center">合作夥伴</div>
+							</div>
+							<div class="logo-carousel-container">
+								<div class="logo-track flex items-center h-full" ref="logoTrackRef">
+									<!-- Logos duplicated for seamless loop -->
+									<img v-for="(logo, index) in partnerLogos" :key="'logo-a-' + index" :src="logo.src" :alt="logo.alt" class="partner-logo" />
+									<img v-for="(logo, index) in partnerLogos" :key="'logo-b-' + index" :src="logo.src" :alt="logo.alt" class="partner-logo" />
+								</div>
+							</div>
+						</div>
+					</div>
 					<!-- 成功案例 -->
 					<div class="block-bg rounded-xl p-6 transition-all duration-500">
 						<div class="absolute inset-0 rounded-xl overflow-hidden">
 							<div class="block-pattern pattern-2"></div>
 						</div>
-						<div class="relative z-10 flex items-center">
-							<div class="mr-4">
-								<div class="text-[32px] md:text-[48px] text-white font-bold">50+</div>
-								<div class="text-[14px] md:text-[16px] text-white/70">成功案例</div>
+						<div class="relative z-10">
+							<div>
+								<div class="text-[24px] md:text-[32px] text-white font-bold text-center">成功案例</div>
 							</div>
-							<p class="text-[14px] text-white/80 max-w-[200px]">橫跨不同行業的成功實例，每個案例都是我們實力的見證</p>
-						</div>
-					</div>
-
-					<!-- 服務年資 -->
-					<div class="block-bg rounded-xl p-6 transition-all duration-500">
-						<div class="absolute inset-0 rounded-xl overflow-hidden">
-							<div class="block-pattern pattern-3"></div>
-						</div>
-						<div class="relative z-10 flex items-center">
-							<div class="mr-4">
-								<div class="text-[32px] md:text-[48px] text-white font-bold">10+</div>
-								<div class="text-[14px] md:text-[16px] text-white/70">服務年資</div>
+							<div class="grid grid-cols-3 gap-2 md:gap-4 text-center">
+								<div>
+									<div class="text-[28px] md:text-[36px] text-white font-bold">50+</div>
+									<div class="text-[12px] md:text-[14px] text-white/70">成功專案</div>
+								</div>
+								<div>
+									<div class="text-[28px] md:text-[36px] text-white font-bold">10+</div>
+									<div class="text-[12px] md:text-[14px] text-white/70">年行業經驗</div>
+								</div>
+								<div>
+									<div class="text-[28px] md:text-[36px] text-white font-bold">98%</div>
+									<div class="text-[12px] md:text-[14px] text-white/70">客戶滿意度</div>
+								</div>
 							</div>
-							<p class="text-[14px] text-white/80 max-w-[200px]">十餘年專業經驗，為客戶提供最穩定可靠的解決方案</p>
 						</div>
 					</div>
 				</div>
@@ -99,10 +117,8 @@
 						<h3 class="text-2xl md:text-3xl font-bold text-neutral-800">合總君悅</h3>
 						<p class="text-lg md:text-xl text-neutral-600">集合式住宅建案</p>
 						<div class="border-l-4 border-blue-500 pl-4 space-y-2 text-gray-700">
-							<p><strong class="font-medium text-gray-800">基地位置：</strong> 雲林縣斗南鎮延平路二段455號旁</p>
+							<p><strong class="font-medium text-gray-800">基地位置：</strong> 雲林縣斗南鎮</p>
 							<p><strong class="font-medium text-gray-800">基地面積：</strong> 541坪</p>
-							<p><strong class="font-medium text-gray-800">產品類型：</strong> 電梯大樓</p>
-							<p><strong class="font-medium text-gray-800">坪數規劃：</strong> 23-34坪</p>
 							<p><strong class="font-medium text-gray-800">戶數：</strong> 91戶、2戶店鋪</p>
 						</div>
 						<p class="text-sm md:text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-md border border-gray-200">
@@ -111,10 +127,7 @@
 					</div>
 
 					<!-- Right Column: Image -->
-					<div class="w-full md:w-1/2 z-10 order-1 md:order-2">
-						<!-- TODO: Replace with actual image path -->
-						<!-- <img src="/success_cases/case_01.jpg" alt="合總君悅 建案外觀" class="rounded-lg shadow-md w-full h-auto object-cover aspect-[4/3]" /> -->
-					</div>
+					<div class="w-full md:w-1/2 z-10 order-1 md:order-2"></div>
 
 					<!-- Pagination Dots (Simple) -->
 					<div class="absolute bottom-6 right-8 flex space-x-2 z-10">
@@ -132,6 +145,7 @@
 import { ref, onMounted, nextTick } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useScrollAnimation } from "@/composables/useScrollAnimation"; // 引入 useScrollAnimation
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,6 +157,11 @@ const heroBlocks = ref(null);
 const sectionRef = ref(null);
 const businessRef = ref(null);
 const publicRef = ref(null);
+
+// --- Refs for Partner Logo Carousel ---
+const partnersSectionRef = ref(null);
+const logoTrackRef = ref(null);
+let logoScrollAnimation = null; // 用於保存GSAP動畫實例
 
 const business_feature = ref([
 	{
@@ -185,8 +204,28 @@ const public_feature = ref([
 	}
 ]);
 
+const partnerLogos = ref([
+	{ src: "/logo/Chung king logo 1.png", alt: "Chung King" },
+	{ src: "/logo/familyMart logo 1.png", alt: "FamilyMart" },
+	{ src: "/logo/shingtech logo 1.png", alt: "Shingtech" },
+	{ src: "/logo/fetnet-logo 1.png", alt: "Fetnet" },
+	{ src: "/logo/greatg logo 1.png", alt: "GreatG" },
+	{ src: "/logo/he-tzung logo 1.png", alt: "He Tzung" },
+	{ src: "/logo/jianyang-logo 1.png", alt: "Jian Yang" },
+	{ src: "/logo/joy English logo 1.png", alt: "Joy English" },
+	{ src: "/logo/NAMR logo 1.png", alt: "NAMR" },
+	{ src: "/logo/TCPA logo 1.png", alt: "TCPA" },
+	{ src: "/logo/ttu logo 1.png", alt: "TTU" },
+	{ src: "/logo/wangbang logo 1.png", alt: "Wang Bang" },
+	{ src: "/logo/zongtai logo 1.png", alt: "Zongtai" }
+]);
+
 onMounted(async () => {
 	await nextTick();
+
+	// --- Initialize Scroll Animation Composable ---
+	const { initScrollPlugins, isMobile } = useScrollAnimation();
+	await initScrollPlugins(); // 等待 GSAP 和 ScrollTrigger 初始化
 
 	// --- Entrance Animation ---
 	if (titleRef.value && heroBlocks.value) {
@@ -197,6 +236,54 @@ onMounted(async () => {
 		entranceTl
 			.to(titleRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
 			.to(heroBlocks.value.children, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" }, "-=0.4"); // Start slightly before title finishes
+	}
+
+	// --- Partner Logo Carousel Animation ---
+	if (logoTrackRef.value && partnersSectionRef.value && partnerLogos.value.length > 0) {
+		const logos = logoTrackRef.value.querySelectorAll(".partner-logo");
+		let totalWidth = 0;
+		// 等待所有圖片加載完成
+		const imageLoadPromises = Array.from(logos)
+			.slice(0, partnerLogos.value.length)
+			.map((img) => {
+				return new Promise((resolve) => {
+					if (img.complete) {
+						totalWidth += img.offsetWidth + parseInt(getComputedStyle(img).marginRight);
+						resolve();
+					} else {
+						img.onload = () => {
+							totalWidth += img.offsetWidth + parseInt(getComputedStyle(img).marginRight);
+							resolve();
+						};
+						img.onerror = resolve; // 即使圖片加載失敗也繼續
+					}
+				});
+			});
+
+		await Promise.all(imageLoadPromises);
+
+		if (totalWidth > 0) {
+			const animationDuration = totalWidth / (isMobile.value ? 30 : 50); // 根據總寬度和屏幕調整速度
+
+			logoScrollAnimation = gsap.to(logoTrackRef.value, {
+				xPercent: -50, // 因為我們複製了logo，所以移動50%就是一組的寬度
+				ease: "none",
+				duration: animationDuration,
+				repeat: -1,
+				paused: true // 初始時暫停
+			});
+
+			ScrollTrigger.create({
+				trigger: partnersSectionRef.value,
+				start: "top bottom", // 當區塊頂部接觸視窗底部時
+				end: "bottom top", // 當區塊底部接觸視窗頂部時
+				onEnter: () => logoScrollAnimation && logoScrollAnimation.play(),
+				onLeave: () => logoScrollAnimation && logoScrollAnimation.pause(),
+				onEnterBack: () => logoScrollAnimation && logoScrollAnimation.play(),
+				onLeaveBack: () => logoScrollAnimation && logoScrollAnimation.pause(),
+				invalidateOnRefresh: true // 確保在 resize 時重新計算
+			});
+		}
 	}
 
 	// --- ScrollTrigger Animations ---
@@ -401,5 +488,27 @@ onMounted(async () => {
 
 .pattern-3 {
 	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Logo Carousel Styles */
+.logo-carousel-container {
+	height: 100%;
+	overflow: hidden; /* 隱藏超出容器的內容 */
+	position: relative;
+	mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); /* 兩端淡化效果 */
+	-webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.logo-track {
+	display: flex;
+	/* width 將由 JS 設定為 (單組logo總寬度 * 2) */
+	will-change: transform; /* 提示瀏覽器此元素將會變形，以進行優化 */
+}
+
+.partner-logo {
+	height: 80px; /* 調整 Logo 高度 */
+	max-width: 160px; /* 限制 Logo 最大寬度，避免過大 */
+	object-fit: contain; /* 保持圖片比例 */
+	margin-right: 30px; /* Logo 之間的間距 */
 }
 </style>
