@@ -11,7 +11,7 @@
 				:aria-expanded="isCategoryActive(category) ? 'true' : 'false'"
 				:aria-controls="`sublist-${getCategoryId(category)}`"
 			>
-				<span :class="['transition-all duration-300', isCategoryActive(category) ? 'text-[24px] md:text-[36px]' : 'text-[16px] md:text-[24px]']">{{
+				<span :class="['transition-all duration-300', isCategoryActive(category) ? 'text-[24px] lg:text-[36px]' : 'text-[16px] lg:text-[24px]']">{{
 					getCategoryName(category)
 				}}</span>
 			</button>
@@ -106,13 +106,15 @@ const getCategoryName = (item) => {
 };
 
 const toggleActive = (id) => {
-	const newActiveId = activeId.value === id ? null : id;
-	activeId.value = newActiveId;
+	// 如果點擊的項目已經是 active，則不取消選擇，保持其 active 狀態
+	if (activeId.value === id) {
+		return; // 不做任何改變
+	}
+	activeId.value = id;
 
 	// 找到對應的 category 物件並發送事件
-	const selectedCategory = props.categories.find((cat) => getCategoryId(cat) === newActiveId);
-	// 即使 newActiveId 為 null (取消選擇)，也觸發事件讓父元件知道
-	emit("category-selected", selectedCategory || null);
+	const selectedCategory = props.categories.find((cat) => getCategoryId(cat) === id);
+	emit("category-selected", selectedCategory);
 };
 
 const selectSubItem = (category, subItem) => {

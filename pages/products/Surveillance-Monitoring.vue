@@ -1,22 +1,23 @@
 <template>
 	<div>
 		<!-- 系列介紹 -->
-		<section class="bg-white relative max-h-screen overflow-hidden">
-			<div class="w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3">
-				<span class="text-[24px] md:text-[36px] lg:text-[48px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">暢銷商品</span>
+		<section class="bg-white relative overflow-hidden space-y-[24px] md:space-y-[36px] lg:space-y-[48px] pb-[24px] md:pb-[36px] lg:pb-[48px]">
+			<article class="w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3">
+				<span class="text-[24px] md:text-[36px] lg:text-[48px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">應用介紹</span>
 				<svg viewBox="0 0 800 800" class="circles">
 					<circle cx="400" cy="400" r="200" class="circle-inline" />
 					<circle cx="400" cy="400" r="400" class="circle-outline" />
 				</svg>
-			</div>
+			</article>
 			<!-- content -->
-			<div class="min-h-screen flex flex-col gap-[24px] md:gap-[36px] lg:gap-[48px]">
+			<aside class="md:min-h-screen flex flex-col" style="margin-top: 0px !important">
 				<!-- title -->
-				<h1 class="text-[48px] md:text-[64px] lg:text-[96px] xl:text-[128px] opacity-50 mt-[24px] md:mt-[48px] ms-[32px] md:ms-[48px] lg:ms-[64px] font-bold">
-					影像監控
-				</h1>
+				<div class="ms-[32px] md:ms-[48px] lg:ms-[64px]">
+					<h1 class="text-[48px] md:text-[64px] lg:text-[96px] xl:text-[128px] opacity-50 font-bold">影像監控</h1>
+					<p class="text-[16px] md:text-[28px] lg:text-[36px] opacity-30">從影像取得更多智慧洞察，結合 AI 模組即時識別異常，守護資產與人員安全。</p>
+				</div>
 				<!-- List CTA -->
-				<div>
+				<div class="mt-[24px] md:mt-[36px] lg:mt-[48px]">
 					<div v-if="navError" class="text-red-500">{{ navError }}</div>
 					<NavList
 						v-show="!isLoadingNav && !navError"
@@ -25,6 +26,32 @@
 						@category-selected="handleCategorySelected"
 						@subitem-selected="handleSubItemSelected"
 					/>
+				</div>
+			</aside>
+			<!-- introduction -->
+			<div class="md:absolute md:top-2/3 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-10 w-1/2 xl:w-2/3 px-4 md:px-0" ref="introductionContainerRef">
+				<SkeletonIntroduction v-if="isLoadingNav" />
+				<TransitionGroup
+					v-else-if="currentIntroductionDisplayItems.length > 0"
+					tag="div"
+					name="introduction-card-list"
+					class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4"
+				>
+					<div
+						v-for="(item, index) in currentIntroductionDisplayItems"
+						:key="item.title"
+						:data-index="index"
+						class="bg-slate-50 border border-slate-200 rounded-lg shadow-md p-4 text-center"
+					>
+						<h4 class="text-[16px] md:text-[21px] lg:text-[24px] font-bold text-slate-800 mb-2">{{ item.title }}</h4>
+						<p class="text-[12px] md:text-[16px] text-slate-600">{{ item.content }}</p>
+					</div>
+				</TransitionGroup>
+				<div v-else-if="!isLoadingNav && productCategories.length > 0 && currentIntroductionDisplayItems.length === 0" class="text-center text-gray-600 py-8">
+					<p>請從上方導覽選擇一個項目以查看詳細介紹。</p>
+				</div>
+				<div v-else-if="!isLoadingNav && productCategories.length === 0" class="text-center text-gray-500 py-8">
+					<p>目前沒有可供選擇的介紹項目。</p>
 				</div>
 			</div>
 		</section>
@@ -81,6 +108,7 @@ import NavList from "~/components/products/NavList.vue";
 import FilterSection from "~/components/products/FilterSection.vue";
 import SkeletonProductCard from "~/components/products/SkeletonProductCard.vue";
 import ProductList from "~/components/products/ProductList.vue";
+import SkeletonIntroduction from "~/components/products/SkeletonIntroduction.vue";
 import { useRouter } from "vue-router";
 
 const languageStore = useLanguageStore();
@@ -92,6 +120,26 @@ const router = useRouter();
 const isLoadingNav = ref(false);
 const navError = ref(null);
 const navListRef = ref(null);
+const activeIntroductionCategoryName = ref(""); // 新增狀態來追蹤當前選擇的介紹內容
+const introductionContainerRef = ref(null); // Added ref for introduction container
+
+// 介紹內容數據
+const introductionItemsMap = {
+	IPC: [
+		{ title: "商業門市", content: "客流熱區分析、性別年齡統計，助攻行銷決策" },
+		{ title: "社區住宅", content: "即時偵測陌生人徘徊、逗留行為，提高社區警覺性" },
+		{ title: "公共空間", content: "車牌辨識、人數統計、口罩穿戴辨識，實現精準防控" }
+	],
+	NVR: [
+		{ title: "辦公廠區", content: "AI辨識異常行為、自動告警，提升管理效率" },
+		{ title: "醫療機構", content: "跌倒偵測、非授權區域入侵提醒，守護患者安全" },
+		{ title: "商業門市", content: "客流熱區分析、性別年齡統計，助攻行銷決策" }
+	]
+};
+
+const currentIntroductionDisplayItems = computed(() => {
+	return introductionItemsMap[activeIntroductionCategoryName.value] || [];
+});
 
 // 產品相關狀態
 const productCategories = ref([]);
@@ -155,7 +203,8 @@ const computedDisplayCategories = computed(() => {
 
 // NavList 選擇事件處理
 const handleCategorySelected = (category) => {
-	console.log("Category selected (but ignored for product list filtering):", category);
+	const name = getCategoryName(category);
+	activeIntroductionCategoryName.value = name;
 };
 
 const handleSubItemSelected = ({ category, subItem }) => {
@@ -176,19 +225,22 @@ const handleViewProduct = (product) => {
 watch(filterValues, (newValue, oldValue) => {}, { deep: true });
 
 // 監聽導航載入狀態，觸發動畫
-watch(isLoadingNav, (newValue, oldValue) => {
-	if (gsap && !newValue && oldValue === true && navListRef.value) {
-		nextTick(() => {
-			const targetElement = navListRef.value.$el || navListRef.value;
-			if (targetElement && targetElement.offsetParent !== null) {
-				gsap.from(targetElement, {
-					x: -50,
-					opacity: 0,
-					duration: 0.8,
-					ease: "power3.out"
-				});
-			}
-		});
+watch(isLoadingNav, (newVal, oldVal) => {
+	if (gsap) {
+		// NavList animation
+		if (!newVal && oldVal === true && navListRef.value) {
+			nextTick(() => {
+				const targetNavList = navListRef.value.$el || navListRef.value;
+				if (targetNavList && targetNavList.offsetParent !== null) {
+					gsap.from(targetNavList, {
+						x: -50,
+						opacity: 0,
+						duration: 0.8,
+						ease: "power3.out"
+					});
+				}
+			});
+		}
 	}
 });
 
@@ -205,6 +257,7 @@ onMounted(async () => {
 	isLoadingProducts.value = true;
 	navError.value = null;
 	productsError.value = null;
+	activeIntroductionCategoryName.value = ""; // 初始化
 
 	try {
 		const subHierarchy = await hierarchyStore.fetchSubHierarchy("series", SERIES_ID);
@@ -216,7 +269,7 @@ onMounted(async () => {
 			// 兼容直接返回陣列的情況
 			productCategories.value = subHierarchy;
 		} else {
-			console.warn(`[Video Intercom] fetchSubHierarchy did not return expected categories for series '${SERIES_ID}'. Received:`, subHierarchy);
+			console.warn(`[Surveillance Monitoring] fetchSubHierarchy did not return expected categories for series '${SERIES_ID}'. Received:`, subHierarchy);
 			productCategories.value = [];
 		}
 
@@ -230,9 +283,15 @@ onMounted(async () => {
 			}
 		});
 
+		// 設置默認選中的介紹內容
+		if (productCategories.value.length > 0) {
+			const firstCategoryName = getCategoryName(productCategories.value[0]);
+			activeIntroductionCategoryName.value = firstCategoryName;
+		}
+
 		isLoadingNav.value = false;
 	} catch (error) {
-		console.error(`[Video Intercom] Error fetching sub-hierarchy for series '${SERIES_ID}':`, error);
+		console.error(`[Surveillance Monitoring] Error fetching sub-hierarchy for series '${SERIES_ID}':`, error);
 		navError.value = "無法載入導覽選單：" + (error.message || "未知錯誤");
 		productsError.value = "無法載入產品資料：" + (error.message || "未知錯誤");
 		productCategories.value = [];
@@ -286,5 +345,26 @@ onMounted(async () => {
 	to {
 		stroke-dashoffset: 0;
 	}
+}
+
+/* Introduction Card List Animations */
+.introduction-card-list-enter-active,
+.introduction-card-list-leave-active {
+	transition: all 0.5s ease;
+}
+.introduction-card-list-enter-from,
+.introduction-card-list-leave-to {
+	opacity: 0;
+	transform: translateY(30px);
+}
+
+/* Staggering effect for enter */
+.introduction-card-list-enter-active {
+	transition-delay: calc(0.1s * var(--stagger-index, 0));
+}
+
+/* For leave, items usually disappear more simultaneously or with a reverse stagger if desired */
+.introduction-card-list-leave-active {
+	position: absolute; /* Important for leave animations to not affect layout */
 }
 </style>
