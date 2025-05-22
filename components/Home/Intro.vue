@@ -1,11 +1,15 @@
 <template>
 	<div>
-		<section id="intro-section" ref="introSection" class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] opacity-0">
+		<section
+			id="intro-section"
+			ref="introSection"
+			class="bg-secondary/90 my-[64px] sm:my-[128px] md:my-[256px] lg:my-[512px] xl:my-[580px] 2xl:my-[640px] opacity-0"
+		>
 			<!-- 服務特點區 -->
-			<article class="relative min-h-[70vh] md:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px]">
+			<article class="relative min-h-[70vh] md:min-h-screen flex flex-col justify-center items-center feature-section py-[24px] sm:py-[48px] px-[12px] sm:px-0">
 				<canvas ref="threeCanvas" class="absolute top-0 w-screen h-full z-0 pointer-events: none"></canvas>
 				<!-- 頂部功能列 -->
-				<div ref="hexagonRow1" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-1 z-10 opacity-0">
+				<div ref="hexagonRow1" class="flex gap-[10px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] xl:gap-[32px] hexagon-row-1 z-10 opacity-0">
 					<Hexagon imageSrc="/YSCP/board-game.png" title="數位看板" />
 					<Hexagon imageSrc="/YSCP/intelligent-analytics.png" title="智慧分析" />
 					<Hexagon imageSrc="/YSCP/vehicle.png" title="車輛" />
@@ -15,17 +19,27 @@
 				<!-- 中間功能列 -->
 				<div
 					ref="hexagonRow2"
-					class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]"
+					class="flex gap-[10px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] xl:gap-[32px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[18px]"
 				>
 					<Hexagon imageSrc="/YSCP/image.png" title="影像" />
-					<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
-					<div class="w-full flex flex-col gap-[4px] items-center text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</div>
-					<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
+					<div
+						class="hexagon-title h-[80px] sm:h-[96px] md:h-[169px] lg:h-[225px] xl:h-[250px] 2xl:h-[280px] text-[10px] sm:text-[12px] md:text-[24px] lg:text-[28px] xl:text-[30px]"
+					>
+						數據與監控
+					</div>
+					<div class="w-full flex flex-col gap-[4px] items-center text-[12px] sm:text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]">
+						遠岫科技
+					</div>
+					<div
+						class="hexagon-title h-[80px] sm:h-[96px] md:h-[169px] lg:h-[225px] xl:h-[250px] 2xl:h-[280px] text-[10px] sm:text-[12px] md:text-[24px] lg:text-[28px] xl:text-[30px]"
+					>
+						安全與管理
+					</div>
 					<Hexagon imageSrc="/YSCP/guarded-entrance.png" title="門禁" />
 				</div>
 
 				<!-- 底部功能列 -->
-				<div ref="hexagonRow3" class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] hexagon-row-3 z-10 opacity-0">
+				<div ref="hexagonRow3" class="flex gap-[10px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] xl:gap-[32px] hexagon-row-3 z-10 opacity-0">
 					<Hexagon imageSrc="/YSCP/route.png" title="路線管理" />
 					<Hexagon imageSrc="/YSCP/attendance.png" title="考勤管理" />
 					<Hexagon imageSrc="/YSCP/alarm.png" title="警報" />
@@ -37,28 +51,28 @@
 			<article
 				id="yscp-article"
 				ref="yscpSection"
-				class="relative container min-h-[70vh] md:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
+				class="relative container min-h-[70vh] md:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px] md:py-[64px] lg:py-[64px] xl:py-[72px] 2xl:py-[80px]"
 			>
 				<!-- 左側內容說明 -->
 				<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
-					<h3 class="text-[21px] sm:text-[24px] md:text-[36px] lg:text-[48px] product-title">YSCentral Professional</h3>
+					<h3 class="text-[21px] sm:text-[24px] md:text-[36px] lg:text-[48px] xl:text-[54px] 2xl:text-[60px] product-title">YSCentral Professional</h3>
 					<div class="title-decoration w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
 
 					<div class="feature-tag-container">
-						<span class="feature-tag">整合性</span>
-						<span class="feature-tag">安全性</span>
-						<span class="feature-tag">高效能</span>
-						<span class="feature-tag">易用性</span>
+						<span class="feature-tag text-[12px] sm:text-[14px] md:text-[16px]">整合性</span>
+						<span class="feature-tag text-[12px] sm:text-[14px] md:text-[16px]">安全性</span>
+						<span class="feature-tag text-[12px] sm:text-[14px] md:text-[16px]">高效能</span>
+						<span class="feature-tag text-[12px] sm:text-[14px] md:text-[16px]">易用性</span>
 					</div>
 
-					<h5 class="text-[10px] sm:text-[12px] md:text-[18px] lg:text-[24px] opacity-80">
+					<h5 class="text-[10px] sm:text-[12px] md:text-[18px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] opacity-80">
 						一款整合式安全性軟體，<br />
 						旨在透過一個「直覺」的平台來應對多種安全挑戰。
 					</h5>
 
 					<div class="relative benefit-section">
 						<div class="benefit-decorative-line"></div>
-						<h4 class="text-[14px] sm:text-[16px] md:text-[24px] lg:text-[36px]">
+						<h4 class="text-[14px] sm:text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]">
 							在保護人員和財產安全的同時，<br />
 							讓日常營運更有效率，<br />
 							幫助使用者做出更明智的決策。
@@ -71,7 +85,7 @@
 					<!-- 功能特點 1 -->
 					<div
 						ref="circleOne"
-						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] ml-[-15px] sm:ml-[-25px] md:ml-0 YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] xl:w-[320px] xl:h-[320px] 2xl:w-[350px] 2xl:h-[350px] ml-[-15px] sm:ml-[-25px] md:ml-0 YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
 					>
 						<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">01</h4>
 						<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">中央管理平台</h4>
@@ -80,7 +94,7 @@
 					<!-- 功能特點 2 -->
 					<div
 						ref="circleTwo"
-						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
+						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] xl:w-[320px] xl:h-[320px] 2xl:w-[350px] 2xl:h-[350px] mt-[-75px] sm:mt-[-100px] md:mt-[-150px] ml-[5px] md:ml-[75px] YSCP-circle shadow-lg col-span-2 col-start-1 feature-circle"
 					>
 						<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">02</h4>
 						<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">軟體與硬體整合</h4>
@@ -89,7 +103,7 @@
 					<!-- 功能特點 3 -->
 					<div
 						ref="circleThree"
-						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] mt-[-95px] sm:mt-[-125px] md:mt-[-175px] ml-[-15px] sm:ml-[-25px] md:ml-[-25px] YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
+						class="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] xl:w-[320px] xl:h-[320px] 2xl:w-[350px] 2xl:h-[350px] mt-[-95px] sm:mt-[-125px] md:mt-[-175px] ml-[-15px] sm:ml-[-25px] md:ml-[-25px] YSCP-circle shadow-lg col-span-2 col-start-2 feature-circle"
 					>
 						<h4 class="text-[18px] sm:text-[24px] md:text-[36px] opacity-80">03</h4>
 						<h4 class="text-[12px] sm:text-[16px] md:text-[24px]">完整的解決方案</h4>
@@ -101,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, inject } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, inject, watch } from "vue";
 import Hexagon from "~/components/common/Hexagon.vue";
 import * as THREE from "three";
 import gsap from "gsap";
@@ -127,6 +141,7 @@ let observer = null;
 let hexagons = [];
 let hexMaterial = null;
 let sharedGeometry = null;
+const isThreeInitialized = ref(false); // 新增：追蹤 Three.js 初始化狀態
 
 // 注入滾動動畫控制器
 const scrollAnimation = inject("scrollAnimation");
@@ -143,25 +158,102 @@ let featureTl,
 
 let hexGridAnimationTl = null; // <-- 為六角網格動畫時間軸聲明變量
 
-// 初始化 Three.js
-const initThree = () => {
+// 初始化 Three.js - 更名並重構
+const initializeThreeJS = () => {
+	if (isThreeInitialized.value || !threeCanvas.value) return; // 防止重複初始化或 canvas 不存在
+	console.log("Initializing Three.js");
+
 	scene = new THREE.Scene();
 	const width = threeCanvas.value.clientWidth;
 	const height = threeCanvas.value.clientHeight;
 
 	camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-	camera.position.set(0, 6, 10); // 提高Y軸位置，更俯視
-	camera.rotation.x = -0.5; // 增加向下傾斜角度
+	camera.position.set(0, 6, 10);
+	camera.rotation.x = -0.5;
 
 	renderer = new THREE.WebGLRenderer({ canvas: threeCanvas.value, alpha: true });
 	renderer.setSize(width, height);
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-	// 調整移動設備上的六角形網格密度
 	createHexagonGrid();
+	resetHexagons(); // 初始設置所有六角形為隱藏狀態
 
-	// 初始設置所有六角形為隱藏狀態
-	resetHexagons();
+	// Setup Intersection Observer for Three.js canvas
+	if (threeCanvas.value) {
+		observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						if (!animationId) {
+							console.log("Intro Canvas intersecting, starting animation.");
+							animate();
+						}
+					} else {
+						if (animationId) {
+							console.log("Intro Canvas not intersecting, stopping animation.");
+							cancelAnimationFrame(animationId);
+							animationId = null;
+						}
+					}
+				});
+			},
+			{ threshold: 0.1 }
+		);
+		observer.observe(threeCanvas.value);
+	}
+
+	setupHexGridAnimation(); // 設置六角網格的入場動畫
+	isThreeInitialized.value = true;
+};
+
+// 清理 Three.js 資源
+const cleanupThreeJS = () => {
+	if (!isThreeInitialized.value) return;
+	console.log("Cleaning up Three.js");
+
+	if (observer && threeCanvas.value) {
+		observer.unobserve(threeCanvas.value); // 確保在disconnect前unobserve
+		observer.disconnect();
+		observer = null;
+	}
+	if (animationId) {
+		cancelAnimationFrame(animationId);
+		animationId = null;
+	}
+
+	if (hexGridAnimationTl) {
+		hexGridAnimationTl.kill();
+		hexGridAnimationTl = null;
+	}
+
+	if (renderer) {
+		renderer.dispose();
+		renderer = null;
+	}
+	if (sharedGeometry) {
+		sharedGeometry.dispose();
+		sharedGeometry = null;
+	}
+	if (hexMaterial) {
+		hexMaterial.dispose();
+		hexMaterial = null;
+	}
+	if (scene) {
+		scene.traverse((object) => {
+			if (object.geometry) object.geometry.dispose();
+			if (object.material) {
+				if (Array.isArray(object.material)) {
+					object.material.forEach((material) => material.dispose());
+				} else {
+					object.material.dispose();
+				}
+			}
+		});
+		scene.clear();
+		scene = null;
+	}
+	hexagons = [];
+	isThreeInitialized.value = false;
 };
 
 // 重置六角形網格，用於反覆觸發動畫
@@ -173,6 +265,7 @@ const resetHexagons = () => {
 
 // 動畫循環 - 波浪效果
 const animate = () => {
+	if (!isThreeInitialized.value) return; // 如果未初始化，則不執行動畫
 	animationId = requestAnimationFrame(animate);
 
 	// 創建向外擴散的波浪效果
@@ -216,7 +309,8 @@ const animate = () => {
 
 // 處理窗口大小變化 (此函數專注於 Three.js 更新)
 const onWindowResize = () => {
-	if (!threeCanvas.value || !camera || !renderer) return; // 添加保護，確保 threeCanvas, camera, renderer 已初始化
+	// 僅在非行動裝置且 Three.js 已初始化時執行
+	if (scrollAnimation.isMobile.value || !isThreeInitialized.value || !threeCanvas.value || !camera || !renderer) return;
 
 	const width = threeCanvas.value.clientWidth;
 	const height = threeCanvas.value.clientHeight;
@@ -472,39 +566,55 @@ const setupYSCPAnimations = async () => {
 
 // 設置網格動畫
 const setupHexGridAnimation = () => {
-	if (hexagons.length > 0) {
-		hexagons.sort((a, b) => a.distance - b.distance);
+	if (!isThreeInitialized.value || hexagons.length === 0) return; // 確保已初始化且有六角形
 
-		hexGridAnimationTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: "#intro-section",
-				start: "top 70%",
-				end: "bottom 20%",
-				toggleActions: "play none none none",
-				onEnter: () => {
-					// 當進入觸發區域時播放動畫
-					console.log("Three.js hex grid animation triggered - enter");
-				}
-			}
-		});
+	hexagons.sort((a, b) => a.distance - b.distance);
 
-		// 為每個六角形添加動畫
-		hexGridAnimationTl.to(
-			hexagons.map((h) => h.mesh.scale),
-			{
-				x: 1,
-				y: 1,
-				z: 1,
-				duration: 1.2,
-				stagger: 0.008,
-				ease: "power2.out"
+	hexGridAnimationTl = gsap.timeline({
+		scrollTrigger: {
+			trigger: "#intro-section",
+			start: "top 70%",
+			end: "bottom 20%",
+			toggleActions: "play none none none",
+			onEnter: () => {
+				// 當進入觸發區域時播放動畫
+				console.log("Three.js hex grid animation triggered - enter");
 			}
-		);
-	}
+		}
+	});
+
+	// 為每個六角形添加動畫
+	hexGridAnimationTl.to(
+		hexagons.map((h) => h.mesh.scale),
+		{
+			x: 1,
+			y: 1,
+			z: 1,
+			duration: 1.2,
+			stagger: 0.008,
+			ease: "power2.out"
+		}
+	);
 };
 
 // 創建六角形網格背景 - 3D化，呈現在底部，作為鋪陳
 const createHexagonGrid = () => {
+	if (!isThreeInitialized.value && !scrollAnimation.isMobile.value) {
+		// This case implies we are trying to create grid during an initialization on desktop
+		// or a resize on desktop. Allow it.
+		// If isThreeInitialized is true, it means it's a resize, allow.
+		// If scrollAnimation.isMobile.value is true, we shouldn't be here due to onWindowResize or initializeThreeJS checks.
+	} else if (scrollAnimation.isMobile.value) {
+		// Explicitly prevent grid creation on mobile if somehow called
+		if (hexGrid) {
+			// If a grid exists from a previous state (e.g. resize from desktop to mobile)
+			scene.remove(hexGrid);
+			hexagons = []; // Clear hexagon data as well
+			hexGrid = null;
+		}
+		return;
+	}
+
 	if (hexGrid) {
 		scene.remove(hexGrid);
 		hexagons = [];
@@ -600,112 +710,54 @@ onMounted(async () => {
 		await scrollAnimation.initScrollPlugins();
 		setupSectionBgAnimation();
 
-		// Initialize Three.js (will run on mobile and desktop based on current logic)
-		initThree();
-
-		// Setup Intersection Observer for Three.js canvas
-		if (threeCanvas.value) {
-			observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							if (!animationId) {
-								console.log("Intro Canvas intersecting, starting animation.");
-								animate();
-							}
-						} else {
-							if (animationId) {
-								console.log("Intro Canvas not intersecting, stopping animation.");
-								cancelAnimationFrame(animationId);
-								animationId = null;
-							}
-						}
-					});
-				},
-				{ threshold: 0.1 } // Trigger when 10% of the canvas is visible
-			);
-			observer.observe(threeCanvas.value);
+		// Conditional Three.js Initialization
+		if (!scrollAnimation.isMobile.value && threeCanvas.value) {
+			initializeThreeJS();
 		}
 
-		setupHexGridAnimation();
 		setupHexagonRowAnimations();
 		await setupYSCPAnimations();
 		window.addEventListener("resize", onWindowResize);
 	}
 });
 
+watch(
+	() => scrollAnimation.isMobile.value,
+	(isMobileNow, wasMobile) => {
+		if (isMobileNow) {
+			cleanupThreeJS();
+		} else {
+			// Switched from mobile to desktop
+			if (threeCanvas.value) {
+				// Ensure canvas element is available
+				initializeThreeJS();
+			}
+		}
+	},
+	{ immediate: false } // `immediate: false` because onMounted handles initial setup
+);
+
 onUnmounted(() => {
-	if (observer) {
-		observer.disconnect();
-		observer = null;
-	}
-	if (animationId) {
-		cancelAnimationFrame(animationId);
-		animationId = null;
-	}
-	// 移除為 Three.js 添加的 resize 監聽器
+	cleanupThreeJS(); // 首先呼叫中心化的 Three.js 清理函數
+
+	// 移除視窗 resize 監聽器 (onWindowResize 內部已有保護)
 	window.removeEventListener("resize", onWindowResize);
 
-	// --- More specific GSAP cleanup ---
-	// Kill specific timelines created in this component
+	// 清理其他非 Three.js 的 GSAP 時間軸
 	if (featureTl) featureTl.kill();
 	if (yscpTextTl) yscpTextTl.kill();
 	if (circlesMasterTl) circlesMasterTl.kill();
 	waveTls.forEach((tl) => tl.kill());
-	if (hexGridAnimationTl) {
-		hexGridAnimationTl.kill();
-	}
+	// hexGridAnimationTl 已在 cleanupThreeJS 中處理
 
-	if (scrollAnimation && scrollAnimation.ScrollTrigger && scrollAnimation.ScrollTrigger.value) {
-		const triggers = scrollAnimation.ScrollTrigger.value.getAll();
-		triggers.forEach((trigger) => {
-			trigger.kill();
-		});
-	}
-	// --- End specific GSAP cleanup ---
-
-	// Cleanup wave DOM elements
+	// 清理 DOM 中手動添加的元素 (如 waveElements)
 	waveElements.forEach((wave) => {
 		if (wave && wave.parentNode) {
-			// Check parentNode before removing
 			wave.parentNode.removeChild(wave);
 		}
 	});
 	waveElements = [];
-	waveTls = [];
-
-	// Cleanup Three.js
-	if (renderer) {
-		renderer.dispose();
-		renderer = null;
-	}
-	if (sharedGeometry) {
-		sharedGeometry.dispose();
-		sharedGeometry = null;
-	}
-	if (hexMaterial) {
-		hexMaterial.dispose();
-		hexMaterial = null;
-	}
-	if (scene) {
-		// Dispose geometries and materials within the scene if necessary
-		scene.traverse((object) => {
-			if (object.geometry) {
-				object.geometry.dispose();
-			}
-			if (object.material) {
-				// Handle arrays of materials
-				if (Array.isArray(object.material)) {
-					object.material.forEach((material) => material.dispose());
-				} else {
-					object.material.dispose();
-				}
-			}
-		});
-		scene.clear(); // Removes all objects, but doesn't dispose them automatically
-		scene = null;
-	}
-	hexagons = []; // Clear the hexagons array
+	waveTls = []; // 清空時間軸數組
 });
 </script>
 
@@ -776,7 +828,6 @@ canvas {
 	color: white;
 	padding: 4px 10px;
 	border-radius: 20px;
-	font-size: 16px;
 	font-weight: 600;
 	box-shadow: 0 2px 4px rgba(221, 28, 28, 0.3);
 }

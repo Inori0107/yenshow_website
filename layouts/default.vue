@@ -7,12 +7,14 @@
 
 	<!-- Footer -->
 	<footer
-		class="container h-screen bg-black bg-opacity-25 relative flex flex-col md:flex-row justify-center items-center gap-[24px] text-secondary py-[48px] backdrop-filter backdrop-blur-sm"
+		class="container h-screen bg-black bg-opacity-25 relative flex flex-col md:flex-row justify-center items-center gap-[24px] text-secondary py-[24px] sm:py-[48px] backdrop-filter backdrop-blur-sm"
 	>
 		<!-- 公司資訊區塊 -->
-		<div class="flex items-center flex-col gap-[16px] md:gap-[24px]">
+		<div class="flex items-center flex-col gap-[24px]">
 			<!-- 公司標誌 -->
-			<div class="w-[250px] h-[125px] md:w-[300px] md:h-[150px] lg:w-[400px] lg:h-[200px] transition-transform duration-300">
+			<div
+				class="w-[200px] h-[100px] sm:w-[250px] sm:h-[125px] md:w-[300px] md:h-[150px] lg:w-[400px] lg:h-[200px] xl:w-[450px] xl:h-[225px] 2xl:w-[500px] 2xl:h-[250px] transition-transform duration-300"
+			>
 				<img src="/yenshow-logo.png" alt="yenshow-logo" class="w-full h-full object-contain" />
 			</div>
 
@@ -42,7 +44,7 @@
 				<a
 					href="https://www.facebook.com/YENSHOW2020"
 					aria-label="Facebook"
-					class="w-[48px] h-[42px] md:w-[64px] md:h-[64px] transition-all duration-300 hover:scale-110 hover:text-blue-500 group"
+					class="w-[48px] h-[48px] md:w-[64px] md:h-[64px] transition-all duration-300 hover:scale-110 hover:text-blue-500 group"
 					target="_blank"
 				>
 					<svg
@@ -58,17 +60,17 @@
 						/>
 					</svg>
 				</a>
-				<!-- Email -->
+				<!-- Youtube (was Email before) -->
 				<a
 					href="https://www.youtube.com/@yenshow706"
-					aria-label="Email"
-					class="w-[48px] h-[42px] md:w-[64px] md:h-[64px] transition-all duration-300 hover:scale-110 hover:text-yellow-400 group"
+					aria-label="Youtube"
+					class="w-[48px] h-[48px] md:w-[64px] md:h-[64px] transition-all duration-300 hover:scale-110 hover:text-red-500 group"
 					target="_blank"
 				>
-					<svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" viewBox="0 0 448 512">
+					<svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" viewBox="0 0 576 512" class="transition-all duration-300 group-hover:fill-red-500">
 						<path
 							fill="#ffffff"
-							d="M282 256.2l-95.2-54.1V310.3L282 256.2zM384 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm14.4 136.1c7.6 28.6 7.6 88.2 7.6 88.2s0 59.6-7.6 88.1c-4.2 15.8-16.5 27.7-32.2 31.9C337.9 384 224 384 224 384s-113.9 0-142.2-7.6c-15.7-4.2-28-16.1-32.2-31.9C42 315.9 42 256.3 42 256.3s0-59.7 7.6-88.2c4.2-15.8 16.5-28.2 32.2-32.4C110.1 128 224 128 224 128s113.9 0 142.2 7.7c15.7 4.2 28 16.6 32.2 32.4z"
+							d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6C16 147.8 16 256 16 256s0 108.2 10.3 131.9c6.3 23.7 24.8 42.3 48.3 48.6C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.9 48.3-48.6C560 364.2 560 256 560 256s0-108.2-10.3-131.9zM232 347.8V164.2L384 256 232 347.8z"
 						/>
 					</svg>
 				</a>
@@ -76,13 +78,13 @@
 
 			<!-- 聯絡資訊卡片 -->
 			<div
-				class="contact-card flex flex-col items-center gap-[16px] max-w-[354px] p-[24px] text-center text-primary bg-white rounded-[50px] shadow-lg transition-all duration-300"
+				class="contact-card flex flex-col items-center gap-[12px] sm:gap-[16px] max-w-[300px] sm:max-w-[354px] p-[16px] sm:p-[24px] text-center text-primary bg-white/80 rounded-[30px] sm:rounded-[50px] shadow-lg transition-all duration-300"
 			>
-				<h3 class="text-[21px] md:text-[28px] lg:text-[36px] text-primary/80">聯絡我們</h3>
-				<p class="text-[12px] lg:text-[16px]">
+				<h3 class="text-[18px] sm:text-[21px] md:text-[28px] lg:text-[36px] text-primary/80">聯絡我們</h3>
+				<p class="text-[12px] sm:text-[14px] lg:text-[16px]">
 					{{ $t("contact us") }}
 				</p>
-				<p class="text-[12px] lg:text-[16px] text-left">
+				<p class="text-[12px] sm:text-[14px] lg:text-[16px] text-left">
 					{{ $t("tel") }} <br />
 					{{ $t("address") }}
 				</p>
@@ -92,8 +94,8 @@
 
 		<!-- 連結區塊 -->
 		<div class="w-full flex flex-row justify-center md:justify-evenly gap-[24px] max-w-[1024px]">
-			<div v-for="(section, index) in linkCTA" :key="index" class="flex flex-col gap-[16px] md:gap-[32px]">
-				<h3 class="text-[21px] md:text-[28px] lg:text-[36px] font-medium relative overflow-hidden group">
+			<div v-for="(section, index) in linkCTA" :key="index" class="flex flex-col gap-[12px] md:gap-[16px] lg:gap-[24px]">
+				<h3 class="text-[18px] sm:text-[21px] md:text-[28px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px] font-medium relative overflow-hidden group">
 					{{ section.title }}
 				</h3>
 
@@ -109,7 +111,7 @@
 				</router-link>
 
 				<!-- 版權資訊 -->
-				<div v-if="section.copyright" class="text-[8px] md:text-[12px] lg:text-[16px] pt-[4px] opacity-80">
+				<div v-if="section.copyright" class="text-[10px] sm:text-[12px] lg:text-[16px] pt-[4px] opacity-80">
 					Copyright © 遠岫科技有限公司
 					<div class="h-[1px] w-0 bg-white mt-1 transition-all duration-500 hover:w-full"></div>
 				</div>

@@ -73,8 +73,24 @@ onUnmounted(() => {
 
 <style scoped>
 .tiptap-renderer-content ::v-deep(p) {
-	margin-bottom: 1.25em; /* 增加段落底部間距 */
-	line-height: 1.7; /* 增加行高提升可讀性 */
+	margin-bottom: 1em; /* Default for small screens */
+	line-height: 1.6; /* Default for small screens */
+}
+
+@media (min-width: 640px) {
+	/* sm and up */
+	.tiptap-renderer-content ::v-deep(p) {
+		margin-bottom: 1.25em;
+		line-height: 1.7;
+	}
+}
+
+@media (min-width: 1280px) {
+	/* xl and up */
+	.tiptap-renderer-content ::v-deep(p) {
+		margin-bottom: 1.35em;
+		line-height: 1.75;
+	}
 }
 
 .tiptap-renderer-content ::v-deep(p:last-child) {
@@ -95,25 +111,69 @@ onUnmounted(() => {
 .tiptap-renderer-content ::v-deep(h4),
 .tiptap-renderer-content ::v-deep(h5),
 .tiptap-renderer-content ::v-deep(h6) {
-	margin-top: 1.8em; /* 增加標題頂部間距 */
-	margin-bottom: 0.8em; /* 增加標題底部間距 */
-	line-height: 1.4;
+	margin-top: 1.5em; /* Default for small screens */
+	margin-bottom: 0.6em; /* Default for small screens */
+	line-height: 1.35; /* Default for small screens */
+}
+
+@media (min-width: 640px) {
+	/* sm and up */
+	.tiptap-renderer-content ::v-deep(h1),
+	.tiptap-renderer-content ::v-deep(h2),
+	.tiptap-renderer-content ::v-deep(h3),
+	.tiptap-renderer-content ::v-deep(h4),
+	.tiptap-renderer-content ::v-deep(h5),
+	.tiptap-renderer-content ::v-deep(h6) {
+		margin-top: 1.8em;
+		margin-bottom: 0.8em;
+		line-height: 1.4;
+	}
+}
+
+@media (min-width: 1280px) {
+	/* xl and up */
+	.tiptap-renderer-content ::v-deep(h1),
+	.tiptap-renderer-content ::v-deep(h2),
+	.tiptap-renderer-content ::v-deep(h3),
+	.tiptap-renderer-content ::v-deep(h4),
+	.tiptap-renderer-content ::v-deep(h5),
+	.tiptap-renderer-content ::v-deep(h6) {
+		margin-top: 2em;
+		margin-bottom: 1em;
+		line-height: 1.45;
+	}
 }
 
 .tiptap-renderer-content ::v-deep(ul),
 .tiptap-renderer-content ::v-deep(ol) {
 	margin-top: 1em;
 	margin-bottom: 1em;
-	padding-left: 2.5em; /* 增加列表縮排 */
+	padding-left: 1.75em; /* Default for small screens */
+}
+
+@media (min-width: 640px) {
+	/* sm and up */
+	.tiptap-renderer-content ::v-deep(ul),
+	.tiptap-renderer-content ::v-deep(ol) {
+		padding-left: 2.5em;
+	}
 }
 
 .tiptap-renderer-content ::v-deep(blockquote) {
 	margin-top: 1.5em;
 	margin-bottom: 1.5em;
-	padding-left: 1.5em;
-	border-left-width: 3px;
+	padding-left: 1em; /* Default for small screens */
+	border-left-width: 2px; /* Default for small screens */
 	opacity: 0.85;
 	border-color: #e2e8f0; /* Tailwind gray-200 */
+}
+
+@media (min-width: 640px) {
+	/* sm and up */
+	.tiptap-renderer-content ::v-deep(blockquote) {
+		padding-left: 1.5em;
+		border-left-width: 3px;
+	}
 }
 
 /* 可以在此處添加更多樣式，例如連結顏色等 */

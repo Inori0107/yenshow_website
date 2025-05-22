@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<!-- ProductIntro -->
-		<section class="marquee-background bg-primary relative my-[128px] md:my-[512px] min-h-screen overflow-hidden">
+		<section class="marquee-background bg-primary relative my-[128px] md:my-[512px] h-screen overflow-hidden">
 			<article
 				class="search-overlay absolute inset-0 z-50 pt-[64px] md:pt-[128px] flex flex-col items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary"
 			>
-				<div class="search-container w-full max-w-[80%] md:max-w-[60%] lg:max-w-[40%] z-10 transition-all duration-300 relative">
+				<div class="search-container w-full max-w-[80%] md:max-w-[60%] lg:max-w-[50%] xl:max-w-[45%] 2xl:max-w-[40%] z-10 transition-all duration-300 relative">
 					<div class="text-center space-y-[12px] md:space-y-[24px] mb-[24px] md:mb-[48px]">
-						<h2 class="text-secondary text-[24px] md:text-[36px] lg:text-[64px] font-bold">探索產品</h2>
-						<h3 class="text-[16px] md:text-[24px] lg:text-[36px]">打造科技便捷的生活</h3>
-						<p class="text-secondary/80 text-[12px] md:text-[16px] lg:text-[24px]">
+						<h2 class="text-secondary text-[24px] md:text-[36px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px] font-bold">探索產品</h2>
+						<h3 class="text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]">打造科技便捷的生活</h3>
+						<p class="text-secondary/80 text-[12px] md:text-[16px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px]">
 							各類產品系統整合，提供多種優質的安全產品和服務，<br />
 							不用複雜的管理軟體，便可創造無限的價值
 						</p>
@@ -181,14 +181,22 @@
 				<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-[120%]">
 					<div class="marquee" :class="rowIndex % 2 === 0 ? '' : 'marquee--reverse'">
 						<div class="marquee__group">
-							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
-								<img class="w-[300px] h-[225px] lg:w-[400px] lg:h-[300px]" :src="image" alt="" />
+							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[8px] sm:py-[12px]">
+								<img
+									class="w-[200px] h-[150px] sm:w-[300px] sm:h-[225px] lg:w-[400px] lg:h-[300px] xl:w-[450px] xl:h-[337.5px] 2xl:w-[500px] 2xl:h-[375px]"
+									:src="image"
+									alt=""
+								/>
 							</div>
 						</div>
 
 						<div aria-hidden="true" class="marquee__group">
-							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[12px]">
-								<img class="w-[300px] h-[225px] lg:w-[400px] lg:h-[300px]" :src="image" alt="" />
+							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[8px] sm:py-[12px]">
+								<img
+									class="w-[200px] h-[150px] sm:w-[300px] sm:h-[225px] lg:w-[400px] lg:h-[300px] xl:w-[450px] xl:h-[337.5px] 2xl:w-[500px] 2xl:h-[375px]"
+									:src="image"
+									alt=""
+								/>
 							</div>
 						</div>
 					</div>
@@ -313,7 +321,7 @@ const baseImages = ref([
 	"/Location/location06.png"
 ]);
 
-const rows = ref(3);
+const rows = ref(5);
 
 const getRowImages = (rowIndex) => {
 	const shuffled = [...baseImages.value];

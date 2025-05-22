@@ -86,14 +86,14 @@ export function useGlobalSearch() {
 		// 根據實體類型跳轉到不同頁面
 		switch (entityType) {
 			case "products": {
-				const productTargetPath = `/products/${item._id}`;
+				const productTargetPath = `/Products/${item._id}`;
 				router.push({ path: productTargetPath });
 				break;
 			}
 			case "series": {
 				const seriesSlug = getSeriesSlug(item._id);
 				if (seriesSlug) {
-					const seriesTargetPath = `/products/${seriesSlug}`;
+					const seriesTargetPath = `/Products/${seriesSlug}`;
 					router.push({ path: seriesTargetPath });
 				} else {
 					console.warn(`找不到系列 ID ${item._id} 對應的 slug，將跳轉至首頁`);
@@ -108,7 +108,7 @@ export function useGlobalSearch() {
 				if (entitySeriesId) {
 					const resolvedSeriesSlug = getSeriesSlug(entitySeriesId);
 					if (resolvedSeriesSlug) {
-						const seriesTargetPath = `/products/${resolvedSeriesSlug}`;
+						const seriesTargetPath = `/Products/${resolvedSeriesSlug}`;
 						router.push({
 							path: seriesTargetPath,
 							query: { entityId: item._id, entityType: entityType }

@@ -1,7 +1,7 @@
 <template>
 	<a :href="to" class="button" :class="buttonClass">
 		<span>{{ label }}</span>
-		<svg xmlns="http://www.w3.org/2000/svg" height="36" width="36" viewBox="0 0 512 512">
+		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 md:h-9 md:w-9" viewBox="0 0 512 512">
 			<path
 				fill="currentColor"
 				d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"
@@ -36,15 +36,14 @@ const buttonClass = computed(() => ({
 
 <style scoped>
 .button {
-	min-width: 168px;
-	padding: 12px 24px;
-	border-radius: 25px;
-
+	/* Mobile first styles */
+	min-width: 92px;
+	padding: 6px 12px;
+	border-radius: 25px; /* Consistent border-radius */
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 12px;
-
+	gap: 6px;
 	cursor: pointer;
 	background: transparent;
 	position: relative;
@@ -52,10 +51,25 @@ const buttonClass = computed(() => ({
 	transition: color 0.3s ease-in-out;
 }
 
+/* md and larger screens */
+@media (min-width: 768px) {
+	.button {
+		min-width: 168px;
+		padding: 12px 24px;
+		gap: 12px;
+	}
+}
+
 /* 黑色主題 */
 .button-black {
-	box-shadow: inset 0 0 0 3px #212a37;
+	/* Mobile first */
+	box-shadow: inset 0 0 0 2px #212a37;
 	color: #212a37;
+}
+@media (min-width: 768px) {
+	.button-black {
+		box-shadow: inset 0 0 0 3px #212a37;
+	}
 }
 
 .button-black::before {
@@ -82,8 +96,14 @@ const buttonClass = computed(() => ({
 
 /* 白色主題 */
 .button-white {
-	box-shadow: inset 0 0 0 3px #ffffff;
+	/* Mobile first */
+	box-shadow: inset 0 0 0 2px #ffffff;
 	color: #ffffff;
+}
+@media (min-width: 768px) {
+	.button-white {
+		box-shadow: inset 0 0 0 3px #ffffff;
+	}
 }
 
 .button-white::before {
@@ -109,39 +129,23 @@ const buttonClass = computed(() => ({
 }
 
 /* 文字與 SVG 樣式 */
-.button span,
+.button span {
+	/* Mobile first */
+	font-size: 12px;
+	line-height: 16px;
+	transition: color 0.3s ease-in-out;
+	z-index: 1;
+}
 .button svg {
-	font-size: 24px;
-	line-height: 32px;
+	/* SVG base size handled by class attribute in template */
 	transition: color 0.3s ease-in-out;
 	z-index: 1;
 }
 
-/* === 響應式設計 === */
-@media (max-width: 768px) {
-	.button {
-		min-width: 92px;
-		padding: 6px 12px;
-		gap: 6px;
-		border-radius: 25px;
-	}
-
+@media (min-width: 768px) {
 	.button span {
-		font-size: 12px;
-		line-height: 16px;
-	}
-
-	.button svg {
-		width: 24px;
-		height: 24px;
-	}
-
-	.button-black {
-		box-shadow: inset 0 0 0 2px #212a37;
-	}
-
-	.button-white {
-		box-shadow: inset 0 0 0 2px #ffffff;
+		font-size: 24px;
+		line-height: 32px;
 	}
 }
 </style>

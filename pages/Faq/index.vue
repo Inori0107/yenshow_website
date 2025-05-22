@@ -1,5 +1,5 @@
 <template>
-	<div class="container min-h-screen p-[120px] md:p-[96px] flex flex-col gap-[48px]">
+	<div class="container min-h-screen p-[48px] md:p-[96px] flex flex-col gap-[48px]">
 		<h2 class="text-center text-[24px] md:text-[36px] lg:text-[48px] font-bold py-[12px] md:pt-[24px] md:pb-[48px] text-white">常見問題</h2>
 
 		<!-- 顯示載入狀態 with Skeleton -->
@@ -44,10 +44,16 @@ import { onMounted } from "vue";
 import { useFaqStore } from "~/stores/faqStore";
 import { useLanguageStore } from "~/stores/core/languageStore";
 import SkeletonFaqCard from "~/components/faq/SkeletonFaqCard.vue";
+import { useHead } from "#app";
 
 const faqStore = useFaqStore();
 const languageStore = useLanguageStore();
 const config = useRuntimeConfig();
+
+useHead({
+	title: " - 常見問題",
+	meta: [{ name: "description", content: "查找關於遠岫科技產品、服務及解決方案的常見問題與解答。" }]
+});
 
 // 獲取本地化文字 (用於 question 和 answer)
 const getLocalizedText = (field, lang, isHtml = false) => {

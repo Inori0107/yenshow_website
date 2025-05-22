@@ -258,12 +258,12 @@
 
 								<!-- 電子信箱 -->
 								<div class="form-group">
-									<label for="contact-email">電子信箱 <span class="text-cyan-400">*</span></label>
-									<div class="input-wrapper">
+									<label for="contact-email" class="text-sm sm:text-base">電子信箱 <span class="text-cyan-400">*</span></label>
+									<div class="input-wrapper mt-1 sm:mt-2">
 										<input
 											id="contact-email"
 											v-model="form.email"
-											class="form-input"
+											class="form-input text-sm sm:text-base"
 											type="email"
 											placeholder="example@mail.com"
 											:class="{ 'has-error': errors.email }"
@@ -276,17 +276,23 @@
 
 								<!-- 公司 / 部門 -->
 								<div class="form-group">
-									<label for="contact-company">公司 / 部門</label>
-									<div class="input-wrapper">
-										<input id="contact-company" v-model="form.company" class="form-input" type="text" placeholder="請輸入貴公司名稱" />
+									<label for="contact-company" class="text-sm sm:text-base">公司 / 部門</label>
+									<div class="input-wrapper mt-1 sm:mt-2">
+										<input id="contact-company" v-model="form.company" class="form-input text-sm sm:text-base" type="text" placeholder="請輸入貴公司名稱" />
 										<span class="input-line"></span>
 									</div>
 								</div>
 
 								<!-- 步驟按鈕 -->
-								<div class="mt-[32px] flex justify-between">
-									<button @click="goToStep(1)" class="back-btn">返回上一步</button>
-									<button @click="submitForm" class="submit-btn" :class="{ loading: isSubmitting }">
+								<div class="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-between gap-3 sm:gap-4">
+									<button @click="goToStep(1)" class="back-btn px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 w-full sm:w-auto">
+										返回上一步
+									</button>
+									<button
+										@click="submitForm"
+										class="submit-btn px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 w-full sm:w-auto"
+										:class="{ loading: isSubmitting }"
+									>
 										<span v-if="!isSubmitting">提交</span>
 										<span v-else class="btn-loader"></span>
 									</button>
@@ -296,28 +302,46 @@
 					</div>
 
 					<!-- 步驟3：提交成功 -->
-					<div v-if="step === 3" class="success-container animate-success">
-						<div class="success-icon">
+					<div v-if="step === 3" class="success-container animate-success px-4 py-8 sm:px-6 sm:py-10 md:px-8 md:py-12">
+						<div class="success-icon w-16 h-16 sm:w-20 sm:h-20">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 								<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
 								<polyline points="22 4 12 14.01 9 11.01"></polyline>
 							</svg>
 						</div>
-						<h2 class="text-[32px] font-bold text-secondary mt-[24px]">感謝您的聯繫！</h2>
-						<p class="text-[16px] md:text-[18px] text-secondary opacity-80 mt-[12px] text-center">
+						<h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary mt-4 sm:mt-6">感謝您的聯繫！</h2>
+						<p class="text-sm sm:text-base md:text-lg text-secondary opacity-80 mt-2 sm:mt-3 text-center">
 							我們的團隊將在幾個工作日內回覆您，敬請耐心等候。<br />
 							如有其他需求，歡迎隨時與我們聯繫。
 						</p>
-						<div class="mt-[32px] p-[24px] rounded-[16px] bg-white bg-opacity-10 backdrop-blur-sm">
-							<p class="flex justify-center items-center gap-[12px] text-cyan-400">
-								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<div class="mt-6 sm:mt-8 p-4 sm:p-6 rounded-[16px] bg-white bg-opacity-10 backdrop-blur-sm">
+							<p class="flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2 text-cyan-400 text-sm sm:text-base">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									class="w-4 h-4 sm:w-5 sm:h-5"
+								>
 									<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
 									<polyline points="22,6 12,13 2,6"></polyline>
 								</svg>
 								Mail: jerry@yenshow.com
 							</p>
-							<p class="flex justify-center items-center gap-[12px] text-cyan-400 mt-[12px]">
-								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<p class="flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2 text-cyan-400 mt-2 sm:mt-3 text-sm sm:text-base">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									class="w-4 h-4 sm:w-5 sm:h-5"
+								>
 									<path
 										d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
 									></path>
@@ -325,7 +349,7 @@
 								聯絡電話: +886-2-222-333-55
 							</p>
 						</div>
-						<button @click="goHome" class="home-btn mt-[48px]">回首頁</button>
+						<button @click="goHome" class="home-btn mt-8 sm:mt-10 md:mt-12 px-5 py-2.5 text-sm sm:px-6 sm:py-3 sm:text-base">回首頁</button>
 					</div>
 				</div>
 			</div>

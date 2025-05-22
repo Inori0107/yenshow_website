@@ -31,8 +31,8 @@ import SuccessCasesIntro from "~/components/Home/SuccessCasesIntro.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 useHead({
-	title: "遠岫科技",
-	meta: [{ name: "description", content: "遠岫科技，既是一段故事，也是一份使命。" }]
+	title: " - 遠岫科技",
+	meta: [{ name: "description", content: "遠岫科技專注於提供創新的軟體解決方案與專業的技術諮詢服務，探索我們的故事、使命與最新產品。" }]
 });
 
 // 使用滾動動畫 composable

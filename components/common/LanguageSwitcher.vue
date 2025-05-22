@@ -1,5 +1,5 @@
 <template>
-	<div class="flex items-center gap-3 text-[16px] hoverBlock-[21px] pointer-auto">
+	<div class="flex items-center gap-3 text-[14px] sm:text-[16px] md:text-[18px] lg:text-[20px] hoverBlock-[21px] pointer-auto">
 		<button
 			@click="toggleLocale($event, 'zh')"
 			:class="locale === 'zh' ? 'font-bold opacity-100' : 'opacity-50'"

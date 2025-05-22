@@ -1,11 +1,19 @@
 <template>
 	<div>
-		<section id="story" class="my-[128px] md:my-[256px] space-y-[128px] md:space-y-[256px]">
+		<section
+			id="story"
+			class="my-[128px] md:my-[256px] xl:my-[320px] 2xl:my-[384px] space-y-[128px] md:space-y-[256px] xl:space-y-[320px] 2xl:space-y-[384px] overflow-hidden"
+		>
 			<!-- Block 1: Intro Section -->
 			<div id="story-intro-block" class="min-h-screen relative flex justify-center items-center overflow-hidden">
 				<!-- Centered Intro text container, arranging vertical texts horizontally -->
-				<div ref="introContainerRef" class="flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px] opacity-0">
-					<p v-for="(text, i) in introTexts" :key="i" :ref="(el) => (introTextRefs[i] = el)" class="vertical-text text-[16px] md:text-[24px] lg:text-[36px]">
+				<div ref="introContainerRef" class="flex flex-row-reverse gap-[6px] md:gap-[24px] lg:gap-[48px] xl:gap-[60px] 2xl:gap-[72px] opacity-0">
+					<p
+						v-for="(text, i) in introTexts"
+						:key="i"
+						:ref="(el) => (introTextRefs[i] = el)"
+						class="vertical-text text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]"
+					>
 						{{ $t(text) }}
 					</p>
 				</div>
@@ -29,7 +37,7 @@
 					<button
 						type="button"
 						:ref="(el) => (themeRefs[key].title = el)"
-						class="vertical-title text-[36px] md:text-[60px] lg:text-[80px] p-[8px] rounded-lg opacity-0 cursor-pointer font-semibold focus:outline-none"
+						class="vertical-title text-[36px] md:text-[60px] lg:text-[80px] xl:text-[90px] 2xl:text-[100px] p-[8px] rounded-lg opacity-0 cursor-pointer font-semibold focus:outline-none"
 						style="position: relative; z-index: 10"
 						@click="handleThemeClick(key)"
 						:aria-expanded="activeThemeKey === key ? 'true' : 'false'"
@@ -40,32 +48,32 @@
 				</div>
 
 				<!-- Unified Details Box - Replaced with individual theme detail containers -->
-				<div ref="cloudDetailsContainerRef" class="details-set" :id="`theme-details-cloud`">
+				<div ref="cloudDetailsContainerRef" class="details-set md:gap-[24px] lg:gap-[48px] xl:gap-[60px] 2xl:gap-[72px]" :id="`theme-details-cloud`">
 					<p
 						v-for="(text, i) in themes.cloud.texts"
 						:key="`cloud-${i}`"
 						:ref="(el) => (cloudDetailParaRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
+						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
 					>
 						{{ $t(text) }}
 					</p>
 				</div>
-				<div ref="mountainDetailsContainerRef" class="details-set" :id="`theme-details-mountain`">
+				<div ref="mountainDetailsContainerRef" class="details-set md:gap-[24px] lg:gap-[48px] xl:gap-[60px] 2xl:gap-[72px]" :id="`theme-details-mountain`">
 					<p
 						v-for="(text, i) in themes.mountain.texts"
 						:key="`mountain-${i}`"
 						:ref="(el) => (mountainDetailParaRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
+						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
 					>
 						{{ $t(text) }}
 					</p>
 				</div>
-				<div ref="skyDetailsContainerRef" class="details-set" :id="`theme-details-sky`">
+				<div ref="skyDetailsContainerRef" class="details-set md:gap-[24px] lg:gap-[48px] xl:gap-[60px] 2xl:gap-[72px]" :id="`theme-details-sky`">
 					<p
 						v-for="(text, i) in themes.sky.texts"
 						:key="`sky-${i}`"
 						:ref="(el) => (skyDetailParaRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] opacity-0"
+						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
 					>
 						{{ $t(text) }}
 					</p>

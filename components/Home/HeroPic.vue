@@ -6,7 +6,7 @@
 
 			<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
 			<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10">
-				<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px]" src="/public/yenshow.png" alt="遠岫科技" />
+				<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px]" src="/public/yenshow.png" alt="遠岫科技" />
 			</div>
 
 			<!-- 主標語 -->
@@ -14,9 +14,9 @@
 				ref="heroText"
 				class="text-center text-transparent bg-gradient-to-b from-[#015C31] to-[#A8E6A3] bg-clip-text opacity-0 transform translate-y-10 z-10 px-4"
 			>
-				<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-bold">
+				<h1 class="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px] font-bold">
 					遠岫科技
-					<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px]">讓安心無所不在</span>
+					<span class="block text-[18px] sm:text-[24px] md:text-[36px] lg:text-[48px] xl:text-[54px] 2xl:text-[60px]">讓安心無所不在</span>
 				</h1>
 			</div>
 
@@ -34,7 +34,7 @@
 				>
 					<!-- 區塊背景 -->
 					<div
-						class="block-bg w-[280px] h-[200px] sm:h-[230px] md:w-[300px] md:h-[280px] lg:w-[320px] lg:h-[320px] rounded-xl transition-all duration-500"
+						class="block-bg w-[280px] h-[200px] sm:h-[230px] md:w-[300px] md:h-[280px] lg:w-[320px] lg:h-[320px] xl:w-[340px] xl:h-[340px] rounded-xl transition-all duration-500 bg-[rgba(0,0,0,0.5)] md:bg-[rgba(0,0,0,0.3)]"
 						:class="{
 							'shadow-2xl': activeIndex === index,
 							'scale-100 opacity-80': activeIndex !== index
@@ -45,9 +45,9 @@
 						</div>
 
 						<div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 sm:p-6 z-10">
-							<div class="text-[16px] sm:text-[18px] md:text-[20px] font-bold opacity-60 mb-1 sm:mb-2">0{{ block.number }}</div>
-							<h3 class="text-[22px] sm:text-[24px] md:text-[28px] font-bold mb-2 sm:mb-4">{{ block.title }}</h3>
-							<p class="text-[14px] sm:text-[15px] md:text-[16px] text-center opacity-80">{{ block.description }}</p>
+							<div class="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] font-bold opacity-60 mb-1 sm:mb-2">0{{ block.number }}</div>
+							<h3 class="text-[22px] sm:text-[24px] md:text-[28px] lg:text-[30px] xl:text-[32px] font-bold mb-2 sm:mb-4">{{ block.title }}</h3>
+							<p class="text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px] xl:text-[18px] text-center opacity-80">{{ block.description }}</p>
 						</div>
 					</div>
 				</button>
@@ -371,18 +371,8 @@ onUnmounted(() => {
 
 <style scoped>
 .block-bg {
-	/* Default fallback for mobile */
-	background-color: rgba(0, 0, 0, 0.5);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-}
-
-/* Apply backdrop-filter only on larger screens */
-@media (min-width: 768px) {
-	.block-bg {
-		background-color: rgba(0, 0, 0, 0.3); /* Slightly different base for desktop */
-		backdrop-filter: blur(10px);
-	}
 }
 
 .block-pattern {

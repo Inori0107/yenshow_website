@@ -1,13 +1,13 @@
 <template>
 	<!-- Filter Buttons -->
-	<div class="flex flex-wrap bg-[#F1F5F9] p-[2px] rounded-[10px] z-30" role="group" :aria-label="props.name || '篩選選項'">
+	<div class="flex flex-wrap bg-slate-100 p-0.5 sm:p-1 rounded-lg sm:rounded-xl z-30" role="group" :aria-label="props.name || '篩選選項'">
 		<button
 			v-for="option in processedOptions"
 			:key="option.value"
 			@click="setFilter(option.value)"
 			:class="[
-				'text-[16px] px-[8px] md:px-[14px] lg:px-[18px] py-[6px] md:py-[12px] lg:py-[16px] rounded-[10px]',
-				selectedOption === option.value ? 'bg-white shadow-md' : 'bg-[#F1F5F9]'
+				'text-xs sm:text-sm md:text-base px-2 py-1 sm:px-3 sm:py-1.5 md:px-3.5 md:py-3 lg:px-4 lg:py-3.5 xl:px-5 xl:py-4 rounded-md sm:rounded-lg',
+				selectedOption === option.value ? 'bg-white shadow-md text-primary font-semibold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
 			]"
 			:aria-pressed="selectedOption === option.value ? 'true' : 'false'"
 		>

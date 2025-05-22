@@ -1,16 +1,21 @@
 <template>
 	<div v-if="modelValue" class="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex justify-center items-center z-50" @click.self="closeDialog">
 		<transition name="slide-up">
-			<div v-if="modelValue" class="login-box relative">
-				<button @click="closeDialog" class="absolute top-4 right-4 text-white hover:text-gray-300 text-2xl">&times;</button>
+			<div
+				v-if="modelValue"
+				class="login-box relative p-6 sm:p-8 md:p-10 lg:p-12 rounded-2xl sm:rounded-3xl md:rounded-[35px] lg:rounded-[50px] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
+			>
+				<button @click="closeDialog" class="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 text-white hover:text-gray-300 text-xl sm:text-2xl">
+					&times;
+				</button>
 				<div class="title-container">
-					<h2 class="title-text text-[24px] lg:text-[36px] font-semibold text-center mb-[12px] lg:mb-[24px]">登入系統</h2>
+					<h2 class="title-text text-2xl sm:text-3xl md:text-4xl font-semibold text-center mb-4 sm:mb-5 md:mb-6">登入系統</h2>
 					<div class="title-decoration"></div>
 				</div>
-				<form @submit.prevent="handleLogin" class="flex flex-col gap-[24px]">
+				<form @submit.prevent="handleLogin" class="flex flex-col gap-4 sm:gap-5 md:gap-6">
 					<!-- 帳號 -->
 					<div>
-						<label for="dialog-account" class="text-white">帳號</label>
+						<label for="dialog-account" class="text-white text-sm sm:text-base md:text-lg mb-1 md:mb-2">帳號</label>
 						<div class="relative">
 							<input
 								type="text"
@@ -18,13 +23,13 @@
 								v-model="account"
 								required
 								placeholder="請輸入帳號"
-								class="bg-white/10 text-white placeholder-white/50 w-full"
+								class="bg-white/10 text-white placeholder-white/50 w-full px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base rounded-md sm:rounded-lg"
 							/>
 						</div>
 					</div>
 					<!-- 密碼 -->
 					<div>
-						<label for="dialog-password" class="text-white">密碼</label>
+						<label for="dialog-password" class="text-white text-sm sm:text-base md:text-lg mb-1 md:mb-2">密碼</label>
 						<div class="relative">
 							<input
 								type="password"
@@ -32,19 +37,23 @@
 								v-model="password"
 								required
 								placeholder="請輸入密碼"
-								class="bg-white/10 text-white placeholder-white/50 w-full"
+								class="bg-white/10 text-white placeholder-white/50 w-full px-3 py-2 sm:px-4 sm:py-2.5 text-sm sm:text-base rounded-md sm:rounded-lg"
 							/>
 						</div>
 					</div>
 					<!-- 錯誤訊息 -->
-					<div v-if="error" class="error-message">
+					<div v-if="error" class="error-message text-xs sm:text-sm mt-2">
 						{{ error }}
 					</div>
 
 					<!-- 登入按鈕 -->
-					<button type="submit" :disabled="loading" class="bg-white text-[#212a37] hover:bg-white/90 flex items-center justify-center">
+					<button
+						type="submit"
+						:disabled="loading"
+						class="bg-white text-[#212a37] hover:bg-white/90 flex items-center justify-center w-full px-4 py-2.5 sm:px-5 sm:py-3 text-base sm:text-lg md:text-xl rounded-md sm:rounded-lg"
+					>
 						<span v-if="loading" class="mr-2">
-							<svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+							<svg class="animate-spin h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 24 24">
 								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
 								<path
 									class="opacity-75"
@@ -56,8 +65,8 @@
 						{{ loading ? "登入中..." : "登入" }}
 					</button>
 					<!-- 導航到聯絡頁面 -->
-					<div class="mt-4 text-center">
-						<p class="text-sm text-white/80">
+					<div class="mt-3 sm:mt-4 text-center">
+						<p class="text-xs sm:text-sm text-white/80">
 							沒有帳號或遇到問題？
 							<a @click="navigateToContact" class="text-white hover:underline cursor-pointer">點此聯繫我們</a>
 						</p>
@@ -153,11 +162,11 @@ watch(
 /* 沿用 login.vue 的樣式 */
 .login-box {
 	background: rgb(33, 42, 55);
-	padding: 48px;
-	border-radius: 50px; /* 可調整 */
+	/* padding: 48px; REMOVED - Handled by Tailwind */
+	/* border-radius: 50px; REMOVED - Handled by Tailwind */
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	width: fit-content; /* 保持內容寬度 */
-	max-width: 90vw; /* 增加最大寬度限制 */
+	max-width: 90vw; /* Fallback max-width */
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	position: relative; /* 確保關閉按鈕定位 */
@@ -167,12 +176,34 @@ watch(
 .title-container {
 	position: relative;
 	text-align: center;
-	margin-bottom: 48px;
-	padding: 24px 0;
+	margin-bottom: 24px; /* Default small */
+	padding: 12px 0; /* Default small py-3 */
+}
+
+@media (min-width: 640px) {
+	/* sm */
+	.title-container {
+		margin-bottom: 32px;
+		padding: 16px 0; /* py-4 */
+	}
+}
+@media (min-width: 768px) {
+	/* md */
+	.title-container {
+		margin-bottom: 40px;
+		padding: 20px 0; /* py-5 */
+	}
+}
+@media (min-width: 1024px) {
+	/* lg */
+	.title-container {
+		margin-bottom: 48px;
+		padding: 24px 0; /* py-6 */
+	}
 }
 
 .title-text {
-	font-size: 48px;
+	/* font-size: 48px; REMOVED - Handled by Tailwind */
 	font-weight: bold;
 	background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
 	-webkit-background-clip: text;
@@ -188,19 +219,39 @@ watch(
 	bottom: 0;
 	left: 50%;
 	transform: translateX(-50%);
-	width: 180px;
-	height: 4px;
+	width: 96px; /* Default small, w-24 */
+	height: 2px; /* h-0.5 or h-1 */
 	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0) 100%);
 	border-radius: 2px;
 }
 
+@media (min-width: 640px) {
+	/* sm */
+	.title-decoration {
+		width: 128px; /* w-32 */
+	}
+}
+@media (min-width: 768px) {
+	/* md */
+	.title-decoration {
+		width: 160px; /* w-40 */
+	}
+}
+@media (min-width: 1024px) {
+	/* lg */
+	.title-decoration {
+		width: 180px;
+		height: 4px;
+	}
+}
+
 input {
-	width: 360px; /* 可考慮移除固定寬度或設為 100% */
+	/* width: 360px; REMOVED - Handled by Tailwind */
 	max-width: 100%; /* 確保在小螢幕上正常 */
-	padding: 12px 24px;
+	/* padding: 12px 24px; REMOVED - Handled by Tailwind */
 	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 10px;
-	font-size: 1rem;
+	/* border-radius: 10px; REMOVED - Handled by Tailwind */
+	/* font-size: 1rem; REMOVED - Handled by Tailwind */
 	transition: all 0.3s ease;
 }
 
@@ -211,12 +262,11 @@ input:focus {
 }
 
 button[type="submit"] {
-	/* 只針對 submit 按鈕 */
-	width: 360px; /* 可考慮移除固定寬度或設為 100% */
+	/* width: 360px; REMOVED - Handled by Tailwind */
 	max-width: 100%; /* 確保在小螢幕上正常 */
-	padding: 12px 24px;
-	border-radius: 10px;
-	font-size: 24px;
+	/* padding: 12px 24px; REMOVED - Handled by Tailwind */
+	/* border-radius: 10px; REMOVED - Handled by Tailwind */
+	/* font-size: 24px; REMOVED - Handled by Tailwind */
 	cursor: pointer;
 	transition: all 0.3s ease;
 	font-weight: bold;
@@ -230,13 +280,13 @@ button:disabled {
 .error-message {
 	color: #ff6b6b;
 	text-align: center;
-	font-size: 16px;
+	/* font-size: 16px; REMOVED - Handled by Tailwind */
 }
 
 label {
 	display: block;
-	font-size: 24px;
-	margin-bottom: 12px;
+	/* font-size: 24px; REMOVED - Handled by Tailwind */
+	/* margin-bottom: 12px; REMOVED - Handled by Tailwind */
 	opacity: 0.9;
 }
 

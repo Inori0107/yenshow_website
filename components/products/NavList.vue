@@ -1,32 +1,38 @@
 <template>
-	<div class="space-y-[12px] md:space-y-[16px] lg:space-y-[24px]">
+	<div class="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
 		<div v-for="category in categories" :key="getCategoryId(category)">
 			<button
 				type="button"
 				@click="toggleActive(getCategoryId(category))"
 				:class="[
-					'trapezoid py-2 md:py-3 text-left ps-4 md:ps-6 transition-all duration-300 ease-in-out relative focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1',
-					isCategoryActive(category) ? 'bg-primary text-white w-[300px] lg:w-[504px]' : 'bg-gray-100 hover:bg-gray-200 text-gray-600 w-[185px] lg:w-[300px]'
+					'trapezoid py-2 sm:py-2.5 md:py-3 lg:py-3.5 xl:py-4 ps-3 sm:ps-4 md:ps-5 lg:ps-6 xl:ps-7 text-left transition-all duration-300 ease-in-out relative focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1',
+					isCategoryActive(category)
+						? 'bg-primary text-white w-48 sm:w-56 md:w-64 lg:w-80 xl:w-[504px]'
+						: 'bg-gray-100 hover:bg-gray-200 text-gray-600 w-36 sm:w-44 md:w-48 lg:w-60 xl:w-[300px]'
 				]"
 				:aria-expanded="isCategoryActive(category) ? 'true' : 'false'"
 				:aria-controls="`sublist-${getCategoryId(category)}`"
 			>
-				<span :class="['transition-all duration-300', isCategoryActive(category) ? 'text-[24px] lg:text-[36px]' : 'text-[16px] lg:text-[24px]']">{{
-					getCategoryName(category)
-				}}</span>
+				<span
+					:class="[
+						'transition-all duration-300 block truncate',
+						isCategoryActive(category) ? 'text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl' : 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl'
+					]"
+					>{{ getCategoryName(category) }}</span
+				>
 			</button>
 			<div
 				v-if="isCategoryActive(category) && getSubItems(category)"
-				class="mt-3 md:mt-4 lg:mt-6 ms-6 ps-4 py-2 border-l-2 border-primary-light w-[300px] lg:w-[504px]"
+				class="mt-2 sm:mt-3 md:mt-4 lg:mt-5 xl:mt-6 ms-4 sm:ms-5 md:ms-6 ps-3 sm:ps-4 py-2 border-l-2 border-primary-light w-48 sm:w-56 md:w-64 lg:w-80 xl:w-[504px]"
 				:id="`sublist-${getCategoryId(category)}`"
 				role="region"
 				:aria-labelledby="getCategoryId(category)"
 			>
-				<ul class="list-none space-y-[8px] md:space-y-[12px] lg:space-y-[16px]">
+				<ul class="list-none space-y-1.5 sm:space-y-2 md:space-y-2.5 lg:space-y-3 xl:space-y-4">
 					<li
 						v-for="item in getSubItems(category)"
 						:key="item._id || item"
-						class="text-[16px] md:text-[24px] text-gray-700 hover:text-primary transition-all duration-200 group"
+						class="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 hover:text-primary transition-all duration-200 group cursor-pointer"
 						role="button"
 						tabindex="0"
 						@click="selectSubItem(category, item)"
@@ -128,5 +134,11 @@ const selectSubItem = (category, subItem) => {
 .trapezoid {
 	clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
 	/* 微調 15px 來改變斜角幅度 */
+}
+
+@media (max-width: 640px) {
+	.trapezoid {
+		clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%); /* 小螢幕時斜度小一些 */
+	}
 }
 </style>

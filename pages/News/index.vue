@@ -1,9 +1,11 @@
 <template>
-	<div class="container min-h-screen p-[120px] md:p-[96px] flex flex-col gap-[48px]">
-		<h2 class="text-center text-[24px] md:text-[36px] lg:text-[48px] font-bold py-[12px] md:pt-[24px] md:pb-[48px] text-white">最新消息</h2>
+	<div class="container min-h-screen px-4 py-8 sm:p-8 md:p-12 lg:p-16 xl:p-24 flex flex-col gap-8 sm:gap-10 md:gap-12">
+		<h2 class="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pt-4 pb-8 sm:pt-6 sm:pb-10 md:pt-8 md:pb-12 text-white">
+			最新消息
+		</h2>
 		<!-- 顯示載入狀態 with Skeleton -->
-		<div v-if="newsStore.isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
-			<SkeletonNewsCard v-for="n in 3" :key="`skeleton-${n}`" />
+		<div v-if="newsStore.isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+			<SkeletonNewsCard v-for="n in newsStore.newsList.length || 3" :key="`skeleton-${n}`" />
 		</div>
 
 		<!-- 顯示錯誤訊息 -->
@@ -12,28 +14,28 @@
 		</div>
 
 		<!-- News 列表 -->
-		<div v-else-if="newsStore.newsList && newsStore.newsList.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
+		<div v-else-if="newsStore.newsList && newsStore.newsList.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
 			<NuxtLink
 				:to="`/News/${newsItem._id}`"
 				v-for="newsItem in newsStore.newsList"
 				:key="newsItem._id || newsItem.id"
-				class="rounded-lg bg-white/90 backdrop-blur-sm overflow-hidden flex flex-col no-underline shadow-md hover:shadow-xl transition-shadow duration-300 group"
+				class="rounded-lg bg-white/80 backdrop-blur-md overflow-hidden flex flex-col no-underline shadow-md hover:shadow-xl transition-shadow duration-300 group"
 			>
 				<NuxtImg
-					class="w-full h-48 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-105"
+					class="w-full h-40 sm:h-44 md:h-48 lg:h-52 xl:h-56 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-105"
 					:src="getImageUrl(newsItem.coverImageUrl)"
 					:alt="getLocalizedText(newsItem.title, languageStore.currentLang)"
 					format="webp"
 					loading="lazy"
 					:placeholder="[50, 27, 75, 5]"
-					sizes="sm:100vw md:50vw lg:300px"
+					sizes="sm:100vw md:50vw lg:300px xl:300px 2xl:300px"
 				/>
-				<div class="flex flex-col gap-[12px] p-[20px] flex-grow">
-					<h4 class="text-[18px] md:text-[22px] font-bold text-primary overflow-hidden whitespace-nowrap text-ellipsis">
+				<div class="flex flex-col gap-2 sm:gap-3 p-4 sm:p-5 flex-grow">
+					<h4 class="text-base sm:text-lg md:text-xl font-bold text-primary overflow-hidden whitespace-nowrap text-ellipsis">
 						{{ getLocalizedText(newsItem.title, languageStore.currentLang) }}
 					</h4>
-					<p class="text-[10px] md:text-[12px] text-slate-500">{{ formatDate(newsItem.publishDate) }}</p>
-					<p class="text-[13px] md:text-[15px] text-slate-600 mt-auto break-words line-clamp-3">
+					<p class="text-xs sm:text-sm text-slate-500">{{ formatDate(newsItem.publishDate) }}</p>
+					<p class="text-sm sm:text-base text-slate-600 mt-auto break-words line-clamp-3">
 						{{ generateSummary(newsItem, languageStore.currentLang) }}
 					</p>
 				</div>
@@ -48,10 +50,16 @@ import { useNewsStore } from "~/stores/newsStore";
 import ButtonCTA from "~/components/common/Button-CTA.vue"; // 更新後的路徑
 import { useLanguageStore } from "~/stores/core/languageStore"; // 用於多語言支援
 import SkeletonNewsCard from "~/components/news/SkeletonNewsCard.vue";
+import { useHead } from "#app";
 
 const newsStore = useNewsStore();
 const languageStore = useLanguageStore(); // 用於獲取當前語言
 const config = useRuntimeConfig(); // 用於獲取 apiBaseUrl
+
+useHead({
+	title: " - 最新消息",
+	meta: [{ name: "description", content: "獲取遠岫科技的最新消息、產品發布、技術更新與行業洞察。" }]
+});
 
 // 處理圖片 URL
 const getImageUrl = (coverImgUrl) => {

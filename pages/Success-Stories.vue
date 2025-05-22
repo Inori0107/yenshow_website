@@ -4,8 +4,7 @@
 		<nav class="h-screen container flex flex-col justify-center relative">
 			<!-- 標題 -->
 			<div class="z-10 mb-12" ref="titleRef">
-				<h1 class="text-[36px] md:text-[96px] text-secondary">Success Stories</h1>
-				<h3 class="text-[24px] md:text-[64px] text-secondary">合作案例</h3>
+				<h1 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary">合作案例</h1>
 			</div>
 
 			<!-- 標語區塊 -->
@@ -79,11 +78,35 @@
 				<!-- 企業與商業合作 -->
 				<article ref="businessRef" class="absolute inset-0 flex flex-col justify-center items-center">
 					<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">企業與商業合作</h4>
-					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-						<div v-for="(feature, index) in business_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
-							<img :src="feature.image" alt="feature" class="w-[100px] lg:w-[150px] aspect-square" />
-							<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ feature.title }}</h5>
-							<p class="text-[12px] md:text-[16px] lg:text-[24px]">{{ feature.description }}</p>
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 place-items-center">
+						<!-- 卡片容器 -->
+						<div
+							v-for="(feature, index) in business_feature"
+							:key="index"
+							class="card-container w-[260px] h-[360px] sm:w-[280px] sm:h-[390px] md:w-[300px] md:h-[420px] lg:w-[320px] lg:h-[440px] perspective group cursor-pointer transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.03]"
+							@click="toggleFlip('business', index)"
+						>
+							<div
+								class="card-inner w-full h-full relative text-center transition-transform duration-500 ease-in-out transform-style-preserve-3d"
+								:class="{ 'is-flipped': flippedCards[`business-${index}`] }"
+							>
+								<!-- 卡片正面 -->
+								<div
+									class="card-face card-front absolute w-full h-full backface-hidden bg-neutral-800 text-white p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg"
+								>
+									<h5 class="text-md sm:text-lg md:text-xl lg:text-2xl font-semibold mb-3">{{ feature.title }}</h5>
+									<p class="text-xs sm:text-sm md:text-base lg:text-lg">{{ feature.pain_point }}</p>
+									<span class="text-xs mt-4 opacity-70">點擊查看方案</span>
+								</div>
+								<!-- 卡片背面 -->
+								<div
+									class="card-face card-back absolute w-full h-full backface-hidden bg-primary text-secondary p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg transform rotate-y-180"
+								>
+									<img :src="feature.image" alt="feature" class="w-[60px] sm:w-[80px] lg:w-[100px] aspect-square mb-2 sm:mb-4" />
+									<h5 class="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{{ feature.title }}</h5>
+									<p class="text-xs sm:text-sm md:text-base">{{ feature.description }}</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</article>
@@ -91,11 +114,35 @@
 				<!-- 公共與專業場域支援 -->
 				<article ref="publicRef" class="absolute inset-0 flex flex-col justify-center items-center opacity-0">
 					<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">公共與專業場域支援</h4>
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-						<div v-for="(feature, index) in public_feature" :key="index" class="feature flex flex-col items-center text-center text-secondary">
-							<img :src="feature.image" alt="feature" class="w-[100px] lg:w-[150px] aspect-square" />
-							<h5 class="text-[16px] md:text-[24px] lg:text-[36px]">{{ feature.title }}</h5>
-							<p class="text-[12px] md:text-[16px] lg:text-[24px]">{{ feature.description }}</p>
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 place-items-center">
+						<!-- 卡片容器 -->
+						<div
+							v-for="(feature, index) in public_feature"
+							:key="index"
+							class="card-container w-[280px] h-[390px] sm:w-[300px] sm:h-[420px] md:w-[330px] md:h-[450px] lg:w-[360px] lg:h-[480px] perspective group cursor-pointer transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.03]"
+							@click="toggleFlip('public', index)"
+						>
+							<div
+								class="card-inner w-full h-full relative text-center transition-transform duration-500 ease-in-out transform-style-preserve-3d"
+								:class="{ 'is-flipped': flippedCards[`public-${index}`] }"
+							>
+								<!-- 卡片正面 -->
+								<div
+									class="card-face card-front absolute w-full h-full backface-hidden bg-neutral-800 text-white p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg"
+								>
+									<h5 class="text-md sm:text-lg md:text-xl lg:text-2xl font-semibold mb-3">{{ feature.title }}</h5>
+									<p class="text-xs sm:text-sm md:text-base lg:text-lg">{{ feature.pain_point }}</p>
+									<span class="text-xs mt-4 opacity-70">點擊查看方案</span>
+								</div>
+								<!-- 卡片背面 -->
+								<div
+									class="card-face card-back absolute w-full h-full backface-hidden bg-primary text-secondary p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg transform rotate-y-180"
+								>
+									<img :src="feature.image" alt="feature" class="w-[60px] sm:w-[80px] lg:w-[100px] aspect-square mb-2 sm:mb-4" />
+									<h5 class="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{{ feature.title }}</h5>
+									<p class="text-xs sm:text-sm md:text-base">{{ feature.description }}</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</article>
@@ -146,8 +193,14 @@ import { ref, onMounted, nextTick } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useScrollAnimation } from "@/composables/useScrollAnimation"; // 引入 useScrollAnimation
+import { useHead } from "#app";
 
 gsap.registerPlugin(ScrollTrigger);
+
+useHead({
+	title: " - 合作案例",
+	meta: [{ name: "description", content: "查看遠岫科技在不同行業的成功合作案例，了解我們如何以創新科技推動智能安全與管理系統的全面應用。" }]
+});
 
 // --- Refs for Entrance Animation ---
 const titleRef = ref(null);
@@ -165,16 +218,19 @@ let logoScrollAnimation = null; // 用於保存GSAP動畫實例
 
 const business_feature = ref([
 	{
+		pain_point: "整合多種弱電系統是否讓您頭痛不已？",
 		title: "系統整合商",
 		description: "為弱電合作夥伴提供高規格、安全的產品和服務。",
 		image: "/corporation/Networking Manager.svg"
 	},
 	{
+		pain_point: "如何滿足品牌客戶多變且客製化的需求？",
 		title: "品牌客戶",
 		description: "與知名品牌合作，客製化需求，以專業性達到客戶需求。",
 		image: "/corporation/customers.svg"
 	},
 	{
+		pain_point: "傳統門禁考勤是否已無法滿足現代企業的高效管理？",
 		title: "公司行號",
 		description: "為企業提供安全便利的門禁考勤解決方案",
 		image: "/corporation/company.svg"
@@ -183,21 +239,25 @@ const business_feature = ref([
 
 const public_feature = ref([
 	{
+		pain_point: "如何在眾多建案中脫穎而出，提升銷售吸引力？",
 		title: "建設公司",
 		description: "提供完整弱電系統規劃，新穎設備提高銷售機會",
 		image: "/corporation/building.svg"
 	},
 	{
+		pain_point: "醫療院所對安全與管理有著極高標準，如何應對？",
 		title: "醫療院所",
 		description: "提供醫療機構的安全解決方案，包括醫院、診所等。",
 		image: "/corporation/hospital.svg"
 	},
 	{
+		pain_point: "校園安全事件頻傳，如何打造更安全的學習環境？",
 		title: "學校",
 		description: "提供學校安全解決方案，包括學校、幼兒園等。",
 		image: "/corporation/school.svg"
 	},
 	{
+		pain_point: "公家機關資訊安全與進出管理是否讓您感到挑戰？",
 		title: "公家機關",
 		description: "與政府機構合作，提供安全技術解決方案。",
 		image: "/corporation/government.svg"
@@ -218,6 +278,13 @@ const partnerLogos = ref([
 	{ src: "/logo/wangbang logo 1.png", alt: "Wang Bang" },
 	{ src: "/logo/zongtai logo 1.png", alt: "Zongtai" }
 ]);
+
+const flippedCards = ref({});
+
+function toggleFlip(type, index) {
+	const key = `${type}-${index}`;
+	flippedCards.value[key] = !flippedCards.value[key];
+}
 
 onMounted(async () => {
 	await nextTick();
@@ -288,9 +355,9 @@ onMounted(async () => {
 	// --- ScrollTrigger Animations ---
 	// 使用可選鏈 ?. 增加安全性
 	const businessTitle = businessRef.value?.querySelector("h4");
-	const businessFeatures = businessRef.value?.querySelectorAll(".feature");
+	const businessFeatures = businessRef.value?.querySelectorAll(".card-container");
 	const publicTitle = publicRef.value?.querySelector("h4");
-	const publicFeatures = publicRef.value?.querySelectorAll(".feature");
+	const publicFeatures = publicRef.value?.querySelectorAll(".card-container");
 
 	// 檢查必要的 refs 和元素是否存在
 	if (!sectionRef.value || !businessRef.value || !publicRef.value || !businessTitle || !publicTitle) {
@@ -509,5 +576,69 @@ onMounted(async () => {
 	max-width: 160px; /* 限制 Logo 最大寬度，避免過大 */
 	object-fit: contain; /* 保持圖片比例 */
 	margin-right: 30px; /* Logo 之間的間距 */
+}
+
+.perspective {
+	perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+	transform-style: preserve-3d;
+}
+
+.backface-hidden {
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden; /* Safari */
+}
+
+.rotate-y-180 {
+	transform: rotateY(180deg);
+}
+
+.card-inner.is-flipped {
+	transform: rotateY(180deg);
+}
+
+.card-face {
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-sizing: border-box;
+}
+
+/* Responsive adjustments for card grid if necessary */
+@media (max-width: 1024px) {
+	/* For lg breakpoint and below */
+	/* publicRef uses lg:grid-cols-2, businessRef uses lg:grid-cols-3 */
+	/* Ensure cards in publicRef don't become too large on medium screens if it's still 2 cols */
+}
+
+@media (max-width: 768px) {
+	/* For md breakpoint and below */
+	/* Cards will stack to 1 column by default based on grid-cols-1 from Tailwind */
+	/* Adjust card sizes if they are too wide or tall for mobile */
+	.card-container {
+		width: 85vw; /* Make cards occupy more screen width */
+		max-width: 340px; /* But not excessively wide */
+		/* Height is now primarily controlled by Tailwind classes, 
+		   but we can set a min-height if dynamic content is very short */
+		min-height: 300px;
+		margin-left: auto; /* Center the card if the grid doesn't fully handle it */
+		margin-right: auto;
+		margin-bottom: 2rem; /* Add more space between stacked cards */
+	}
+	.card-container:last-child {
+		margin-bottom: 0; /* Remove margin for the last card in a group */
+	}
+
+	/* Adjust font sizes for cards on mobile */
+	.card-face h5 {
+		font-size: 1rem; /* Adjust title size */
+	}
+	.card-face p {
+		font-size: 0.875rem; /* Adjust paragraph text size */
+	}
+	.card-face .text-xs.mt-4.opacity-70 {
+		/* Targeting '點擊查看方案' span */
+		font-size: 0.75rem;
+	}
 }
 </style>
