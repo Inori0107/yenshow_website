@@ -1,10 +1,7 @@
 <template>
 	<div v-if="modelValue" class="fixed inset-0 bg-black/10 backdrop-blur-[1px] flex justify-center items-center z-50" @click.self="closeDialog">
 		<transition name="slide-up">
-			<div
-				v-if="modelValue"
-				class="login-box relative p-6 sm:p-8 md:p-10 lg:p-12 rounded-2xl sm:rounded-3xl md:rounded-[35px] lg:rounded-[50px] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
-			>
+			<div v-if="modelValue" class="login-box relative p-6 sm:p-8 md:p-10 lg:p-12 rounded-2xl sm:rounded-3xl md:rounded-[35px] lg:rounded-[50px]">
 				<button @click="closeDialog" class="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 text-white hover:text-gray-300 text-xl sm:text-2xl">
 					&times;
 				</button>

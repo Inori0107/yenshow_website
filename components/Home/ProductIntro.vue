@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- ProductIntro -->
-		<section class="marquee-background bg-primary relative my-[128px] md:my-[512px] h-screen overflow-hidden">
+		<section class="marquee-background bg-primary relative my-[128px] md:my-[512px] h-screen md:h-[120vh] overflow-hidden">
 			<article
 				class="search-overlay absolute inset-0 z-50 pt-[64px] md:pt-[128px] flex flex-col items-center gap-[12px] md:gap-[24px] lg:gap-[48px] text-secondary"
 			>

@@ -2,7 +2,10 @@
 	<div>
 		<!-- 系列介紹 -->
 		<section class="bg-white relative overflow-hidden space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12 pb-4 sm:pb-6 md:pb-8 lg:pb-10 xl:pb-12">
-			<article class="w-1/2 sm:w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3">
+			<article
+				ref="animatedArticleRef"
+				class="w-1/2 sm:w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3"
+			>
 				<span class="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					>應用介紹</span
 				>
@@ -12,7 +15,7 @@
 				</svg>
 			</article>
 			<!-- content -->
-			<aside class="md:min-h-screen flex flex-col">
+			<aside ref="animatedContentRef" class="md:min-h-screen flex flex-col">
 				<!-- title -->
 				<div class="ms-4 sm:ms-6 md:ms-8 lg:ms-12 xl:ms-16 space-y-2 md:space-y-4">
 					<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl opacity-50 font-bold">可視對講</h1>
@@ -143,6 +146,8 @@ const navError = ref(null);
 const navListRef = ref(null);
 const activeIntroductionCategoryName = ref(""); // 新增狀態來追蹤當前選擇的介紹內容
 const introductionContainerRef = ref(null); // Added ref for introduction container
+const animatedArticleRef = ref(null); // Ref for the animated article (SVG)
+const animatedContentRef = ref(null); // Ref for the animated aside (content)
 
 // 介紹內容數據
 const introductionItemsMap = {
@@ -250,15 +255,40 @@ watch(filterValues, (newValue, oldValue) => {}, { deep: true });
 watch(isLoadingNav, (newVal, oldVal) => {
 	if (gsap) {
 		// NavList animation
-		if (!newVal && oldVal === true && navListRef.value) {
+		if (!newVal && oldVal === true) {
 			nextTick(() => {
-				const targetNavList = navListRef.value.$el || navListRef.value;
+				// Animate content (aside)
+				if (animatedContentRef.value && animatedContentRef.value.offsetParent !== null) {
+					gsap.from(animatedContentRef.value, {
+						opacity: 0,
+						y: 20,
+						duration: 0.7,
+						ease: "power3.out",
+						delay: 0.1 // Slight delay to start after or concurrently with potential parent changes
+					});
+				}
+
+				// Animate article (SVG container)
+				if (animatedArticleRef.value && animatedArticleRef.value.offsetParent !== null) {
+					gsap.from(animatedArticleRef.value, {
+						opacity: 0,
+						x: 50, // Slide in from right
+						scale: 0.9,
+						duration: 0.7,
+						ease: "power3.out",
+						delay: 0.25 // A bit after contentRef
+					});
+				}
+
+				// Existing NavList animation
+				const targetNavList = navListRef.value?.$el || navListRef.value;
 				if (targetNavList && targetNavList.offsetParent !== null) {
 					gsap.from(targetNavList, {
 						x: -50,
 						opacity: 0,
 						duration: 0.8,
-						ease: "power3.out"
+						ease: "power3.out",
+						delay: 0.15 // Delay slightly to allow parent (aside) to start animating
 					});
 				}
 			});

@@ -1,186 +1,274 @@
 <template>
 	<div>
-		<!-- Entrance -->
-		<nav class="h-screen container flex flex-col justify-center relative">
-			<!-- 標題 -->
-			<div class="z-10 mb-12" ref="titleRef">
-				<h1 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary">合作案例</h1>
-			</div>
-
-			<!-- 標語區塊 -->
-			<div class="flex flex-col md:flex-row gap-8 md:gap-6 z-10" ref="heroBlocks">
-				<!-- 主標語區塊 -->
-				<div class="block-bg w-full md:w-1/2 rounded-xl p-6 md:p-8 transition-all duration-500">
-					<div class="absolute inset-0 rounded-xl overflow-hidden">
-						<div class="block-pattern pattern-1"></div>
-					</div>
-					<div class="relative z-10">
-						<div class="text-[16px] md:text-[18px] text-white/70 mb-2">OUR MISSION</div>
-						<h4 class="text-[20px] md:text-[28px] text-white font-medium mb-4">以創新科技提供多元解決方案<br />推動智能安全與管理系統的全面應用</h4>
-						<p class="text-[14px] md:text-[16px] lg:text-[18px] text-white/80">
-							我們致力於結合先進技術和本地化服務，為客戶提供高度整合、高效且可靠的系統支持。通過不斷提升技術能力和深入了解客戶需求，遠岫科技目標成為亞太地區值得信賴的夥伴，推動產業轉型，提升整體安全與管理效能，並為社會創造更安全、更智慧的生活環境。
-						</p>
-					</div>
+		<!-- Section 1: Hero - Title, Intro, Logo Wall -->
+		<section ref="heroSectionRef" class="relative text-white overflow-hidden min-h-screen flex flex-col justify-center items-center">
+			<div class="container mx-auto relative space-y-[24px] md:space-y-[48px] px-4 sm:px-6 lg:px-8 z-10">
+				<!-- Page Title -->
+				<div class="text-center">
+					<h1 ref="pageTitleRef" class="text-[36px] md:text-[64px] lg:text-[80px] font-bold opacity-0">攜手共進，成就卓越</h1>
+					<p
+						ref="pageSubtitleRef"
+						class="max-w-5xl mt-[24px] md:mt-[48px] text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] text-sky-200 mx-auto opacity-0"
+						style="text-shadow: 0 0 10px rgba(0, 0, 0, 0.5)"
+					>
+						探索我們與各行各業夥伴的合作故事，見證如何透過創新技術與專業服務，共同應對挑戰，創造非凡價值。
+					</p>
 				</div>
 
-				<!-- 數據統計區塊 -->
-				<div class="flex flex-col gap-4 md:w-1/2">
-					<!-- 合作夥伴 -->
-					<div class="block-bg rounded-xl p-6 transition-all duration-500" ref="partnersSectionRef">
-						<div class="absolute inset-0 rounded-xl overflow-hidden">
-							<div class="block-pattern"></div>
-						</div>
-						<div class="relative z-10">
-							<div>
-								<div class="text-[24px] md:text-[32px] text-white font-bold text-center">合作夥伴</div>
-							</div>
-							<div class="logo-carousel-container">
-								<div class="logo-track flex items-center h-full" ref="logoTrackRef">
-									<!-- Logos duplicated for seamless loop -->
-									<img v-for="(logo, index) in partnerLogos" :key="'logo-a-' + index" :src="logo.src" :alt="logo.alt" class="partner-logo" />
-									<img v-for="(logo, index) in partnerLogos" :key="'logo-b-' + index" :src="logo.src" :alt="logo.alt" class="partner-logo" />
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- 成功案例 -->
-					<div class="block-bg rounded-xl p-6 transition-all duration-500">
-						<div class="absolute inset-0 rounded-xl overflow-hidden">
-							<div class="block-pattern pattern-2"></div>
-						</div>
-						<div class="relative z-10">
-							<div>
-								<div class="text-[24px] md:text-[32px] text-white font-bold text-center">成功案例</div>
-							</div>
-							<div class="grid grid-cols-3 gap-2 md:gap-4 text-center">
-								<div>
-									<div class="text-[28px] md:text-[36px] text-white font-bold">50+</div>
-									<div class="text-[12px] md:text-[14px] text-white/70">成功專案</div>
-								</div>
-								<div>
-									<div class="text-[28px] md:text-[36px] text-white font-bold">10+</div>
-									<div class="text-[12px] md:text-[14px] text-white/70">年行業經驗</div>
-								</div>
-								<div>
-									<div class="text-[28px] md:text-[36px] text-white font-bold">98%</div>
-									<div class="text-[12px] md:text-[14px] text-white/70">客戶滿意度</div>
-								</div>
-							</div>
+				<!-- Cooperation Philosophy (Intro Text) -->
+				<div ref="philosophyRef" class="max-w-5xl mx-auto bg-black/20 backdrop-blur-md p-6 md:p-8 rounded-xl shadow-xl opacity-0">
+					<h2 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-secondary mb-4 text-center">
+						我們的合作理念
+					</h2>
+					<p class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[20px] 2xl:text-[22px] text-secondary/80 leading-relaxed">
+						在遠岫科技，我們深信夥伴關係的力量。我們不僅是技術提供者，更是與客戶並肩作戰的夥伴。我們致力於深入理解您的業務需求與挑戰，量身打造最合適的解決方案。我們相信，透明的溝通、專業的執行以及對卓越成果的共同追求，是每一段成功合作的基石。
+					</p>
+				</div>
+
+				<!-- Logo Wall -->
+				<div ref="logoWallRef" class="opacity-0">
+					<h3
+						class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-secondary mb-6 md:mb-8 text-center"
+					>
+						信賴我們的夥伴
+					</h3>
+					<div class="logo-carousel-container relative w-full h-24 md:h-28 mx-auto overflow-hidden">
+						<div ref="logoTrackRef" class="logo-track absolute top-0 left-0 flex items-center whitespace-nowrap">
+							<!-- Logos will be dynamically added here by GSAP for seamless loop -->
+							<img
+								v-for="(logo, index) in partnerLogos"
+								:key="'logo-initial-' + index"
+								:src="logo.src"
+								:alt="logo.alt"
+								class="partner-logo mx-4 md:mx-6 h-12 sm:h-16 md:h-20 lg:h-24 object-contain"
+							/>
+							<!-- Duplicates for seamless scroll -->
+							<img
+								v-for="(logo, index) in partnerLogos"
+								:key="'logo-duplicate-' + index"
+								:src="logo.src"
+								:alt="logo.alt"
+								class="partner-logo mx-4 md:mx-6 h-12 sm:h-16 md:h-20 lg:h-24 object-contain"
+							/>
 						</div>
 					</div>
 				</div>
 			</div>
-		</nav>
+		</section>
 
-		<!-- 合作夥伴 -->
-		<div class="bg-primary rounded-[100px] p-12">
-			<section ref="sectionRef" class="relative min-h-screen">
-				<!-- 企業與商業合作 -->
-				<article ref="businessRef" class="absolute inset-0 flex flex-col justify-center items-center">
-					<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">企業與商業合作</h4>
-					<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 place-items-center">
-						<!-- 卡片容器 -->
+		<!-- Section 2: Clarifying Needs / Common Challenges -->
+		<section ref="clarifyingNeedsSectionRef" class="clarifying-needs-section py-16 md:py-24 bg-gray-100">
+			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-12 md:mb-16">
+					<h2 ref="clarifyingNeedsTitleRef" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 opacity-0">您是否正為以下挑戰煩惱？</h2>
+					<p ref="clarifyingNeedsSubtitleRef" class="text-lg text-gray-600 max-w-3xl mx-auto opacity-0">
+						我們深入了解各行業在導入智慧解決方案時可能遇到的常見問題。看看這些場景是否與您相關，並探索可能的解決之道。
+					</p>
+				</div>
+
+				<!-- Business Challenges -->
+				<div class="mb-16 md:mb-20">
+					<h3 ref="businessChallengesTitleRef" class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 mb-8 md:mb-12 text-center opacity-0">
+						企業客戶的常見挑戰
+					</h3>
+					<div ref="businessCardsContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
 						<div
-							v-for="(feature, index) in business_feature"
-							:key="index"
-							class="card-container w-[260px] h-[360px] sm:w-[280px] sm:h-[390px] md:w-[300px] md:h-[420px] lg:w-[320px] lg:h-[440px] perspective group cursor-pointer transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.03]"
-							@click="toggleFlip('business', index)"
+							v-for="(item, index) in business_feature"
+							:key="'biz-' + index"
+							class="flip-card-container perspective opacity-0 h-[380px] md:h-[420px]"
+							@mouseenter="toggleFlip('biz', index)"
+							@mouseleave="toggleFlip('biz', index)"
 						>
-							<div
-								class="card-inner w-full h-full relative text-center transition-transform duration-500 ease-in-out transform-style-preserve-3d"
-								:class="{ 'is-flipped': flippedCards[`business-${index}`] }"
-							>
-								<!-- 卡片正面 -->
+							<div class="flip-card-inner transform-style-preserve-3d" :class="{ 'is-flipped': flippedCards['biz-' + index] }">
+								<!-- Front Face -->
 								<div
-									class="card-face card-front absolute w-full h-full backface-hidden bg-neutral-800 text-white p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg"
+									class="flip-card-front card-face backface-hidden bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col items-center text-center"
 								>
-									<h5 class="text-md sm:text-lg md:text-xl lg:text-2xl font-semibold mb-3">{{ feature.title }}</h5>
-									<p class="text-xs sm:text-sm md:text-base lg:text-lg">{{ feature.pain_point }}</p>
-									<span class="text-xs mt-4 opacity-70">點擊查看方案</span>
+									<img :src="item.image" :alt="item.title" class="w-20 h-20 mb-5 object-contain text-sky-600" />
+									<h4 class="text-xl font-semibold text-gray-800 mb-3">{{ item.title }}</h4>
+									<p class="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">{{ item.pain_point }}</p>
+									<span class="mt-auto text-sm font-medium text-sky-600 group-hover:text-sky-700">
+										查看解決方案
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-4 w-4 ml-1 inline-block transition-transform duration-200 ease-in-out transform group-hover:translate-x-1"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											stroke-width="2"
+										>
+											<path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7" />
+										</svg>
+									</span>
 								</div>
-								<!-- 卡片背面 -->
+								<!-- Back Face -->
 								<div
-									class="card-face card-back absolute w-full h-full backface-hidden bg-primary text-secondary p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg transform rotate-y-180"
+									class="flip-card-back card-face backface-hidden rotate-y-180 bg-sky-600 text-white rounded-xl shadow-xl p-6 flex flex-col items-center justify-center text-center"
 								>
-									<img :src="feature.image" alt="feature" class="w-[60px] sm:w-[80px] lg:w-[100px] aspect-square mb-2 sm:mb-4" />
-									<h5 class="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{{ feature.title }}</h5>
-									<p class="text-xs sm:text-sm md:text-base">{{ feature.description }}</p>
+									<h4 class="text-xl font-semibold mb-3">{{ item.title }}</h4>
+									<p class="text-sm leading-relaxed">{{ item.description }}</p>
 								</div>
 							</div>
 						</div>
 					</div>
-				</article>
+				</div>
 
-				<!-- 公共與專業場域支援 -->
-				<article ref="publicRef" class="absolute inset-0 flex flex-col justify-center items-center opacity-0">
-					<h4 class="text-[24px] md:text-[48px] lg:text-[64px] text-secondary text-center mb-12">公共與專業場域支援</h4>
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 place-items-center">
-						<!-- 卡片容器 -->
+				<!-- Public Sector Challenges -->
+				<div>
+					<h3 ref="publicChallengesTitleRef" class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 mb-8 md:mb-12 text-center opacity-0">
+						公共事業的常見挑戰
+					</h3>
+					<div ref="publicCardsContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
 						<div
-							v-for="(feature, index) in public_feature"
-							:key="index"
-							class="card-container w-[280px] h-[390px] sm:w-[300px] sm:h-[420px] md:w-[330px] md:h-[450px] lg:w-[360px] lg:h-[480px] perspective group cursor-pointer transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1.5 hover:scale-[1.03]"
-							@click="toggleFlip('public', index)"
+							v-for="(item, index) in public_feature"
+							:key="'pub-' + index"
+							class="flip-card-container perspective opacity-0 h-[380px] md:h-[420px]"
+							@mouseenter="toggleFlip('pub', index)"
+							@mouseleave="toggleFlip('pub', index)"
 						>
-							<div
-								class="card-inner w-full h-full relative text-center transition-transform duration-500 ease-in-out transform-style-preserve-3d"
-								:class="{ 'is-flipped': flippedCards[`public-${index}`] }"
-							>
-								<!-- 卡片正面 -->
+							<div class="flip-card-inner transform-style-preserve-3d" :class="{ 'is-flipped': flippedCards['pub-' + index] }">
+								<!-- Front Face -->
 								<div
-									class="card-face card-front absolute w-full h-full backface-hidden bg-neutral-800 text-white p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg"
+									class="flip-card-front card-face backface-hidden bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col items-center text-center"
 								>
-									<h5 class="text-md sm:text-lg md:text-xl lg:text-2xl font-semibold mb-3">{{ feature.title }}</h5>
-									<p class="text-xs sm:text-sm md:text-base lg:text-lg">{{ feature.pain_point }}</p>
-									<span class="text-xs mt-4 opacity-70">點擊查看方案</span>
+									<img :src="item.image" :alt="item.title" class="w-20 h-20 mb-5 object-contain text-teal-600" />
+									<h4 class="text-xl font-semibold text-gray-800 mb-3">{{ item.title }}</h4>
+									<p class="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">{{ item.pain_point }}</p>
+									<span class="mt-auto text-sm font-medium text-teal-600 group-hover:text-teal-700">
+										查看解決方案
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-4 w-4 ml-1 inline-block transition-transform duration-200 ease-in-out transform group-hover:translate-x-1"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+											stroke-width="2"
+										>
+											<path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7" />
+										</svg>
+									</span>
 								</div>
-								<!-- 卡片背面 -->
+								<!-- Back Face -->
 								<div
-									class="card-face card-back absolute w-full h-full backface-hidden bg-primary text-secondary p-4 sm:p-6 rounded-xl flex flex-col justify-center items-center shadow-lg transform rotate-y-180"
+									class="flip-card-back card-face backface-hidden rotate-y-180 bg-teal-600 text-white rounded-xl shadow-xl p-6 flex flex-col items-center justify-center text-center"
 								>
-									<img :src="feature.image" alt="feature" class="w-[60px] sm:w-[80px] lg:w-[100px] aspect-square mb-2 sm:mb-4" />
-									<h5 class="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{{ feature.title }}</h5>
-									<p class="text-xs sm:text-sm md:text-base">{{ feature.description }}</p>
+									<h4 class="text-xl font-semibold mb-3">{{ item.title }}</h4>
+									<p class="text-sm leading-relaxed">{{ item.description }}</p>
 								</div>
 							</div>
 						</div>
 					</div>
-				</article>
-			</section>
-		</div>
+				</div>
+			</div>
+		</section>
 
-		<!-- Success Cases Section -->
-		<section class="min-h-screen flex flex-col justify-center">
-			<!-- Light background -->
-			<div class="container mx-auto px-4">
-				<h2 class="text-3xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-secondary">實績案例</h2>
+		<!-- Section 3: Case Studies (Builders with Taiwan Map) -->
+		<section ref="buildersCaseStudiesSectionRef" class="builders-case-studies-section py-16 md:py-24 bg-white">
+			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+				<!-- Section Title -->
+				<div class="text-center mb-12 md:mb-16">
+					<h2 ref="buildersCaseStudiesTitleRef" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 opacity-0">
+						建商合作案例：深耕台灣，共築理想家園
+					</h2>
+					<p ref="buildersCaseStudiesSubtitleRef" class="text-lg text-gray-600 max-w-2xl mx-auto opacity-0">
+						我們與全台各地的建商緊密合作，從智慧住宅到大型社區，提供全面的弱電整合與智能建築解決方案。
+					</p>
+				</div>
 
-				<!-- Single Case Example -->
-				<div
-					class="flex flex-col md:flex-row items-center gap-8 md:gap-12 bg-white p-8 md:p-12 rounded-2xl shadow-lg relative overflow-hidden border border-gray-100"
-				>
-					<!-- Left Column: Text Details -->
-					<div class="w-full md:w-1/2 space-y-6 z-10 order-2 md:order-1">
-						<h3 class="text-2xl md:text-3xl font-bold text-neutral-800">合總君悅</h3>
-						<p class="text-lg md:text-xl text-neutral-600">集合式住宅建案</p>
-						<div class="border-l-4 border-blue-500 pl-4 space-y-2 text-gray-700">
-							<p><strong class="font-medium text-gray-800">基地位置：</strong> 雲林縣斗南鎮</p>
-							<p><strong class="font-medium text-gray-800">基地面積：</strong> 541坪</p>
-							<p><strong class="font-medium text-gray-800">戶數：</strong> 91戶、2戶店鋪</p>
-						</div>
-						<p class="text-sm md:text-base text-gray-600 leading-relaxed bg-gray-50 p-4 rounded-md border border-gray-200">
-							該項目使用遠岫全住可視對講系統，採用10寸室內機YS-9510，4.3吋人臉辨識住戶門口機，整社區人臉辨識通行不須再攜帶磁卡。其他配套產品包含：視頻監控前後端產品、傳輸、門禁、集中管理平臺軟體。
-						</p>
+				<!-- Main Content: Map and Case Details -->
+				<div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-start">
+					<!-- Taiwan Map Placeholder -->
+					<div
+						ref="taiwanMapContainerRef"
+						class="w-full lg:w-1/2 h-[400px] md:h-[500px] lg:h-[600px] bg-gray-200 rounded-lg shadow-md flex items-center justify-center text-gray-500 opacity-0 relative"
+					>
+						<!-- Placeholder background for the map -->
+						<img
+							src="/images/taiwan-map-placeholder.svg"
+							alt="台灣地圖輪廓"
+							class="absolute inset-0 w-full h-full object-contain opacity-30 pointer-events-none"
+						/>
+						<!-- User should replace with an actual map SVG or a more detailed placeholder -->
+						<!-- For now, it's just an opacity layer over bg-gray-200 if the image is not found -->
+
+						<!-- Case Markers -->
+						<button
+							v-for="caseItem in builderCaseStudies"
+							:key="caseItem.id"
+							@click="selectBuilderCase(caseItem)"
+							class="absolute w-3 h-3 md:w-4 md:h-4 bg-sky-600 rounded-full shadow-md transform -translate-x-1/2 -translate-y-1/2 hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50 transition-all duration-150 ease-in-out cursor-pointer"
+							:style="{
+								left: caseItem.mapPosition.x,
+								top: caseItem.mapPosition.y,
+								zIndex: selectedBuilderCase && selectedBuilderCase.id === caseItem.id ? 10 : 1
+							}"
+							:class="{
+								'bg-red-600 scale-150 ring-2 ring-red-400 ring-offset-2 ring-offset-gray-200': selectedBuilderCase && selectedBuilderCase.id === caseItem.id
+							}"
+							:aria-label="`查看 ${caseItem.name} 案例`"
+						>
+							<span class="sr-only">{{ caseItem.name }}</span>
+							<!-- Pulsing animation for selected marker -->
+							<span
+								v-if="selectedBuilderCase && selectedBuilderCase.id === caseItem.id"
+								class="absolute inset-[-2px] rounded-full bg-red-500 animate-ping-slow opacity-75"
+							></span>
+						</button>
+						<p v-if="!builderCaseStudies || builderCaseStudies.length === 0" class="text-center z-0">暫無建商案例標記</p>
 					</div>
 
-					<!-- Right Column: Image -->
-					<div class="w-full md:w-1/2 z-10 order-1 md:order-2"></div>
+					<!-- Case Details / List -->
+					<div ref="caseDetailsContainerRef" class="w-full lg:w-1/2 opacity-0">
+						<h3 class="text-2xl font-semibold text-gray-700 mb-6">精選案例</h3>
+						<div v-if="selectedBuilderCase" :key="selectedBuilderCase.id" class="case-detail-card bg-sky-50 p-4 md:p-6 rounded-lg shadow-lg mb-6">
+							<h4 class="text-xl font-bold text-sky-700 mb-2">{{ selectedBuilderCase.name }}</h4>
+							<p class="text-sm text-gray-500 mb-3">地點：{{ selectedBuilderCase.location }}</p>
+							<div v-if="selectedBuilderCase.image" class="my-4 h-48 bg-gray-300 rounded overflow-hidden">
+								<img
+									:src="selectedBuilderCase.image"
+									:alt="selectedBuilderCase.image_alt || '案例圖片'"
+									class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+								/>
+							</div>
+							<p class="text-gray-700 my-3 text-sm leading-relaxed"><strong class="font-medium">挑戰：</strong>{{ selectedBuilderCase.challenge }}</p>
+							<p class="text-gray-700 my-3 text-sm leading-relaxed"><strong class="font-medium">解決方案：</strong>{{ selectedBuilderCase.solution }}</p>
+							<p class="text-gray-700 text-sm leading-relaxed"><strong class="font-medium">成果：</strong>{{ selectedBuilderCase.result }}</p>
+						</div>
+						<div v-else class="text-center py-10 text-gray-500 bg-gray-50/70 rounded-lg">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="mx-auto h-12 w-12 text-gray-400"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="1"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+							</svg>
+							<p class="mt-2 text-base">請點擊地圖上的標記，或從下方列表選擇，以查看案例詳情。</p>
+						</div>
 
-					<!-- Pagination Dots (Simple) -->
-					<div class="absolute bottom-6 right-8 flex space-x-2 z-10">
-						<span class="w-3 h-3 bg-blue-500 rounded-full cursor-pointer"></span>
-						<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
-						<span class="w-3 h-3 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></span>
+						<!-- Alternative List View -->
+						<div class="mt-8" v-if="builderCaseStudies && builderCaseStudies.length > 0">
+							<h4 class="text-xl font-semibold text-gray-700 mb-4">或從列表選擇：</h4>
+							<ul class="space-y-2 max-h-[250px] md:max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+								<li v-for="caseItem in builderCaseStudies" :key="'list-' + caseItem.id">
+									<button
+										@click="selectBuilderCase(caseItem)"
+										class="w-full text-left p-3 rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-300"
+										:class="
+											selectedBuilderCase && selectedBuilderCase.id === caseItem.id
+												? 'bg-sky-100 text-sky-700 shadow-md scale-[1.02]'
+												: 'hover:bg-gray-100 text-gray-600 hover:text-gray-800'
+										"
+									>
+										<span class="font-medium text-sm md:text-base">{{ caseItem.name }}</span>
+										<span class="text-xs block text-gray-500">{{ caseItem.location }}</span>
+									</button>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -198,71 +286,12 @@ import { useHead } from "#app";
 gsap.registerPlugin(ScrollTrigger);
 
 useHead({
-	title: " - 合作案例",
-	meta: [{ name: "description", content: "查看遠岫科技在不同行業的成功合作案例，了解我們如何以創新科技推動智能安全與管理系統的全面應用。" }]
+	title: "遠岫科技 - 合作案例",
+	meta: [{ name: "description", content: "深入探索遠岫科技與各行業夥伴的成功合作案例，了解我們如何以創新技術與專業服務，應對挑戰，共創價值。" }]
 });
 
-// --- Refs for Entrance Animation ---
-const titleRef = ref(null);
-const heroBlocks = ref(null);
-
-// --- Refs for ScrollTrigger Animation ---
-const sectionRef = ref(null);
-const businessRef = ref(null);
-const publicRef = ref(null);
-
 // --- Refs for Partner Logo Carousel ---
-const partnersSectionRef = ref(null);
 const logoTrackRef = ref(null);
-let logoScrollAnimation = null; // 用於保存GSAP動畫實例
-
-const business_feature = ref([
-	{
-		pain_point: "整合多種弱電系統是否讓您頭痛不已？",
-		title: "系統整合商",
-		description: "為弱電合作夥伴提供高規格、安全的產品和服務。",
-		image: "/corporation/Networking Manager.svg"
-	},
-	{
-		pain_point: "如何滿足品牌客戶多變且客製化的需求？",
-		title: "品牌客戶",
-		description: "與知名品牌合作，客製化需求，以專業性達到客戶需求。",
-		image: "/corporation/customers.svg"
-	},
-	{
-		pain_point: "傳統門禁考勤是否已無法滿足現代企業的高效管理？",
-		title: "公司行號",
-		description: "為企業提供安全便利的門禁考勤解決方案",
-		image: "/corporation/company.svg"
-	}
-]);
-
-const public_feature = ref([
-	{
-		pain_point: "如何在眾多建案中脫穎而出，提升銷售吸引力？",
-		title: "建設公司",
-		description: "提供完整弱電系統規劃，新穎設備提高銷售機會",
-		image: "/corporation/building.svg"
-	},
-	{
-		pain_point: "醫療院所對安全與管理有著極高標準，如何應對？",
-		title: "醫療院所",
-		description: "提供醫療機構的安全解決方案，包括醫院、診所等。",
-		image: "/corporation/hospital.svg"
-	},
-	{
-		pain_point: "校園安全事件頻傳，如何打造更安全的學習環境？",
-		title: "學校",
-		description: "提供學校安全解決方案，包括學校、幼兒園等。",
-		image: "/corporation/school.svg"
-	},
-	{
-		pain_point: "公家機關資訊安全與進出管理是否讓您感到挑戰？",
-		title: "公家機關",
-		description: "與政府機構合作，提供安全技術解決方案。",
-		image: "/corporation/government.svg"
-	}
-]);
 
 const partnerLogos = ref([
 	{ src: "/logo/Chung king logo 1.png", alt: "Chung King" },
@@ -286,279 +315,273 @@ function toggleFlip(type, index) {
 	flippedCards.value[key] = !flippedCards.value[key];
 }
 
+const scrollAnimation = useScrollAnimation();
+
+// Refs for Section 2: Clarifying Needs
+const clarifyingNeedsSectionRef = ref(null);
+const clarifyingNeedsTitleRef = ref(null);
+const clarifyingNeedsSubtitleRef = ref(null);
+const businessChallengesTitleRef = ref(null);
+const businessCardsContainerRef = ref(null);
+const publicChallengesTitleRef = ref(null);
+const publicCardsContainerRef = ref(null);
+
+// Data for Section 2 Challenges
+const business_feature = ref([
+	{
+		pain_point: "整合多種弱電系統是否讓您頭痛不已？",
+		title: "系統整合商",
+		description: "為弱電合作夥伴提供高規格、安全的產品和服務，簡化複雜的系統架構，實現高效協同作業。",
+		image: "/corporation/Networking Manager.svg"
+	},
+	{
+		pain_point: "如何滿足品牌客戶多變且客製化的需求？",
+		title: "品牌客戶",
+		description: "與知名品牌深度合作，提供彈性的客製化解決方案，以專業技術實現客戶的獨特需求與品牌價值。",
+		image: "/corporation/customers.svg"
+	},
+	{
+		pain_point: "傳統門禁考勤是否已無法滿足現代企業的高效管理？",
+		title: "公司行號",
+		description: "為各類型企業導入智慧化門禁考勤系統，提升管理效率，保障辦公環境安全，優化員工體驗。",
+		image: "/corporation/company.svg"
+	}
+]);
+
+const public_feature = ref([
+	{
+		pain_point: "如何在眾多建案中脫穎而出，提升銷售吸引力？",
+		title: "建設公司",
+		description: "提供完整的社區弱電系統規劃與新穎的智慧家庭設備，提高建案附加價值與市場競爭力，加速銷售。",
+		image: "/corporation/building.svg"
+	},
+	{
+		pain_point: "醫療院所對安全與管理有著極高標準，如何應對？",
+		title: "醫療院所",
+		description: "為醫院、診所等醫療機構量身打造高可靠度的安全解決方案，符合嚴格的行業規範，保障醫病安全。",
+		image: "/corporation/hospital.svg"
+	},
+	{
+		pain_point: "校園安全事件頻傳，如何打造更安全的學習環境？",
+		title: "學校",
+		description: "針對各級學校、幼兒園等教育場所，提供全方位的校園安全解決方案，建構安心的學習成長環境。",
+		image: "/corporation/school.svg"
+	},
+	{
+		pain_point: "公家機關資訊安全與進出管理是否讓您感到挑戰？",
+		title: "公家機關",
+		description: "與政府機構緊密合作，提供符合高度資安需求的門禁管理與數據保護技術解決方案。",
+		image: "/corporation/government.svg"
+	}
+]);
+
+const handleChallengeClick = (challenge) => {
+	console.log("Challenge clicked:", challenge.title);
+	// Later, this could navigate to a specific section or open a modal
+	if (challenge.linkUrl && challenge.linkUrl.startsWith("#")) {
+		// Simple anchor link navigation for now
+		// const element = document.getElementById(challenge.linkUrl.substring(1));
+		// if (element) element.scrollIntoView({ behavior: 'smooth' });
+	} else if (challenge.linkUrl) {
+		// window.location.href = challenge.linkUrl; // Or use router.push for internal links
+	}
+};
+
+// Refs for section 1 elements
+const heroSectionRef = ref(null);
+const pageTitleRef = ref(null);
+const pageSubtitleRef = ref(null);
+const philosophyRef = ref(null);
+const logoWallRef = ref(null);
+
+// --- Refs for Section 3: Builder Case Studies ---
+const buildersCaseStudiesSectionRef = ref(null);
+const buildersCaseStudiesTitleRef = ref(null);
+const buildersCaseStudiesSubtitleRef = ref(null);
+const taiwanMapContainerRef = ref(null); // Placeholder for map interactions
+const caseDetailsContainerRef = ref(null);
+
+const builderCaseStudies = ref([
+	{
+		id: 1,
+		name: "合總君悅 (範例)",
+		location: "雲林縣斗南鎮",
+		challenge: "傳統對講系統老舊，住戶期望更現代化、更安全的門禁管理方式。",
+		solution: "引入遠岫全戶型智慧可視對講系統，整合人臉辨識門口機與高清室內機。",
+		result: "大幅提升社區安全性與便利性，住戶無需攜帶磁卡即可通行，管理中心亦可高效管理。",
+		image: "/images/case-studies/hetzong-junyue.jpg", // Replace with actual image path
+		image_alt: "合總君悅建案外觀",
+		mapPosition: { x: "40%", y: "65%" } // Example coordinates for map marker
+	},
+	{
+		id: 2,
+		name: "城市核心 (範例)",
+		location: "台中市西屯區",
+		challenge: "新建案需導入高規格智慧家庭解決方案，提升建案價值與吸引力。",
+		solution: "提供全套智慧家庭系統，包括智能照明、環境控制、安全監控及影音娛樂整合。",
+		result: "打造科技豪宅形象，提供住戶便捷舒適的智慧生活體驗，促進建案銷售。",
+		image: "/images/case-studies/city-core.jpg", // Replace with actual image path
+		image_alt: "城市核心建案大樓",
+		mapPosition: { x: "50%", y: "50%" }
+	},
+	{
+		id: 3,
+		name: "海景一號院 (範例)",
+		location: "高雄市鼓山區",
+		challenge: "濱海高級住宅對安全監控與環境適應性有極高要求。",
+		solution: "部署耐候型高清監控攝影機，結合AI影像分析與周界防護系統，並整合社區緊急應變通報機制。",
+		result: "提供全天候無死角的安全監控，有效預防潛在風險，保障住戶生命財產安全。",
+		image: "/images/case-studies/sea-view-one.jpg", // Replace with actual image path
+		image_alt: "海景一號院社區",
+		mapPosition: { x: "45%", y: "80%" }
+	}
+]);
+
+const selectedBuilderCase = ref(null);
+
+const selectBuilderCase = (caseItem) => {
+	selectedBuilderCase.value = caseItem;
+};
+
+// Initialize with the first case or null
+onMounted(() => {
+	if (builderCaseStudies.value.length > 0) {
+		// selectedBuilderCase.value = builderCaseStudies.value[0]; // Optionally select the first case by default
+	}
+});
+
 onMounted(async () => {
 	await nextTick();
+	let logoScrollAnimation = null;
 
-	// --- Initialize Scroll Animation Composable ---
-	const { initScrollPlugins, isMobile } = useScrollAnimation();
-	await initScrollPlugins(); // 等待 GSAP 和 ScrollTrigger 初始化
+	if (scrollAnimation && typeof scrollAnimation.initScrollPlugins === "function") {
+		await scrollAnimation.initScrollPlugins();
+	}
 
-	// --- Entrance Animation ---
-	if (titleRef.value && heroBlocks.value) {
-		gsap.set(titleRef.value, { autoAlpha: 0, y: 30 });
-		gsap.set(heroBlocks.value.children, { autoAlpha: 0, y: 30 });
-
-		const entranceTl = gsap.timeline({ delay: 0.2 }); // Add a small delay
-		entranceTl
-			.to(titleRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" })
-			.to(heroBlocks.value.children, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.2, ease: "power2.out" }, "-=0.4"); // Start slightly before title finishes
+	// --- Hero Section Animation ---
+	if (pageTitleRef.value && pageSubtitleRef.value && philosophyRef.value && logoWallRef.value) {
+		const tlHero = gsap.timeline({ delay: 0.2 });
+		tlHero
+			.to(pageTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "+=0.2")
+			.to(pageSubtitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.5")
+			.to(philosophyRef.value, { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: "back.out(1.7)" }, "-=0.4")
+			.to(logoWallRef.value, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.4");
+		gsap.set(pageTitleRef.value, { y: 30, autoAlpha: 0 });
+		gsap.set(pageSubtitleRef.value, { y: 25, autoAlpha: 0 });
+		gsap.set(philosophyRef.value, { y: 20, scale: 0.95, autoAlpha: 0 });
+		gsap.set(logoWallRef.value, { y: 20, autoAlpha: 0 });
 	}
 
 	// --- Partner Logo Carousel Animation ---
-	if (logoTrackRef.value && partnersSectionRef.value && partnerLogos.value.length > 0) {
-		const logos = logoTrackRef.value.querySelectorAll(".partner-logo");
+	if (logoTrackRef.value && partnerLogos.value.length > 0) {
+		const logos = Array.from(logoTrackRef.value.querySelectorAll(".partner-logo")).slice(0, partnerLogos.value.length);
 		let totalWidth = 0;
-		// 等待所有圖片加載完成
-		const imageLoadPromises = Array.from(logos)
-			.slice(0, partnerLogos.value.length)
-			.map((img) => {
-				return new Promise((resolve) => {
+		const imageLoadPromises = logos.map(
+			(img) =>
+				new Promise((resolve) => {
 					if (img.complete) {
-						totalWidth += img.offsetWidth + parseInt(getComputedStyle(img).marginRight);
+						totalWidth += img.offsetWidth + (parseInt(getComputedStyle(img).marginLeft) || 0) + (parseInt(getComputedStyle(img).marginRight) || 0);
 						resolve();
 					} else {
 						img.onload = () => {
-							totalWidth += img.offsetWidth + parseInt(getComputedStyle(img).marginRight);
+							totalWidth += img.offsetWidth + (parseInt(getComputedStyle(img).marginLeft) || 0) + (parseInt(getComputedStyle(img).marginRight) || 0);
 							resolve();
 						};
-						img.onerror = resolve; // 即使圖片加載失敗也繼續
+						img.onerror = () => {
+							console.warn(`Logo image failed to load: ${img.src}`);
+							resolve();
+						};
 					}
-				});
-			});
-
+				})
+		);
 		await Promise.all(imageLoadPromises);
-
-		if (totalWidth > 0) {
-			const animationDuration = totalWidth / (isMobile.value ? 30 : 50); // 根據總寬度和屏幕調整速度
-
-			logoScrollAnimation = gsap.to(logoTrackRef.value, {
-				xPercent: -50, // 因為我們複製了logo，所以移動50%就是一組的寬度
-				ease: "none",
-				duration: animationDuration,
-				repeat: -1,
-				paused: true // 初始時暫停
-			});
-
-			ScrollTrigger.create({
-				trigger: partnersSectionRef.value,
-				start: "top bottom", // 當區塊頂部接觸視窗底部時
-				end: "bottom top", // 當區塊底部接觸視窗頂部時
-				onEnter: () => logoScrollAnimation && logoScrollAnimation.play(),
-				onLeave: () => logoScrollAnimation && logoScrollAnimation.pause(),
-				onEnterBack: () => logoScrollAnimation && logoScrollAnimation.play(),
-				onLeaveBack: () => logoScrollAnimation && logoScrollAnimation.pause(),
-				invalidateOnRefresh: true // 確保在 resize 時重新計算
-			});
+		if (totalWidth > 0 && logoTrackRef.value.parentElement.offsetWidth < totalWidth) {
+			const animationDuration = totalWidth / 50;
+			logoScrollAnimation = gsap.to(logoTrackRef.value, { x: -totalWidth, ease: "none", duration: animationDuration, repeat: -1 });
+			logoTrackRef.value.parentElement.addEventListener("mouseenter", () => logoScrollAnimation && logoScrollAnimation.pause());
+			logoTrackRef.value.parentElement.addEventListener("mouseleave", () => logoScrollAnimation && logoScrollAnimation.play());
+		} else if (logoTrackRef.value) {
+			logoTrackRef.value.style.justifyContent = "center";
 		}
 	}
 
-	// --- ScrollTrigger Animations ---
-	// 使用可選鏈 ?. 增加安全性
-	const businessTitle = businessRef.value?.querySelector("h4");
-	const businessFeatures = businessRef.value?.querySelectorAll(".card-container");
-	const publicTitle = publicRef.value?.querySelector("h4");
-	const publicFeatures = publicRef.value?.querySelectorAll(".card-container");
+	// --- Section 2: Clarifying Needs Animation ---
+	if (clarifyingNeedsSectionRef.value) {
+		gsap.set([clarifyingNeedsTitleRef.value, clarifyingNeedsSubtitleRef.value, businessChallengesTitleRef.value, publicChallengesTitleRef.value], {
+			y: 30,
+			autoAlpha: 0
+		});
+		gsap.set(".flip-card-container", { y: 30, autoAlpha: 0, scale: 0.95 });
 
-	// 檢查必要的 refs 和元素是否存在
-	if (!sectionRef.value || !businessRef.value || !publicRef.value || !businessTitle || !publicTitle) {
-		console.error("GSAP 動畫所需的元素未在 DOM 中找到。");
-		return; // 如果缺少關鍵元素則退出
+		const tlNeeds = gsap.timeline({
+			scrollTrigger: {
+				trigger: clarifyingNeedsSectionRef.value,
+				start: "top 85%", // Adjust as needed
+				toggleActions: "play none none none"
+			}
+		});
+
+		tlNeeds
+			.to(clarifyingNeedsTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" })
+			.to(clarifyingNeedsSubtitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.4")
+			.to(businessChallengesTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3")
+			.to(
+				businessCardsContainerRef.value
+					? businessCardsContainerRef.value.querySelectorAll(".flip-card-container")
+					: ".business-challenge-card-selector-placeholder", // Placeholder if ref not used
+				{ autoAlpha: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: "back.out(1.7)" },
+				"-=0.2"
+			)
+			.to(publicChallengesTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, "+=0.2") // Add some delay before next section title
+			.to(
+				publicCardsContainerRef.value ? publicCardsContainerRef.value.querySelectorAll(".flip-card-container") : ".public-challenge-card-selector-placeholder", // Placeholder if ref not used
+				{ autoAlpha: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: "back.out(1.7)" },
+				"-=0.2"
+			);
 	}
 
-	ScrollTrigger.matchMedia({
-		// --- 大螢幕 (>= 768px) ---
-		"(min-width: 768px)": function () {
-			// --- 初始狀態設定 ---
-			gsap.set(businessRef.value, { autoAlpha: 1 });
-			gsap.set(publicRef.value, { autoAlpha: 0 });
+	// --- Section 3: Builder Case Studies Animation ---
+	if (buildersCaseStudiesSectionRef.value) {
+		gsap.set([buildersCaseStudiesTitleRef.value, buildersCaseStudiesSubtitleRef.value, taiwanMapContainerRef.value, caseDetailsContainerRef.value], {
+			autoAlpha: 0,
+			y: 30
+		});
 
-			// 確保 features 存在再設定
-			const allFeaturesExist = businessFeatures?.length && publicFeatures?.length;
-			const elementsToSet = allFeaturesExist ? [businessTitle, ...businessFeatures, publicTitle, ...publicFeatures] : [businessTitle, publicTitle];
-			gsap.set(elementsToSet, { autoAlpha: 0, y: 30 });
-
-			// --- 主時間軸設定 ---
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: sectionRef.value,
-					start: "top top",
-					end: "+=350%",
-					scrub: 1,
-					pin: true,
-					markers: false // 除非需要調試，否則保持 false
-				}
-			});
-
-			// --- 動畫序列編排 ---
-			// 檢查 features 是否存在
-			if (businessFeatures?.length) {
-				tl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" })
-					.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5")
-					.to(businessTitle, { autoAlpha: 0, y: -30, duration: 1, ease: "power2.in" }, "+=1") // 增加顯示時間
-					.to(businessFeatures, { autoAlpha: 0, y: -30, stagger: 0.2, duration: 1, ease: "power2.in" }, "<"); // 同步開始淡出 features
-			} else {
-				// 如果 features 不存在時的備案
-				tl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }).to(
-					businessTitle,
-					{ autoAlpha: 0, y: -30, duration: 1, ease: "power2.in" },
-					"+=1.5"
-				); // 調整時間
+		const tlBuilderCases = gsap.timeline({
+			scrollTrigger: {
+				trigger: buildersCaseStudiesSectionRef.value,
+				start: "top 80%",
+				toggleActions: "play none none none"
 			}
+		});
 
-			// 將 businessRef 隱藏，publicRef 顯示
-			// 使用 "<" 確保與上一個動畫的結束同步或稍微提前
-			tl.set(businessRef.value, { autoAlpha: 0 }, "<+0.8") // 在 features 完全淡出後再隱藏 businessRef
-				.set(publicRef.value, { autoAlpha: 1 }, "<"); // 同步顯示 publicRef
-
-			// 淡入 Public 區塊
-			if (publicFeatures?.length) {
-				tl.to(publicTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "<") // 與 set 同步開始
-					.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: "power2.out" }, "-=0.5");
-			} else {
-				tl.to(publicTitle, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "<");
-			}
-
-			// 返回清理函數
-			return () => {
-				if (tl && tl.scrollTrigger) {
-					tl.scrollTrigger.kill();
-				}
-				if (tl) tl.kill();
-				// 重置樣式，避免影響手機版佈局
-				gsap.set(elementsToSet, { clearProps: "all" });
-				gsap.set([businessRef.value, publicRef.value], { clearProps: "all" });
-			};
-		},
-
-		// --- 小螢幕 (< 768px) ---
-		"(max-width: 767px)": function () {
-			const mobileTriggers = []; // 用於收集手機版的 ScrollTriggers
-
-			// 初始狀態設定 (手機版)
-			gsap.set([businessRef.value, publicRef.value], { autoAlpha: 1 }); // 容器可見
-
-			const allFeaturesExist = businessFeatures?.length && publicFeatures?.length;
-			const elementsToSet = allFeaturesExist ? [businessTitle, ...businessFeatures, publicTitle, ...publicFeatures] : [businessTitle, publicTitle];
-			gsap.set(elementsToSet, { autoAlpha: 0, y: 20 }); // 內容準備進場
-
-			// 為 Business 區塊創建簡單進場動畫
-			const businessTl = gsap.timeline({ paused: true });
-			businessTl.to(businessTitle, { autoAlpha: 1, y: 0, duration: 0.6 });
-			if (businessFeatures?.length) {
-				businessTl.to(businessFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
-			}
-
-			mobileTriggers.push(
-				ScrollTrigger.create({
-					trigger: businessRef.value,
-					start: "top 85%",
-					animation: businessTl,
-					toggleActions: "play none none none", // 進入時播放一次
-					once: true // 確保只觸發一次
-				})
-			);
-
-			// 為 Public 區塊創建簡單進場動畫
-			const publicTl = gsap.timeline({ paused: true });
-			publicTl.to(publicTitle, { autoAlpha: 1, y: 0, duration: 0.6 });
-			if (publicFeatures?.length) {
-				publicTl.to(publicFeatures, { autoAlpha: 1, y: 0, stagger: 0.15, duration: 0.5 }, "-=0.3");
-			}
-
-			mobileTriggers.push(
-				ScrollTrigger.create({
-					trigger: publicRef.value,
-					start: "top 85%",
-					animation: publicTl,
-					toggleActions: "play none none none",
-					once: true
-				})
-			);
-
-			// 返回清理函數
-			return () => {
-				mobileTriggers.forEach((trigger) => trigger.kill());
-				if (businessTl) businessTl.kill();
-				if (publicTl) publicTl.kill();
-				// 重置樣式
-				gsap.set(elementsToSet, { clearProps: "all" });
-				gsap.set([businessRef.value, publicRef.value], { clearProps: "all" });
-			};
-		},
-
-		// --- 通用設定 (可選) ---
-		all: function () {
-			// 這裡可以放所有螢幕尺寸都需要的設定 (如果有的話)
-		}
-	});
-
-	// 選項：可以在稍後強制刷新 ScrollTrigger，以防動態內容影響佈局
-	// setTimeout(() => ScrollTrigger.refresh(), 500);
+		tlBuilderCases
+			.to(buildersCaseStudiesTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" })
+			.to(buildersCaseStudiesSubtitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.4")
+			.to(taiwanMapContainerRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.3")
+			.to(caseDetailsContainerRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
+	}
 });
 </script>
 
 <style scoped>
-/* 在手機版移除 pin 效果 */
-@media (max-width: 767px) {
-	section {
-		position: relative !important;
-		transform: none !important;
-	}
-
-	article {
-		position: relative !important;
-		opacity: 1 !important;
-		transform: none !important;
-		margin-bottom: 4rem; /* 在手機版增加區塊間距 */
-	}
-
-	/* 移除最後一個 article 的 margin-bottom */
-	article:last-child {
-		margin-bottom: 0;
-	}
-}
-
-.feature {
-	background: linear-gradient(135deg, rgba(50, 60, 75, 0.8), rgba(80, 100, 120, 0.8));
-	border-radius: 50px;
-	padding: 24px;
-	box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5);
-	will-change: transform, opacity;
-	transform: translateZ(0);
-}
-
-/* 入口區塊樣式 */
-.block-bg {
+.logo-carousel-container {
+	overflow: hidden; /* 隱藏超出容器的內容 */
 	position: relative;
-	background-color: rgba(0, 0, 0, 0.3);
-	backdrop-filter: blur(10px);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-	overflow: hidden;
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); /* 兩端淡化效果 */
+	-webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
-.block-pattern {
-	width: 100%;
-	height: 100%;
-	opacity: 0.15;
+.partner-logo {
+	transition: transform 0.3s ease, filter 0.3s ease;
 }
-
-.pattern-1 {
-	background: radial-gradient(circle at 30% 50%, #4facfe 0%, #00f2fe 100%);
-}
-
-.pattern-2 {
-	background: linear-gradient(45deg, #fa709a 0%, #fee140 100%);
-}
-
-.pattern-3 {
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.partner-logo:hover {
+	transform: scale(1.1);
+	filter: brightness(1.2);
 }
 
 /* Logo Carousel Styles */
 .logo-carousel-container {
-	height: 100%;
 	overflow: hidden; /* 隱藏超出容器的內容 */
 	position: relative;
 	mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); /* 兩端淡化效果 */
@@ -567,7 +590,6 @@ onMounted(async () => {
 
 .logo-track {
 	display: flex;
-	/* width 將由 JS 設定為 (單組logo總寬度 * 2) */
 	will-change: transform; /* 提示瀏覽器此元素將會變形，以進行優化 */
 }
 
@@ -578,67 +600,95 @@ onMounted(async () => {
 	margin-right: 30px; /* Logo 之間的間距 */
 }
 
+/* Flip Card Styles */
 .perspective {
 	perspective: 1000px;
 }
-
 .transform-style-preserve-3d {
 	transform-style: preserve-3d;
 }
-
 .backface-hidden {
 	backface-visibility: hidden;
-	-webkit-backface-visibility: hidden; /* Safari */
+	-webkit-backface-visibility: hidden;
 }
-
 .rotate-y-180 {
 	transform: rotateY(180deg);
 }
 
-.card-inner.is-flipped {
+.flip-card-inner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1); /* Smoother transition */
+	transform-style: preserve-3d;
+}
+
+.flip-card-inner.is-flipped {
 	transform: rotateY(180deg);
 }
 
 .card-face {
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	box-sizing: border-box;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	overflow-wrap: break-word; /* ensure long words break */
+	word-wrap: break-word;
+	hyphens: auto; /* auto hyphenate if supported */
 }
 
-/* Responsive adjustments for card grid if necessary */
-@media (max-width: 1024px) {
-	/* For lg breakpoint and below */
-	/* publicRef uses lg:grid-cols-2, businessRef uses lg:grid-cols-3 */
-	/* Ensure cards in publicRef don't become too large on medium screens if it's still 2 cols */
+@keyframes ping-slow {
+	75%,
+	100% {
+		transform: scale(2.5);
+		opacity: 0;
+	}
+}
+.animate-ping-slow {
+	animation: ping-slow 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-@media (max-width: 768px) {
-	/* For md breakpoint and below */
-	/* Cards will stack to 1 column by default based on grid-cols-1 from Tailwind */
-	/* Adjust card sizes if they are too wide or tall for mobile */
-	.card-container {
-		width: 85vw; /* Make cards occupy more screen width */
-		max-width: 340px; /* But not excessively wide */
-		/* Height is now primarily controlled by Tailwind classes, 
-		   but we can set a min-height if dynamic content is very short */
-		min-height: 300px;
-		margin-left: auto; /* Center the card if the grid doesn't fully handle it */
-		margin-right: auto;
-		margin-bottom: 2rem; /* Add more space between stacked cards */
-	}
-	.card-container:last-child {
-		margin-bottom: 0; /* Remove margin for the last card in a group */
-	}
+.case-detail-card {
+	opacity: 0;
+	transform: translateY(15px) scale(0.98);
+	animation: fadeInDetail 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
 
-	/* Adjust font sizes for cards on mobile */
-	.card-face h5 {
-		font-size: 1rem; /* Adjust title size */
+@keyframes fadeInDetail {
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
 	}
-	.card-face p {
-		font-size: 0.875rem; /* Adjust paragraph text size */
-	}
-	.card-face .text-xs.mt-4.opacity-70 {
-		/* Targeting '點擊查看方案' span */
-		font-size: 0.75rem;
-	}
+}
+
+/* Custom Scrollbar for Webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+	width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent; /* Or use theme-appropriate color e.g., #f1f1f1 */
+	border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #cbd5e1; /* Tailwind's gray-300 */
+	border-radius: 10px;
+	transition: background 0.2s ease-in-out;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #94a3b8; /* Tailwind's gray-400 or 500 */
+}
+
+/* Firefox scrollbar minimal styling */
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: #cbd5e1 transparent; /* thumb and track */
+}
+
+/* Ensure map container text is visually below markers if image fails or for placeholder */
+.taiwanMapContainerRef > p {
+	position: relative;
+	z-index: 0;
 }
 </style>
