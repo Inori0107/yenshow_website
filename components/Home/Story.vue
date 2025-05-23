@@ -44,6 +44,7 @@
 						:aria-controls="`theme-details-${key}`"
 					>
 						{{ $t(theme.title) }}
+						<span :ref="(el) => (themeRefs[key].indicator = el)" class="theme-indicator">+</span>
 					</button>
 				</div>
 
@@ -115,9 +116,9 @@ const introTextRefs = ref([]);
 
 // Refs for main themes
 const themeRefs = reactive({
-	cloud: { container: null, title: null, aura: null },
-	mountain: { container: null, title: null, aura: null },
-	sky: { container: null, title: null, aura: null }
+	cloud: { container: null, title: null, aura: null, indicator: null },
+	mountain: { container: null, title: null, aura: null, indicator: null },
+	sky: { container: null, title: null, aura: null, indicator: null }
 });
 
 const storyThemesBlockRef = ref(null);
@@ -141,6 +142,14 @@ const AURA_INITIAL_SCALE = 0.3;
 let detailAnimationTl = null;
 let introTl = null;
 let themesTl = null;
+
+// Adjusted timings for better user reaction and visibility
+const THEME_TITLE_STAGGER = 0.35; // Increased from 0.2
+const THEME_PULSE_DELAY_AFTER_TITLE = 0.5; // Increased from 0.3
+const THEME_PULSE_DURATION = 0.45; // Increased from 0.35
+const INDICATOR_ANIM_DURATION = 0.4; // Increased from 0.3
+const PARAGRAPH_ANIM_DURATION = 0.8; // Increased from 0.7
+const PARAGRAPH_STAGGER_EACH = 0.15; // Decreased from 0.2
 
 const themeElementMap = {
 	cloud: { container: cloudDetailsContainerRef, paras: cloudDetailParaRefs },
@@ -170,20 +179,29 @@ watch(activeThemeKey, async (newKey, oldKey) => {
 
 	if (detailAnimationTl) detailAnimationTl.kill();
 
-	// Handle old theme's title styling and aura
+	const oldThemeElements = oldKey ? themeRefs[oldKey] : null;
+	const newThemeElements = newKey ? themeRefs[newKey] : null;
+
+	const oldTitleEl = oldThemeElements?.title;
+	const oldIndicatorEl = oldThemeElements?.indicator;
+	const newTitleEl = newThemeElements?.title;
+	const newIndicatorEl = newThemeElements?.indicator;
+
+	// Handle old theme's title styling, aura, and indicator
 	if (oldKey) {
 		hideAura(oldKey);
-		const oldTitleEl = themeRefs[oldKey]?.title;
 		if (oldTitleEl) {
 			oldTitleEl.classList.remove("theme-title-active");
 			oldTitleEl.style.removeProperty("--theme-glow-color");
 		}
+		if (oldIndicatorEl) {
+			gsap.to(oldIndicatorEl, { rotation: 0, scale: 1, duration: 0.3, ease: "power2.out" });
+		}
 	}
 
-	// Handle new theme's title styling and aura
+	// Handle new theme's title styling, aura, and indicator
 	if (newKey) {
 		showAura(newKey);
-		const newTitleEl = themeRefs[newKey]?.title;
 		if (newTitleEl) {
 			newTitleEl.classList.add("theme-title-active");
 			let glowColor = "rgba(255, 255, 255, 0.7)"; // Default white glow
@@ -192,14 +210,17 @@ watch(activeThemeKey, async (newKey, oldKey) => {
 			else if (newKey === "sky") glowColor = "rgba(180, 230, 220, 0.8)"; // Light cyanish
 			newTitleEl.style.setProperty("--theme-glow-color", glowColor);
 		}
+		if (newIndicatorEl) {
+			gsap.to(newIndicatorEl, { rotation: 135, scale: 1.1, duration: INDICATOR_ANIM_DURATION, ease: "power2.out" });
+		}
 	}
 
-	const oldElements = oldKey ? themeElementMap[oldKey] : null;
-	const newElements = newKey ? themeElementMap[newKey] : null;
+	const oldDetailElements = oldKey ? themeElementMap[oldKey] : null;
+	const newDetailElements = newKey ? themeElementMap[newKey] : null;
 
 	// Animate out old elements if they exist and are different from new ones
-	if (oldElements && oldKey !== newKey) {
-		const parasToHide = oldElements.paras.value.filter(Boolean);
+	if (oldDetailElements && oldKey !== newKey) {
+		const parasToHide = oldDetailElements.paras.value.filter(Boolean);
 		if (parasToHide.length > 0) {
 			await gsap
 				.to(parasToHide, {
@@ -211,27 +232,27 @@ watch(activeThemeKey, async (newKey, oldKey) => {
 				})
 				.then();
 		}
-		if (oldElements.container.value) {
-			gsap.to(oldElements.container.value, { opacity: 0, duration: 0.2 }); // Quick fade for container
-			oldElements.container.value.style.pointerEvents = "none";
+		if (oldDetailElements.container.value) {
+			gsap.to(oldDetailElements.container.value, { opacity: 0, duration: 0.2 }); // Quick fade for container
+			oldDetailElements.container.value.style.pointerEvents = "none";
 		}
 	}
 
 	// Animate in new elements if they exist
-	if (newElements) {
-		if (newElements.container.value) {
-			newElements.container.value.style.pointerEvents = "auto";
+	if (newDetailElements) {
+		if (newDetailElements.container.value) {
+			newDetailElements.container.value.style.pointerEvents = "auto";
 			// Ensure container is set to opacity 0 before fade in, in case it wasn't fully faded out by a rapid switch
 			if (oldKey !== null) {
-				gsap.set(newElements.container.value, { opacity: 0 });
+				gsap.set(newDetailElements.container.value, { opacity: 0 });
 			}
-			gsap.to(newElements.container.value, { opacity: 1, duration: 0.3, ease: "power3.out", delay: oldElements && oldKey !== newKey ? 0.1 : 0 }); // Slight delay if old one was fading
+			gsap.to(newDetailElements.container.value, { opacity: 1, duration: 0.3, ease: "power3.out", delay: oldDetailElements && oldKey !== newKey ? 0.1 : 0 }); // Slight delay if old one was fading
 		}
 
-		const parasToShow = newElements.paras.value.filter(Boolean);
+		const parasToShow = newDetailElements.paras.value.filter(Boolean);
 		if (parasToShow.length > 0) {
 			// Reset starting state for paragraphs before animating them in
-			gsap.set(parasToShow, { opacity: 0, y: 20 }); // Animate from downwards
+			gsap.set(parasToShow, { opacity: 0, y: 30 }); // Animate from downwards
 
 			detailAnimationTl = gsap.timeline();
 			detailAnimationTl.to(
@@ -239,23 +260,23 @@ watch(activeThemeKey, async (newKey, oldKey) => {
 				{
 					opacity: 1,
 					y: 0,
-					duration: 0.7,
-					ease: "power3.out",
-					stagger: { each: 0.2, from: "start" }
+					duration: PARAGRAPH_ANIM_DURATION,
+					ease: "circ.out", // Changed ease
+					stagger: { each: PARAGRAPH_STAGGER_EACH, from: "start" }
 				},
-				oldElements && oldKey !== newKey ? "+=0.2" : "+=0.1"
+				oldDetailElements && oldKey !== newKey ? "+=0.2" : "+=0.1"
 			); // Delay based on whether an old element was present
 		}
-	} else if (oldElements) {
+	} else if (oldDetailElements) {
 		// If newKey is null, but there was an oldKey, ensure it's hidden
-		const parasToHide = oldElements.paras.value.filter(Boolean);
+		const parasToHide = oldDetailElements.paras.value.filter(Boolean);
 		if (parasToHide.length > 0) {
 			// No await needed if we just want to kick off the hide animation
 			gsap.to(parasToHide, { opacity: 0, y: -20, duration: 0.3, ease: "power3.in", stagger: 0.05 });
 		}
-		if (oldElements.container.value) {
-			gsap.to(oldElements.container.value, { opacity: 0, duration: 0.2 });
-			oldElements.container.value.style.pointerEvents = "none";
+		if (oldDetailElements.container.value) {
+			gsap.to(oldDetailElements.container.value, { opacity: 0, duration: 0.2 });
+			oldDetailElements.container.value.style.pointerEvents = "none";
 		}
 	}
 });
@@ -334,27 +355,54 @@ const setupStoryAnimation = () => {
 		trigger: `#story-themes-block`,
 		start: "top 70%",
 		end: "bottom 20%",
-		toggleActions: "play none none reverse"
+		toggleActions: "play none none none"
 	});
 
-	const THEME_ANIM_STAGGER = 0.2;
 	const THEME_ANIM_DURATION = 1.0;
 	const themeOrder = ["cloud", "mountain", "sky"];
 	const lastThemeKey = themeOrder[themeOrder.length - 1];
 
 	themeOrder.forEach((themeKey, index) => {
 		const titleEl = themeRefs[themeKey]?.title;
+		const indicatorEl = themeRefs[themeKey]?.indicator;
+		const individualLabel = `titleAnimEnd-${themeKey}`;
+
 		if (titleEl) {
-			const startTime = index * THEME_ANIM_STAGGER;
+			const startTime = index * THEME_TITLE_STAGGER;
 			themesTl.fromTo(titleEl, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: THEME_ANIM_DURATION, ease: "power3.out" }, startTime);
-			// If this is the last theme's title animation, add a label at its theoretical end point
+
+			if (indicatorEl) {
+				themesTl.fromTo(
+					indicatorEl,
+					{ opacity: 0, scale: 0.5, y: 20 },
+					{ opacity: 1, scale: 1, y: 0, duration: THEME_ANIM_DURATION * 0.8, ease: "back.out(1.7)" },
+					startTime + THEME_ANIM_DURATION * 0.2
+				);
+			}
+
+			// 在每個標題的入場動畫基本完成後，為其添加單獨的脈動提示
+			themesTl.fromTo(
+				titleEl,
+				{ scale: 1 },
+				{
+					scale: 1.06,
+					duration: THEME_PULSE_DURATION,
+					yoyo: true,
+					repeat: 1,
+					ease: "power1.inOut"
+				},
+				startTime + THEME_ANIM_DURATION + THEME_PULSE_DELAY_AFTER_TITLE
+			);
+
+			// 如果這是最後一個主題的標題動畫，仍然添加標籤用於後續的 activeThemeKey 設置
 			if (themeKey === lastThemeKey) {
-				themesTl.addLabel("lastTitleAnimationEnd", startTime + THEME_ANIM_DURATION - 0.2);
+				themesTl.addLabel("lastTitleAnimationEnd", startTime + THEME_ANIM_DURATION);
 			}
 		}
 	});
 
 	// Use the label for the .call() to trigger it precisely when the last title animation should end
+	// 移除之前在這裡的全局脈動動畫，只保留 activeThemeKey 的設置
 	themesTl.call(
 		() => {
 			if (activeThemeKey.value === null) {
@@ -427,6 +475,31 @@ onUnmounted(() => {
 	text-orientation: upright;
 	font-family: "LXGW WenKai Mono TC";
 	color: rgba(0, 0, 0, 0.7);
+}
+
+.theme-indicator {
+	display: inline-block;
+	font-size: 0.6em; /* Relative to parent (title) font size */
+	line-height: 1;
+	color: rgba(0, 0, 0, 0.4);
+	transition: color 0.3s ease-out; /* Keep color transition for active state */
+	opacity: 0; /* Start hidden, animated by GSAP */
+	margin-left: 12px; /* Adjust as needed for vertical text spacing */
+	transform-origin: center center; /* Ensure rotation is centered */
+	position: absolute; /* For finer control if needed */
+	right: -25px; /* Adjust based on title font size and desired position */
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.vertical-title:hover .theme-indicator {
+	color: rgba(0, 0, 0, 0.7); /* Slightly darken on hover for better visibility */
+}
+
+/* Active state for indicator is handled by GSAP rotation and the .theme-title-active class below */
+.theme-title-active .theme-indicator {
+	/* color: var(--theme-glow-color, #007aff); /* Example: Use theme glow color if desired, or a fixed active color */
+	color: #007aff; /* Example active color */
 }
 
 .details-set {

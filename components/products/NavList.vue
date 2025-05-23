@@ -1,5 +1,17 @@
 <template>
-	<div class="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+	<div v-if="isLoading" class="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 animate-pulse">
+		<div v-for="i in 3" :key="`skeleton-nav-${i}`">
+			<div
+				:class="[
+					'trapezoid py-2 sm:py-2.5 md:py-3 lg:py-3.5 xl:py-4 ps-3 sm:ps-4 md:ps-5 lg:ps-6 xl:ps-7',
+					'bg-gray-200 w-36 sm:w-44 md:w-48 lg:w-60 xl:w-[300px] h-10 sm:h-12 md:h-14 lg:h-16 xl:h-[70px]'
+				]"
+			>
+				<div class="h-4 sm:h-5 md:h-6 lg:h-7 xl:h-8 bg-gray-300 rounded w-3/4"></div>
+			</div>
+		</div>
+	</div>
+	<div v-else class="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
 		<div v-for="category in categories" :key="getCategoryId(category)">
 			<button
 				type="button"
@@ -60,6 +72,10 @@ const props = defineProps({
 	initialActiveId: {
 		type: String,
 		default: null
+	},
+	isLoading: {
+		type: Boolean,
+		default: false
 	}
 });
 
