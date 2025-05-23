@@ -80,21 +80,18 @@
 					>
 						<div class="flip-card-inner transform-style-preserve-3d" :class="{ 'is-flipped': flippedCards['challenge-' + index] }">
 							<!-- Front Face -->
-							<div
-								class="flip-card-front card-face backface-hidden bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col items-center text-center"
-							>
-								<img :src="item.image" :alt="item.title" class="w-24 h-24 mb-6 object-contain text-sky-600" />
+							<div class="card-face backface-hidden bg-white rounded-xl shadow-xl p-6 text-center flex flex-col items-center justify-center">
 								<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-gray-800 mb-3">
 									{{ item.title }}
 								</h4>
 								<p class="text-gray-600 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">
 									{{ item.pain_point }}
 								</p>
-								<span class="mt-auto text-sm font-medium text-sky-600 group-hover:text-sky-700">
+								<span class="absolute bottom-4 text-sm font-medium text-sky-600 group-hover:text-sky-700">
 									查看解決方案
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
-										class="h-4 w-4 ml-1 inline-block transition-transform duration-200 ease-in-out transform group-hover:translate-x-1"
+										class="h-4 w-4 ml-1 inline-block"
 										fill="none"
 										viewBox="0 0 24 24"
 										stroke="currentColor"
@@ -108,8 +105,8 @@
 							<div
 								class="flip-card-back card-face backface-hidden rotate-y-180 bg-sky-600 text-white rounded-xl shadow-xl p-6 flex flex-col items-center justify-center text-center"
 							>
-								<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold mb-3">{{ item.title }}</h4>
-								<p class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">{{ item.description }}</p>
+								<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] mb-3">{{ item.title }}</h4>
+								<p class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] opacity-80">{{ item.description }}</p>
 							</div>
 						</div>
 					</div>
@@ -118,24 +115,27 @@
 		</section>
 
 		<!-- Section 3: Case Studies (Builders with Taiwan Map) -->
-		<section ref="buildersCaseStudiesSectionRef" class="builders-case-studies-section py-16 md:py-24 bg-white">
+		<section ref="buildersCaseStudiesSectionRef" class="py-16 md:py-24 bg-white">
 			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 				<!-- Section Title -->
 				<div class="text-center mb-12 md:mb-16">
 					<h2 ref="buildersCaseStudiesTitleRef" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 opacity-0">
 						建商合作案例：深耕台灣，共築理想家園
 					</h2>
-					<p ref="buildersCaseStudiesSubtitleRef" class="text-lg text-gray-600 max-w-2xl mx-auto opacity-0">
+					<p
+						ref="buildersCaseStudiesSubtitleRef"
+						class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] text-gray-600 max-w-3xl mx-auto opacity-0"
+					>
 						我們與全台各地的建商緊密合作，從智慧住宅到大型社區，提供全面的弱電整合與智能建築解決方案。
 					</p>
 				</div>
 
 				<!-- Main Content: Map and Case Details -->
-				<div class="flex flex-col lg:flex-row gap-8 md:gap-12 items-start">
+				<div class="flex flex-col lg:flex-row gap-8 md:gap-12 relative overflow-hidden">
 					<!-- Taiwan Map Placeholder -->
 					<div
 						ref="taiwanMapContainerRef"
-						class="w-full lg:w-1/2 h-[400px] md:h-[500px] lg:h-[600px] p-4 bg-sky-50 rounded-lg shadow-md flex items-center justify-center text-gray-500 opacity-0 relative"
+						class="w-full lg:w-1/2 h-[400px] md:h-[500px] lg:h-[600px] p-4 bg-sky-50 rounded-lg shadow-md flex items-center justify-center opacity-0 relative z-0"
 					>
 						<img src="/case/Taiwan.svg" alt="台灣地圖" class="w-full h-full object-contain" />
 
@@ -143,7 +143,7 @@
 						<button
 							v-for="caseItem in builderCaseStudies"
 							:key="caseItem.id"
-							@click="selectBuilderCase(caseItem)"
+							@click="handleSelectBuilderCase(caseItem)"
 							class="absolute w-3 h-3 md:w-4 md:h-4 bg-sky-600 rounded-full shadow-md transform -translate-x-1/2 -translate-y-1/2 hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-50 transition-all duration-150 ease-in-out cursor-pointer"
 							:style="{
 								left: caseItem.mapPosition.x,
@@ -165,53 +165,61 @@
 						<p v-if="!builderCaseStudies || builderCaseStudies.length === 0" class="text-center z-0">暫無建商案例標記</p>
 					</div>
 
-					<!-- Case Details / List -->
-					<div ref="caseDetailsContainerRef" class="w-full lg:w-1/2 opacity-0 h-[400px] md:h-[500px] lg:h-[600px]">
-						<div v-if="selectedBuilderCase" :key="selectedBuilderCase.id" class="case-detail-card bg-sky-50 p-4 md:p-6 rounded-lg shadow-lg mb-6">
-							<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-bold text-sky-700 mb-2 text-center">
-								{{ selectedBuilderCase.name }}
-							</h4>
-
-							<div v-if="selectedBuilderCase.image" class="my-4 h-48 bg-gray-300 overflow-hidden">
-								<img
-									:src="selectedBuilderCase.image"
-									:alt="selectedBuilderCase.image_alt || '案例圖片'"
-									class="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
-								/>
+					<!-- Original Right Column for Intro Card (Remains visible) -->
+					<div ref="caseDetailsContainerRef" class="w-full lg:w-1/2 opacity-0 h-[400px] md:h-[500px] lg:h-[600px] flex relative z-10">
+						<!-- Intro Card (Always takes full width of its container and is visible) -->
+						<div v-if="selectedBuilderCase" :key="'intro-' + selectedBuilderCase.id" class="w-full h-full bg-sky-50 shadow-lg flex flex-col">
+							<div class="flex justify-between items-center p-3 md:p-4">
+								<div class="flex flex-col">
+									<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-bold text-sky-700 mb-0.5">
+										{{ selectedBuilderCase.name }}
+									</h4>
+									<p class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] text-gray-400">
+										{{ selectedBuilderCase.location }}
+									</p>
+								</div>
+								<p class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] text-gray-800">集合式住宅建案</p>
 							</div>
 
-							<p class="text-gray-700 my-3 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">
-								<strong class="font-medium">挑戰：</strong>{{ selectedBuilderCase.challenge }}
-							</p>
-
-							<template v-if="showFullCaseDetails">
-								<p class="text-sm text-gray-500 mb-3">地點：{{ selectedBuilderCase.location }}</p>
-								<p class="text-gray-700 my-3 text-sm leading-relaxed"><strong class="font-medium">解決方案：</strong>{{ selectedBuilderCase.solution }}</p>
-								<p class="text-gray-700 text-sm leading-relaxed"><strong class="font-medium">成果：</strong>{{ selectedBuilderCase.result }}</p>
-							</template>
-
-							<button
-								@click="showFullCaseDetails = !showFullCaseDetails"
-								class="mt-4 w-full text-sky-600 hover:text-sky-700 font-medium py-2 px-4 rounded-md border border-sky-600 hover:bg-sky-100 transition-colors duration-200 flex items-center justify-center"
-							>
-								{{ showFullCaseDetails ? "收合資訊" : "了解更多" }}
-								<svg
-									v-if="!showFullCaseDetails"
-									xmlns="http://www.w3.org/2000/svg"
-									class="h-4 w-4 ml-2"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									stroke-width="2"
+							<div class="relative min-h-[150px] md:min-h-[200px] lg:min-h-[250px]">
+								<img :src="selectedBuilderCase.image" :alt="selectedBuilderCase.image_alt || '案例圖片'" class="w-full h-full object-contain bg-gray-100" />
+								<button
+									@click="toggleExpandedDetails"
+									class="absolute bottom-2 right-2 bg-primary/80 text-white px-2.5 py-1.5 rounded-md text-[8px] sm:text-[10px] md:text-[12px] lg:text-[14px] xl:text-[16px] 2xl:text-[18px] hover:bg-primary backdrop-blur-sm transition-all duration-300 flex items-center focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-opacity-75"
+									:aria-label="isDetailedViewExpanded ? '收合詳情' : '了解更多'"
 								>
-									<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-								</svg>
-								<svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
-								</svg>
-							</button>
+									{{ isDetailedViewExpanded ? "收合內容" : "了解更多" }}
+									<svg
+										v-if="!isDetailedViewExpanded"
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-3.5 w-3.5 ml-1"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="2.5"
+									>
+										<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+									</svg>
+									<svg
+										v-else
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-3.5 w-3.5 ml-1"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="2.5"
+									>
+										<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+									</svg>
+								</button>
+							</div>
 						</div>
-						<div v-else class="text-center py-10 text-gray-500 bg-gray-50/70 rounded-lg">
+
+						<!-- Placeholder if no case is selected -->
+						<div
+							v-if="!selectedBuilderCase"
+							class="w-full h-full text-center py-10 text-gray-500 bg-gray-50/70 rounded-lg flex flex-col justify-center items-center"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								class="mx-auto h-12 w-12 text-gray-400"
@@ -223,9 +231,55 @@
 								<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
 								<path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
 							</svg>
-							<p class="mt-2 text-base">請點擊地圖上的標記，或從下方列表選擇，以查看案例詳情。</p>
+							<p class="mt-2 text-base">請點擊地圖上的標記，以查看案例詳情。</p>
 						</div>
 					</div>
+
+					<!-- Detailed Info Panel (Absolutely Positioned, Slides from Left to cover Map area) -->
+					<transition
+						enter-active-class="transition-all duration-500 ease-in-out"
+						enter-from-class="-translate-x-full opacity-0"
+						enter-to-class="translate-x-0 opacity-100"
+						leave-active-class="transition-all duration-500 ease-in-out"
+						leave-from-class="translate-x-0 opacity-100"
+						leave-to-class="-translate-x-full opacity-0"
+					>
+						<div
+							v-if="selectedBuilderCase && isDetailedViewExpanded"
+							class="detailed-info-panel absolute top-0 left-0 h-full w-full lg:w-1/2 bg-sky-700 text-white p-4 md:p-6 shadow-2xl overflow-y-auto custom-scrollbar z-20"
+						>
+							<div class="min-w-[200px] md:min-w-[250px]">
+								<div class="flex justify-between items-center mb-3">
+									<h5 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold">
+										{{ selectedBuilderCase.name }}
+									</h5>
+									<button @click="toggleExpandedDetails" aria-label="收起詳情" class="text-sky-200 hover:text-white p-1.5 rounded-full hover:bg-sky-600">
+										<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+										</svg>
+									</button>
+								</div>
+								<p class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] text-sky-300 mb-4 border-b border-sky-600 pb-3">
+									專案詳細資訊
+								</p>
+
+								<div class="space-y-5 text-sm md:text-base">
+									<div>
+										<h6 class="font-semibold text-sky-200 mb-1.5 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">面臨挑戰</h6>
+										<p class="leading-relaxed opacity-90">{{ selectedBuilderCase.challenge }}</p>
+									</div>
+									<div>
+										<h6 class="font-semibold text-sky-200 mb-1.5 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">解決方案</h6>
+										<p class="leading-relaxed opacity-90">{{ selectedBuilderCase.solution }}</p>
+									</div>
+									<div>
+										<h6 class="font-semibold text-sky-200 mb-1.5 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">達成成果</h6>
+										<p class="leading-relaxed opacity-90">{{ selectedBuilderCase.result }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</transition>
 				</div>
 			</div>
 		</section>
@@ -284,20 +338,17 @@ const business_feature = ref([
 	{
 		pain_point: "整合多種弱電系統是否讓您頭痛不已？",
 		title: "系統整合商",
-		description: "為弱電合作夥伴提供高規格、安全的產品和服務，簡化複雜的系統架構，實現高效協同作業。",
-		image: "/case/Networking-Manager.svg"
+		description: "為弱電合作夥伴提供高規格、安全的產品和服務，簡化複雜的系統架構，實現高效協同作業。"
 	},
 	{
 		pain_point: "如何滿足品牌客戶多變且客製化的需求？",
 		title: "品牌客戶",
-		description: "與知名品牌深度合作，提供彈性的客製化解決方案，以專業技術實現客戶的獨特需求與品牌價值。",
-		image: "/case/customers.svg"
+		description: "與知名品牌深度合作，提供彈性的客製化解決方案，以專業技術實現客戶的獨特需求與品牌價值。"
 	},
 	{
 		pain_point: "傳統門禁考勤是否已無法滿足現代企業的高效管理？",
 		title: "公司行號",
-		description: "為各類型企業導入智慧化門禁考勤系統，提升管理效率，保障辦公環境安全，優化員工體驗。",
-		image: "/case/company.svg"
+		description: "為各類型企業導入智慧化門禁考勤系統，提升管理效率，保障辦公環境安全，優化員工體驗。"
 	}
 ]);
 
@@ -305,26 +356,22 @@ const public_feature = ref([
 	{
 		pain_point: "如何在眾多建案中脫穎而出，提升銷售吸引力？",
 		title: "建設公司",
-		description: "提供完整的社區弱電系統規劃與新穎的智慧家庭設備，提高建案附加價值與市場競爭力，加速銷售。",
-		image: "/case/building.svg"
+		description: "提供完整的社區弱電系統規劃與新穎的智慧家庭設備，提高建案附加價值與市場競爭力，加速銷售。"
 	},
 	{
 		pain_point: "醫療院所對安全與管理有著極高標準，如何應對？",
 		title: "醫療院所",
-		description: "為醫院、診所等醫療機構量身打造高可靠度的安全解決方案，符合嚴格的行業規範，保障醫病安全。",
-		image: "/case/hospital.svg"
+		description: "為醫院、診所等醫療機構量身打造高可靠度的安全解決方案，符合嚴格的行業規範，保障醫病安全。"
 	},
 	{
 		pain_point: "校園安全事件頻傳，如何打造更安全的學習環境？",
 		title: "學校",
-		description: "針對各級學校、幼兒園等教育場所，提供全方位的校園安全解決方案，建構安心的學習成長環境。",
-		image: "/case/school.svg"
+		description: "針對各級學校、幼兒園等教育場所，提供全方位的校園安全解決方案，建構安心的學習成長環境。"
 	},
 	{
 		pain_point: "公家機關資訊安全與進出管理是否讓您感到挑戰？",
 		title: "公家機關",
-		description: "與政府機構緊密合作，提供符合高度資安需求的門禁管理與數據保護技術解決方案。",
-		image: "/case/government.svg"
+		description: "與政府機構緊密合作，提供符合高度資安需求的門禁管理與數據保護技術解決方案。"
 	}
 ]);
 
@@ -344,14 +391,14 @@ const logoWallRef = ref(null);
 const buildersCaseStudiesSectionRef = ref(null);
 const buildersCaseStudiesTitleRef = ref(null);
 const buildersCaseStudiesSubtitleRef = ref(null);
-const taiwanMapContainerRef = ref(null); // Placeholder for map interactions
+const taiwanMapContainerRef = ref(null);
 const caseDetailsContainerRef = ref(null);
 
 const builderCaseStudies = ref([
 	{
 		id: 1,
 		name: "合總君悅",
-		location: "雲林縣斗南鎮延平路二段455號旁 (麥當勞正隔壁)",
+		location: "雲林縣斗南鎮",
 		challenge: "因應現代住宅需求，提升社區門禁系統的安全性、便利性與科技感，以吸引潛在住戶並提升建案價值。",
 		solution:
 			"導入遠岫全戶型智慧可視對講系統，採用10吋室內機YS-9510與4.3吋人臉辨識住戶門口機。系統整合視頻監控前後端產品、傳輸設備、門禁控制及集中管理平台軟體。",
@@ -363,7 +410,7 @@ const builderCaseStudies = ref([
 	{
 		id: 2,
 		name: "小時代 III",
-		location: "台中市沙鹿區斗潭路",
+		location: "台中市沙鹿區",
 		challenge: "大型社區（129戶）對門禁管理效率與住戶通行便利性有較高要求，需現代化解決方案取代傳統磁卡。",
 		solution: "採用遠岫全社區可視對講系統，配置10吋室內機YS-8520及4.3吋人臉辨識住戶門口機。整合方案包括視頻監控、傳輸、門禁系統及集中管理平台。",
 		result:
@@ -375,7 +422,7 @@ const builderCaseStudies = ref([
 	{
 		id: 3,
 		name: "日光天晴",
-		location: "新竹縣竹北市新寮街",
+		location: "新竹縣竹北市",
 		challenge:
 			"為位於新竹縣竹北市新寮街的「日光天晴」建案 (電梯大樓，60戶，基地520坪，坪數23~38坪)，導入先進的社區門禁解決方案，提升住戶的生活品質與建案價值。",
 		solution:
@@ -388,17 +435,22 @@ const builderCaseStudies = ref([
 ]);
 
 const selectedBuilderCase = ref(null);
-const showFullCaseDetails = ref(false);
+const isDetailedViewExpanded = ref(false); // New state for expanded details
 
-const selectBuilderCase = (caseItem) => {
+const handleSelectBuilderCase = (caseItem) => {
 	selectedBuilderCase.value = caseItem;
-	showFullCaseDetails.value = false;
+	isDetailedViewExpanded.value = false; // Reset expanded state when new case is selected
 };
 
-// Initialize with the first case or null
+const toggleExpandedDetails = () => {
+	isDetailedViewExpanded.value = !isDetailedViewExpanded.value;
+};
+
+// Initialize with the first case or null - currently commented out
 onMounted(() => {
 	if (builderCaseStudies.value.length > 0) {
 		// selectedBuilderCase.value = builderCaseStudies.value[0]; // Optionally select the first case by default
+		// if (selectedBuilderCase.value) isDetailedViewExpanded.value = false;
 	}
 });
 
@@ -592,19 +644,6 @@ onMounted(async () => {
 	animation: ping-slow 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-.case-detail-card {
-	opacity: 0;
-	transform: translateY(15px) scale(0.98);
-	animation: fadeInDetail 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes fadeInDetail {
-	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-}
-
 /* Custom Scrollbar for Webkit browsers */
 .custom-scrollbar::-webkit-scrollbar {
 	width: 6px;
@@ -614,18 +653,18 @@ onMounted(async () => {
 	border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-	background: #cbd5e1; /* Tailwind's gray-300 */
+	background: #60a5fa; /* Tailwind's blue-400, or sky-400 for consistency */
 	border-radius: 10px;
 	transition: background 0.2s ease-in-out;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-	background: #94a3b8; /* Tailwind's gray-400 or 500 */
+	background: #3b82f6; /* Tailwind's blue-500, or sky-500 */
 }
 
 /* Firefox scrollbar minimal styling */
 .custom-scrollbar {
 	scrollbar-width: thin;
-	scrollbar-color: #cbd5e1 transparent; /* thumb and track */
+	scrollbar-color: #60a5fa transparent; /* thumb and track */
 }
 
 /* Ensure map container text is visually below markers if image fails or for placeholder */
