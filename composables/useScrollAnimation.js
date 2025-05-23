@@ -31,7 +31,10 @@ export function useScrollAnimation() {
 			const STP = await import("gsap/ScrollToPlugin");
 			ScrollToPlugin.value = STP.default || STP.ScrollToPlugin;
 
-			gsap.registerPlugin(ScrollTrigger.value, ScrollToPlugin.value);
+			const TP = await import("gsap/TextPlugin");
+			const TextPlugin = TP.default || TP.TextPlugin;
+
+			gsap.registerPlugin(ScrollTrigger.value, ScrollToPlugin.value, TextPlugin);
 			isInitialized.value = true;
 
 			// Initialize isMobile on client side after plugins loaded
@@ -79,7 +82,7 @@ export function useScrollAnimation() {
 
 	// 設置基本滾動動畫
 	const createScrollAnimation = (params) => {
-		const { trigger, animation, start = "top 70%", end = "bottom 20%", toggleActions = "play none none reverse" } = params;
+		const { trigger, animation, start = "top 70%", end = "bottom 20%", toggleActions } = params;
 
 		if (!ScrollTrigger.value) return null;
 
@@ -109,7 +112,8 @@ export function useScrollAnimation() {
 			pinSpacing = true,
 			anticipatePin = 1,
 			mobileScrubFactor = 1.5,
-			disableSnapOnMobile = true
+			disableSnapOnMobile = true,
+			toggleActions
 		} = params;
 
 		if (!ScrollTrigger.value) return null;
@@ -125,7 +129,8 @@ export function useScrollAnimation() {
 			markers,
 			scrub: finalScrub,
 			snap: finalSnap,
-			onUpdate
+			onUpdate,
+			toggleActions
 		};
 
 		// 只有在 pinElement 為 true 時才應用 pin 相關屬性
@@ -152,7 +157,8 @@ export function useScrollAnimation() {
 			toY = 0,
 			toOpacity = 1,
 			ease = "power3.out",
-			delay = 0
+			delay = 0,
+			toggleActions
 		} = params;
 
 		if (!ScrollTrigger.value) return null;
@@ -166,7 +172,7 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end,
-					toggleActions: "play none none reverse"
+					toggleActions
 				}
 			})
 			.fromTo(chars, { y: fromY, opacity: fromOpacity }, { y: toY, opacity: toOpacity, duration, stagger: staggerAmount, ease, delay });
@@ -187,7 +193,8 @@ export function useScrollAnimation() {
 			toOpacity = 1,
 			duration = 1,
 			delay = 0,
-			ease = "power2.out"
+			ease = "power2.out",
+			toggleActions
 		} = params;
 
 		if (!ScrollTrigger.value) return null;
@@ -201,7 +208,7 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end: end || "bottom 20%",
-					toggleActions: "play none none reverse"
+					toggleActions
 				}
 			})
 			.fromTo(
@@ -226,7 +233,8 @@ export function useScrollAnimation() {
 			toScale = 1,
 			duration = 1,
 			delay = 0,
-			ease = "power2.out"
+			ease = "power2.out",
+			toggleActions
 		} = params;
 
 		if (!ScrollTrigger.value) return null;
@@ -240,7 +248,7 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end: end || "bottom 20%",
-					toggleActions: "play none none reverse"
+					toggleActions
 				}
 			})
 			.fromTo(targetElements, { y: fromY, opacity: fromOpacity, scale: fromScale }, { y: toY, opacity: toOpacity, scale: toScale, duration, ease, delay });
@@ -262,14 +270,14 @@ export function useScrollAnimation() {
 			trigger,
 			start = "top 70%",
 			end = "bottom 20%",
-			fromProps = { opacity: 0, y: 30 },
-			toProps = { opacity: 1, y: 0 },
+			fromProps = { opacity: 0 },
+			toProps = { opacity: 1 },
 			duration = 1,
 			delay = 0,
 			stagger = 0,
 			ease = "power2.out",
 			scrub = false,
-			toggleActions = "play none none reverse",
+			toggleActions,
 			mobileScrubFactor = 1.5
 		} = params;
 
@@ -299,7 +307,7 @@ export function useScrollAnimation() {
 
 	// 創建時間軸動畫 - 用於更複雜的連續動畫
 	const createTimelineAnimation = (params) => {
-		const { trigger, start = "top 70%", end = "bottom 20%", scrub = false, toggleActions = "play none none reverse", mobileScrubFactor = 1.5 } = params;
+		const { trigger, start = "top 70%", end = "bottom 20%", scrub = false, toggleActions, mobileScrubFactor = 1.5 } = params;
 
 		if (!ScrollTrigger.value) return null;
 

@@ -61,100 +61,55 @@
 			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-center mb-12 md:mb-16">
 					<h2 ref="clarifyingNeedsTitleRef" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 opacity-0">您是否正為以下挑戰煩惱？</h2>
-					<p ref="clarifyingNeedsSubtitleRef" class="text-lg text-gray-600 max-w-3xl mx-auto opacity-0">
-						我們深入了解各行業在導入智慧解決方案時可能遇到的常見問題。看看這些場景是否與您相關，並探索可能的解決之道。
+					<p
+						ref="clarifyingNeedsSubtitleRef"
+						class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] text-gray-600 max-w-3xl mx-auto opacity-0"
+					>
+						我們深入了解各行業在導入智慧解決方案時可能遇到的常見問題。<br />看看這些場景是否與您相關，並探索可能的解決之道。
 					</p>
 				</div>
 
-				<!-- Business Challenges -->
-				<div class="mb-16 md:mb-20">
-					<h3 ref="businessChallengesTitleRef" class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 mb-8 md:mb-12 text-center opacity-0">
-						企業客戶的常見挑戰
-					</h3>
-					<div ref="businessCardsContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-						<div
-							v-for="(item, index) in business_feature"
-							:key="'biz-' + index"
-							class="flip-card-container perspective opacity-0 h-[380px] md:h-[420px]"
-							@mouseenter="toggleFlip('biz', index)"
-							@mouseleave="toggleFlip('biz', index)"
-						>
-							<div class="flip-card-inner transform-style-preserve-3d" :class="{ 'is-flipped': flippedCards['biz-' + index] }">
-								<!-- Front Face -->
-								<div
-									class="flip-card-front card-face backface-hidden bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col items-center text-center"
-								>
-									<img :src="item.image" :alt="item.title" class="w-20 h-20 mb-5 object-contain text-sky-600" />
-									<h4 class="text-xl font-semibold text-gray-800 mb-3">{{ item.title }}</h4>
-									<p class="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">{{ item.pain_point }}</p>
-									<span class="mt-auto text-sm font-medium text-sky-600 group-hover:text-sky-700">
-										查看解決方案
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-4 w-4 ml-1 inline-block transition-transform duration-200 ease-in-out transform group-hover:translate-x-1"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7" />
-										</svg>
-									</span>
-								</div>
-								<!-- Back Face -->
-								<div
-									class="flip-card-back card-face backface-hidden rotate-y-180 bg-sky-600 text-white rounded-xl shadow-xl p-6 flex flex-col items-center justify-center text-center"
-								>
-									<h4 class="text-xl font-semibold mb-3">{{ item.title }}</h4>
-									<p class="text-sm leading-relaxed">{{ item.description }}</p>
-								</div>
+				<!-- Unified Challenges Section -->
+				<div ref="allChallengesContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mb-16 md:mb-20">
+					<div
+						v-for="(item, index) in allChallenges"
+						:key="'challenge-' + index"
+						class="flip-card-container perspective opacity-0 h-[380px] md:h-[420px]"
+						@mouseenter="toggleFlip('challenge', index)"
+						@mouseleave="toggleFlip('challenge', index)"
+					>
+						<div class="flip-card-inner transform-style-preserve-3d" :class="{ 'is-flipped': flippedCards['challenge-' + index] }">
+							<!-- Front Face -->
+							<div
+								class="flip-card-front card-face backface-hidden bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col items-center text-center"
+							>
+								<img :src="item.image" :alt="item.title" class="w-24 h-24 mb-6 object-contain text-sky-600" />
+								<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-gray-800 mb-3">
+									{{ item.title }}
+								</h4>
+								<p class="text-gray-600 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">
+									{{ item.pain_point }}
+								</p>
+								<span class="mt-auto text-sm font-medium text-sky-600 group-hover:text-sky-700">
+									查看解決方案
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4 ml-1 inline-block transition-transform duration-200 ease-in-out transform group-hover:translate-x-1"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										stroke-width="2"
+									>
+										<path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7" />
+									</svg>
+								</span>
 							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Public Sector Challenges -->
-				<div>
-					<h3 ref="publicChallengesTitleRef" class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-700 mb-8 md:mb-12 text-center opacity-0">
-						公共事業的常見挑戰
-					</h3>
-					<div ref="publicCardsContainerRef" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-						<div
-							v-for="(item, index) in public_feature"
-							:key="'pub-' + index"
-							class="flip-card-container perspective opacity-0 h-[380px] md:h-[420px]"
-							@mouseenter="toggleFlip('pub', index)"
-							@mouseleave="toggleFlip('pub', index)"
-						>
-							<div class="flip-card-inner transform-style-preserve-3d" :class="{ 'is-flipped': flippedCards['pub-' + index] }">
-								<!-- Front Face -->
-								<div
-									class="flip-card-front card-face backface-hidden bg-white rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300 p-6 flex flex-col items-center text-center"
-								>
-									<img :src="item.image" :alt="item.title" class="w-20 h-20 mb-5 object-contain text-teal-600" />
-									<h4 class="text-xl font-semibold text-gray-800 mb-3">{{ item.title }}</h4>
-									<p class="text-gray-600 text-sm leading-relaxed mb-4 flex-grow">{{ item.pain_point }}</p>
-									<span class="mt-auto text-sm font-medium text-teal-600 group-hover:text-teal-700">
-										查看解決方案
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											class="h-4 w-4 ml-1 inline-block transition-transform duration-200 ease-in-out transform group-hover:translate-x-1"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											stroke-width="2"
-										>
-											<path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7" />
-										</svg>
-									</span>
-								</div>
-								<!-- Back Face -->
-								<div
-									class="flip-card-back card-face backface-hidden rotate-y-180 bg-teal-600 text-white rounded-xl shadow-xl p-6 flex flex-col items-center justify-center text-center"
-								>
-									<h4 class="text-xl font-semibold mb-3">{{ item.title }}</h4>
-									<p class="text-sm leading-relaxed">{{ item.description }}</p>
-								</div>
+							<!-- Back Face -->
+							<div
+								class="flip-card-back card-face backface-hidden rotate-y-180 bg-sky-600 text-white rounded-xl shadow-xl p-6 flex flex-col items-center justify-center text-center"
+							>
+								<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold mb-3">{{ item.title }}</h4>
+								<p class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">{{ item.description }}</p>
 							</div>
 						</div>
 					</div>
@@ -180,16 +135,9 @@
 					<!-- Taiwan Map Placeholder -->
 					<div
 						ref="taiwanMapContainerRef"
-						class="w-full lg:w-1/2 h-[400px] md:h-[500px] lg:h-[600px] bg-gray-200 rounded-lg shadow-md flex items-center justify-center text-gray-500 opacity-0 relative"
+						class="w-full lg:w-1/2 h-[400px] md:h-[500px] lg:h-[600px] p-4 bg-sky-50 rounded-lg shadow-md flex items-center justify-center text-gray-500 opacity-0 relative"
 					>
-						<!-- Placeholder background for the map -->
-						<img
-							src="/images/taiwan-map-placeholder.svg"
-							alt="台灣地圖輪廓"
-							class="absolute inset-0 w-full h-full object-contain opacity-30 pointer-events-none"
-						/>
-						<!-- User should replace with an actual map SVG or a more detailed placeholder -->
-						<!-- For now, it's just an opacity layer over bg-gray-200 if the image is not found -->
+						<img src="/case/Taiwan.svg" alt="台灣地圖" class="w-full h-full object-contain" />
 
 						<!-- Case Markers -->
 						<button
@@ -218,21 +166,50 @@
 					</div>
 
 					<!-- Case Details / List -->
-					<div ref="caseDetailsContainerRef" class="w-full lg:w-1/2 opacity-0">
-						<h3 class="text-2xl font-semibold text-gray-700 mb-6">精選案例</h3>
+					<div ref="caseDetailsContainerRef" class="w-full lg:w-1/2 opacity-0 h-[400px] md:h-[500px] lg:h-[600px]">
 						<div v-if="selectedBuilderCase" :key="selectedBuilderCase.id" class="case-detail-card bg-sky-50 p-4 md:p-6 rounded-lg shadow-lg mb-6">
-							<h4 class="text-xl font-bold text-sky-700 mb-2">{{ selectedBuilderCase.name }}</h4>
-							<p class="text-sm text-gray-500 mb-3">地點：{{ selectedBuilderCase.location }}</p>
-							<div v-if="selectedBuilderCase.image" class="my-4 h-48 bg-gray-300 rounded overflow-hidden">
+							<h4 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-bold text-sky-700 mb-2 text-center">
+								{{ selectedBuilderCase.name }}
+							</h4>
+
+							<div v-if="selectedBuilderCase.image" class="my-4 h-48 bg-gray-300 overflow-hidden">
 								<img
 									:src="selectedBuilderCase.image"
 									:alt="selectedBuilderCase.image_alt || '案例圖片'"
-									class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+									class="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
 								/>
 							</div>
-							<p class="text-gray-700 my-3 text-sm leading-relaxed"><strong class="font-medium">挑戰：</strong>{{ selectedBuilderCase.challenge }}</p>
-							<p class="text-gray-700 my-3 text-sm leading-relaxed"><strong class="font-medium">解決方案：</strong>{{ selectedBuilderCase.solution }}</p>
-							<p class="text-gray-700 text-sm leading-relaxed"><strong class="font-medium">成果：</strong>{{ selectedBuilderCase.result }}</p>
+
+							<p class="text-gray-700 my-3 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">
+								<strong class="font-medium">挑戰：</strong>{{ selectedBuilderCase.challenge }}
+							</p>
+
+							<template v-if="showFullCaseDetails">
+								<p class="text-sm text-gray-500 mb-3">地點：{{ selectedBuilderCase.location }}</p>
+								<p class="text-gray-700 my-3 text-sm leading-relaxed"><strong class="font-medium">解決方案：</strong>{{ selectedBuilderCase.solution }}</p>
+								<p class="text-gray-700 text-sm leading-relaxed"><strong class="font-medium">成果：</strong>{{ selectedBuilderCase.result }}</p>
+							</template>
+
+							<button
+								@click="showFullCaseDetails = !showFullCaseDetails"
+								class="mt-4 w-full text-sky-600 hover:text-sky-700 font-medium py-2 px-4 rounded-md border border-sky-600 hover:bg-sky-100 transition-colors duration-200 flex items-center justify-center"
+							>
+								{{ showFullCaseDetails ? "收合資訊" : "了解更多" }}
+								<svg
+									v-if="!showFullCaseDetails"
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-4 w-4 ml-2"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="2"
+								>
+									<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+								</svg>
+								<svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+								</svg>
+							</button>
 						</div>
 						<div v-else class="text-center py-10 text-gray-500 bg-gray-50/70 rounded-lg">
 							<svg
@@ -248,27 +225,6 @@
 							</svg>
 							<p class="mt-2 text-base">請點擊地圖上的標記，或從下方列表選擇，以查看案例詳情。</p>
 						</div>
-
-						<!-- Alternative List View -->
-						<div class="mt-8" v-if="builderCaseStudies && builderCaseStudies.length > 0">
-							<h4 class="text-xl font-semibold text-gray-700 mb-4">或從列表選擇：</h4>
-							<ul class="space-y-2 max-h-[250px] md:max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-								<li v-for="caseItem in builderCaseStudies" :key="'list-' + caseItem.id">
-									<button
-										@click="selectBuilderCase(caseItem)"
-										class="w-full text-left p-3 rounded-md transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-300"
-										:class="
-											selectedBuilderCase && selectedBuilderCase.id === caseItem.id
-												? 'bg-sky-100 text-sky-700 shadow-md scale-[1.02]'
-												: 'hover:bg-gray-100 text-gray-600 hover:text-gray-800'
-										"
-									>
-										<span class="font-medium text-sm md:text-base">{{ caseItem.name }}</span>
-										<span class="text-xs block text-gray-500">{{ caseItem.location }}</span>
-									</button>
-								</li>
-							</ul>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -277,7 +233,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, computed } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useScrollAnimation } from "@/composables/useScrollAnimation"; // 引入 useScrollAnimation
@@ -321,10 +277,7 @@ const scrollAnimation = useScrollAnimation();
 const clarifyingNeedsSectionRef = ref(null);
 const clarifyingNeedsTitleRef = ref(null);
 const clarifyingNeedsSubtitleRef = ref(null);
-const businessChallengesTitleRef = ref(null);
-const businessCardsContainerRef = ref(null);
-const publicChallengesTitleRef = ref(null);
-const publicCardsContainerRef = ref(null);
+const allChallengesContainerRef = ref(null); // New ref for the unified container
 
 // Data for Section 2 Challenges
 const business_feature = ref([
@@ -332,19 +285,19 @@ const business_feature = ref([
 		pain_point: "整合多種弱電系統是否讓您頭痛不已？",
 		title: "系統整合商",
 		description: "為弱電合作夥伴提供高規格、安全的產品和服務，簡化複雜的系統架構，實現高效協同作業。",
-		image: "/corporation/Networking Manager.svg"
+		image: "/case/Networking-Manager.svg"
 	},
 	{
 		pain_point: "如何滿足品牌客戶多變且客製化的需求？",
 		title: "品牌客戶",
 		description: "與知名品牌深度合作，提供彈性的客製化解決方案，以專業技術實現客戶的獨特需求與品牌價值。",
-		image: "/corporation/customers.svg"
+		image: "/case/customers.svg"
 	},
 	{
 		pain_point: "傳統門禁考勤是否已無法滿足現代企業的高效管理？",
 		title: "公司行號",
 		description: "為各類型企業導入智慧化門禁考勤系統，提升管理效率，保障辦公環境安全，優化員工體驗。",
-		image: "/corporation/company.svg"
+		image: "/case/company.svg"
 	}
 ]);
 
@@ -353,39 +306,32 @@ const public_feature = ref([
 		pain_point: "如何在眾多建案中脫穎而出，提升銷售吸引力？",
 		title: "建設公司",
 		description: "提供完整的社區弱電系統規劃與新穎的智慧家庭設備，提高建案附加價值與市場競爭力，加速銷售。",
-		image: "/corporation/building.svg"
+		image: "/case/building.svg"
 	},
 	{
 		pain_point: "醫療院所對安全與管理有著極高標準，如何應對？",
 		title: "醫療院所",
 		description: "為醫院、診所等醫療機構量身打造高可靠度的安全解決方案，符合嚴格的行業規範，保障醫病安全。",
-		image: "/corporation/hospital.svg"
+		image: "/case/hospital.svg"
 	},
 	{
 		pain_point: "校園安全事件頻傳，如何打造更安全的學習環境？",
 		title: "學校",
 		description: "針對各級學校、幼兒園等教育場所，提供全方位的校園安全解決方案，建構安心的學習成長環境。",
-		image: "/corporation/school.svg"
+		image: "/case/school.svg"
 	},
 	{
 		pain_point: "公家機關資訊安全與進出管理是否讓您感到挑戰？",
 		title: "公家機關",
 		description: "與政府機構緊密合作，提供符合高度資安需求的門禁管理與數據保護技術解決方案。",
-		image: "/corporation/government.svg"
+		image: "/case/government.svg"
 	}
 ]);
 
-const handleChallengeClick = (challenge) => {
-	console.log("Challenge clicked:", challenge.title);
-	// Later, this could navigate to a specific section or open a modal
-	if (challenge.linkUrl && challenge.linkUrl.startsWith("#")) {
-		// Simple anchor link navigation for now
-		// const element = document.getElementById(challenge.linkUrl.substring(1));
-		// if (element) element.scrollIntoView({ behavior: 'smooth' });
-	} else if (challenge.linkUrl) {
-		// window.location.href = challenge.linkUrl; // Or use router.push for internal links
-	}
-};
+const allChallenges = computed(() => {
+	const combined = [...business_feature.value, ...public_feature.value];
+	return combined.filter((item) => item.title !== "公家機關");
+});
 
 // Refs for section 1 elements
 const heroSectionRef = ref(null);
@@ -404,43 +350,49 @@ const caseDetailsContainerRef = ref(null);
 const builderCaseStudies = ref([
 	{
 		id: 1,
-		name: "合總君悅 (範例)",
-		location: "雲林縣斗南鎮",
-		challenge: "傳統對講系統老舊，住戶期望更現代化、更安全的門禁管理方式。",
-		solution: "引入遠岫全戶型智慧可視對講系統，整合人臉辨識門口機與高清室內機。",
-		result: "大幅提升社區安全性與便利性，住戶無需攜帶磁卡即可通行，管理中心亦可高效管理。",
-		image: "/images/case-studies/hetzong-junyue.jpg", // Replace with actual image path
+		name: "合總君悅",
+		location: "雲林縣斗南鎮延平路二段455號旁 (麥當勞正隔壁)",
+		challenge: "因應現代住宅需求，提升社區門禁系統的安全性、便利性與科技感，以吸引潛在住戶並提升建案價值。",
+		solution:
+			"導入遠岫全戶型智慧可視對講系統，採用10吋室內機YS-9510與4.3吋人臉辨識住戶門口機。系統整合視頻監控前後端產品、傳輸設備、門禁控制及集中管理平台軟體。",
+		result: "實現全社區及各戶人臉辨識無卡通行，大幅提升居住便利性與安全管理水平。基地面積541坪，規劃91戶住家及2戶店鋪，坪數規劃23-34坪。",
+		image: "/case/huzong.png",
 		image_alt: "合總君悅建案外觀",
-		mapPosition: { x: "40%", y: "65%" } // Example coordinates for map marker
+		mapPosition: { x: "35%", y: "47%" }
 	},
 	{
 		id: 2,
-		name: "城市核心 (範例)",
-		location: "台中市西屯區",
-		challenge: "新建案需導入高規格智慧家庭解決方案，提升建案價值與吸引力。",
-		solution: "提供全套智慧家庭系統，包括智能照明、環境控制、安全監控及影音娛樂整合。",
-		result: "打造科技豪宅形象，提供住戶便捷舒適的智慧生活體驗，促進建案銷售。",
-		image: "/images/case-studies/city-core.jpg", // Replace with actual image path
-		image_alt: "城市核心建案大樓",
-		mapPosition: { x: "50%", y: "50%" }
+		name: "小時代 III",
+		location: "台中市沙鹿區斗潭路",
+		challenge: "大型社區（129戶）對門禁管理效率與住戶通行便利性有較高要求，需現代化解決方案取代傳統磁卡。",
+		solution: "採用遠岫全社區可視對講系統，配置10吋室內機YS-8520及4.3吋人臉辨識住戶門口機。整合方案包括視頻監控、傳輸、門禁系統及集中管理平台。",
+		result:
+			"成功讓129戶住家實現無磁卡人臉辨識通行，提升社區安全與住戶體驗。項目基地1369坪，建蔽率22.04%，公設31%，樓層為地上14層、地下2層，規劃2房23-26坪及3房36坪。",
+		image: "/case/little-3.png",
+		image_alt: "小時代 III 建案",
+		mapPosition: { x: "43%", y: "33%" }
 	},
 	{
 		id: 3,
-		name: "海景一號院 (範例)",
-		location: "高雄市鼓山區",
-		challenge: "濱海高級住宅對安全監控與環境適應性有極高要求。",
-		solution: "部署耐候型高清監控攝影機，結合AI影像分析與周界防護系統，並整合社區緊急應變通報機制。",
-		result: "提供全天候無死角的安全監控，有效預防潛在風險，保障住戶生命財產安全。",
-		image: "/images/case-studies/sea-view-one.jpg", // Replace with actual image path
-		image_alt: "海景一號院社區",
-		mapPosition: { x: "45%", y: "80%" }
+		name: "日光天晴",
+		location: "新竹縣竹北市新寮街",
+		challenge:
+			"為位於新竹縣竹北市新寮街的「日光天晴」建案 (電梯大樓，60戶，基地520坪，坪數23~38坪)，導入先進的社區門禁解決方案，提升住戶的生活品質與建案價值。",
+		solution:
+			"採用遠岫全住戶可視對講系統，核心設備為7寸室內機YS-6320-LE1。系統整合人臉辨識技術，讓住戶進出社區及家門均無需攜帶磁卡。整體方案亦包含視頻監控前後端產品、傳輸設備、門禁控制以及集中管理平台軟體。",
+		result: "成功實現全社區人臉辨識門禁系統，為60戶住戶帶來無卡化的便捷通行體驗，有效提升社區安全管理水平與居住便利性。",
+		image: "/case/sunshine.jpg",
+		image_alt: "日光天晴建案",
+		mapPosition: { x: "54%", y: "22%" }
 	}
 ]);
 
 const selectedBuilderCase = ref(null);
+const showFullCaseDetails = ref(false);
 
 const selectBuilderCase = (caseItem) => {
 	selectedBuilderCase.value = caseItem;
+	showFullCaseDetails.value = false;
 };
 
 // Initialize with the first case or null
@@ -507,11 +459,10 @@ onMounted(async () => {
 
 	// --- Section 2: Clarifying Needs Animation ---
 	if (clarifyingNeedsSectionRef.value) {
-		gsap.set([clarifyingNeedsTitleRef.value, clarifyingNeedsSubtitleRef.value, businessChallengesTitleRef.value, publicChallengesTitleRef.value], {
+		gsap.set([clarifyingNeedsTitleRef.value, clarifyingNeedsSubtitleRef.value], {
 			y: 30,
 			autoAlpha: 0
 		});
-		gsap.set(".flip-card-container", { y: 30, autoAlpha: 0, scale: 0.95 });
 
 		const tlNeeds = gsap.timeline({
 			scrollTrigger: {
@@ -524,19 +475,10 @@ onMounted(async () => {
 		tlNeeds
 			.to(clarifyingNeedsTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" })
 			.to(clarifyingNeedsSubtitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.4")
-			.to(businessChallengesTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3")
 			.to(
-				businessCardsContainerRef.value
-					? businessCardsContainerRef.value.querySelectorAll(".flip-card-container")
-					: ".business-challenge-card-selector-placeholder", // Placeholder if ref not used
+				allChallengesContainerRef.value ? allChallengesContainerRef.value.querySelectorAll(".flip-card-container") : [],
 				{ autoAlpha: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: "back.out(1.7)" },
-				"-=0.2"
-			)
-			.to(publicChallengesTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" }, "+=0.2") // Add some delay before next section title
-			.to(
-				publicCardsContainerRef.value ? publicCardsContainerRef.value.querySelectorAll(".flip-card-container") : ".public-challenge-card-selector-placeholder", // Placeholder if ref not used
-				{ autoAlpha: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: "back.out(1.7)" },
-				"-=0.2"
+				"+=0.1"
 			);
 	}
 

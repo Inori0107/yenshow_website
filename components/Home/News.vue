@@ -83,8 +83,12 @@ onMounted(async () => {
 		staggerAmount: 0.2,
 		staggerFrom: "start",
 		fromY: 35,
+		fromOpacity: 0,
+		toY: 0,
+		toOpacity: 1,
 		duration: 1,
-		delay: 0.3
+		delay: 0.3,
+		toggleActions: "play none none none"
 	});
 
 	// 2. 文章內容項目 - 逐個顯示
@@ -96,9 +100,13 @@ onMounted(async () => {
 		staggerAmount: 0.25,
 		staggerFrom: "start",
 		fromY: 15,
+		fromOpacity: 0,
+		toY: 0,
+		toOpacity: 1,
 		duration: 0.6,
 		delay: 0.7,
-		ease: "power1.out"
+		ease: "power1.out",
+		toggleActions: "play none none none"
 	});
 
 	// 4. 按鈕元素進場動畫
@@ -109,9 +117,14 @@ onMounted(async () => {
 		end: "bottom 20%",
 		delay: 0.9,
 		fromY: 20,
+		fromOpacity: 0,
 		fromScale: 0.9,
+		toY: 0,
+		toOpacity: 1,
+		toScale: 1,
 		duration: 0.8,
-		ease: "back.out(1.5)"
+		ease: "back.out(1.5)",
+		toggleActions: "play none none none"
 	});
 });
 

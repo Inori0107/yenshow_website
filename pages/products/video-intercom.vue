@@ -16,7 +16,7 @@
 				</svg>
 			</article>
 			<!-- content -->
-			<aside ref="animatedContentRef" class="md:min-h-screen flex flex-col">
+			<aside class="md:min-h-screen flex flex-col">
 				<!-- title -->
 				<div ref="titleContentRef" style="opacity: 0" class="ms-4 sm:ms-6 md:ms-8 lg:ms-12 xl:ms-16 space-y-2 md:space-y-4">
 					<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl opacity-50 font-bold">可視對講</h1>
@@ -60,11 +60,8 @@
 						<p class="text-xs sm:text-sm md:text-base text-slate-600">{{ item.content }}</p>
 					</div>
 				</TransitionGroup>
-				<div
-					v-else-if="!isLoadingNav && productCategories.length > 0 && currentIntroductionDisplayItems.length === 0"
-					class="text-center text-gray-600 py-6 sm:py-8"
-				>
-					<p class="text-sm sm:text-base">請從上方導覽選擇一個項目以查看詳細介紹。</p>
+				<div v-else-if="!isLoadingNav && productCategories.length === 0" class="text-center text-gray-500 py-6 sm:py-8">
+					<p class="text-sm sm:text-base">目前沒有可供選擇的介紹項目。</p>
 				</div>
 			</div>
 		</section>
@@ -93,7 +90,7 @@
 								<!-- 子分類標題 -->
 								<h3 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-primary/80 flex-shrink-0">{{ getCategoryName(subCategory) }}</h3>
 								<!-- 規格篩選器 (只在子分類級別有規格時顯示) -->
-								<div v-if="hasSpecifications(subCategory)" class="w-full md:w-fit">
+								<div v-if="hasSpecifications(subCategory)" class="w-fit">
 									<FilterSection
 										:options="getSpecifications(subCategory)"
 										v-model="filterValues[subCategory._id]"
@@ -105,6 +102,10 @@
 							<!-- 產品展示 (使用 ProductList) -->
 							<ProductList :products="prepareProductsForList(getFilteredProducts(subCategory))" :loading="false" @view-product="handleViewProduct" />
 						</div>
+					</div>
+					<!-- 如果 computedDisplayCategories 為空 -->
+					<div v-if="computedDisplayCategories.length === 0 && !isLoadingProducts" class="text-center py-10 sm:py-12 text-gray-500 text-sm sm:text-base">
+						沒有找到符合條件的分類或產品。
 					</div>
 				</div>
 			</div>
@@ -252,36 +253,12 @@ watch(isLoadingNav, (newVal, oldVal) => {
 		// NavList animation - Animate only when NavList is actually rendered and not in loading state
 		if (!newVal && oldVal === true && navListRef.value && productCategories.value.length > 0) {
 			nextTick(() => {
-				// Animate content (aside)
-				if (animatedContentRef.value && animatedContentRef.value.offsetParent !== null) {
-					gsap.from(animatedContentRef.value, {
-						opacity: 0,
-						y: 20,
-						duration: 0.7,
-						ease: "power3.out",
-						delay: 0.1 // Slight delay to start after or concurrently with potential parent changes
-					});
-				}
-
-				// Animate article (SVG container)
-				if (animatedArticleRef.value && animatedArticleRef.value.offsetParent !== null) {
-					gsap.from(animatedArticleRef.value, {
-						opacity: 0,
-						x: 50, // Slide in from right
-						scale: 0.9,
-						duration: 0.7,
-						ease: "power3.out",
-						delay: 0.25 // A bit after contentRef
-					});
-				}
-
-				// Existing NavList animation
-				const targetNavList = navListRef.value?.$el || navListRef.value;
+				const targetNavList = navListRef.value.$el || navListRef.value;
 				if (targetNavList && targetNavList.offsetParent !== null) {
 					gsap.from(targetNavList, {
 						x: -50,
 						opacity: 0,
-						duration: 1.5,
+						duration: 1.5, // Adjusted duration
 						ease: "power3.out"
 					});
 				}
@@ -289,9 +266,9 @@ watch(isLoadingNav, (newVal, oldVal) => {
 				if (seriesIntroductionArticleRef.value) {
 					gsap.to(seriesIntroductionArticleRef.value, {
 						opacity: 1,
-						duration: 1.5,
+						duration: 1.5, // Adjusted duration
 						ease: "power3.out",
-						delay: 0.2 // 與 NavList 動畫稍微錯開或同步
+						delay: 0.2 // Adjusted delay
 					});
 				}
 			});
@@ -308,14 +285,14 @@ const prepareProductsForList = (products) => {
 };
 
 onMounted(async () => {
-	const { initScrollPlugins: initGsapScrollPlugins, gsap: gsapInstance } = useScrollAnimation(); // Renamed to avoid conflict
+	const { initScrollPlugins: initGsapScrollPlugins, gsap: gsapInstance } = useScrollAnimation();
 	await initGsapScrollPlugins();
 
 	isLoadingNav.value = true;
 	isLoadingProducts.value = true;
 	navError.value = null;
 	productsError.value = null;
-	activeIntroductionCategoryName.value = ""; // 初始化
+	activeIntroductionCategoryName.value = "";
 
 	// Title content animation
 	if (gsapInstance && titleContentRef.value) {
@@ -325,13 +302,12 @@ onMounted(async () => {
 			stagger: 0.25,
 			duration: 0.7,
 			ease: "power2.out",
-			delay: 0.3 // Small delay after page load
+			delay: 0.3
 		});
-		// Animate the title container itself to fade in, as its children are animated from opacity 0
 		gsapInstance.to(titleContentRef.value, {
 			opacity: 1,
-			duration: 0.01, // very short, just to make it visible as children animate
-			delay: 0.3 // align with children animation start
+			duration: 0.01,
+			delay: 0.3
 		});
 	}
 
@@ -345,7 +321,7 @@ onMounted(async () => {
 			// 兼容直接返回陣列的情況
 			productCategories.value = subHierarchy;
 		} else {
-			console.warn(`[Video Intercom] fetchSubHierarchy did not return expected categories for series '${SERIES_ID}'. Received:`, subHierarchy);
+			console.warn(`[Surveillance Monitoring] fetchSubHierarchy did not return expected categories for series '${SERIES_ID}'. Received:`, subHierarchy);
 			productCategories.value = [];
 		}
 
@@ -367,7 +343,7 @@ onMounted(async () => {
 
 		isLoadingNav.value = false;
 	} catch (error) {
-		console.error(`[Video Intercom] Error fetching sub-hierarchy for series '${SERIES_ID}':`, error);
+		console.error(`[Surveillance Monitoring] Error fetching sub-hierarchy for series '${SERIES_ID}':`, error);
 		navError.value = "無法載入導覽選單：" + (error.message || "未知錯誤");
 		productsError.value = "無法載入產品資料：" + (error.message || "未知錯誤");
 		productCategories.value = [];

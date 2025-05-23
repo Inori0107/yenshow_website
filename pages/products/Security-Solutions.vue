@@ -60,12 +60,6 @@
 						<p class="text-xs sm:text-sm md:text-base text-slate-600">{{ item.content }}</p>
 					</div>
 				</TransitionGroup>
-				<div
-					v-else-if="!isLoadingNav && productCategories.length > 0 && currentIntroductionDisplayItems.length === 0"
-					class="text-center text-gray-600 py-6 sm:py-8"
-				>
-					<p class="text-sm sm:text-base">請從上方導覽選擇一個項目以查看詳細介紹。</p>
-				</div>
 				<div v-else-if="!isLoadingNav && productCategories.length === 0" class="text-center text-gray-500 py-6 sm:py-8">
 					<p class="text-sm sm:text-base">目前沒有可供選擇的介紹項目。</p>
 				</div>
@@ -96,7 +90,7 @@
 								<!-- 子分類標題 -->
 								<h3 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-primary/80 flex-shrink-0">{{ getCategoryName(subCategory) }}</h3>
 								<!-- 規格篩選器 (只在子分類級別有規格時顯示) -->
-								<div v-if="hasSpecifications(subCategory)" class="w-full md:w-fit">
+								<div v-if="hasSpecifications(subCategory)" class="w-fit">
 									<FilterSection
 										:options="getSpecifications(subCategory)"
 										v-model="filterValues[subCategory._id]"

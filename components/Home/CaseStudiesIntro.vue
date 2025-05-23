@@ -109,6 +109,7 @@ const accuracyRate = ref(null);
 const barChart = ref(null);
 const pieChart = ref(null);
 const pieChartLegend = ref(null);
+const ctaButtonContainer = ref(null);
 
 // --- Chart Data (Placeholders) ---
 const barChartData = [
@@ -154,7 +155,6 @@ const animateStatNumbers = () => {
 			duration: 2,
 			ease: "power2.out",
 			snap: { textContent: 0.1 },
-			decimals: 1,
 			delay: 1.2, // 0.8s (card anim) + 0.4s (stagger)
 			scrollTrigger: { trigger: statCard1.value, start: "top 80%" }
 		});
@@ -300,7 +300,8 @@ onMounted(async () => {
 			trigger: sectionNode,
 			start: "top 85%",
 			toProps: { opacity: 1 }, // Fade in section
-			duration: 0.5
+			duration: 0.5,
+			toggleActions: "play none none none"
 		});
 
 		// Animate Headline and Intro Paragraph
@@ -314,7 +315,8 @@ onMounted(async () => {
 					toProps: { opacity: 1, y: 0 },
 					duration: 0.8,
 					delay: index * 0.15,
-					ease: "power3.out"
+					ease: "power3.out",
+					toggleActions: "play none none none"
 				});
 			}
 		});
@@ -331,13 +333,13 @@ onMounted(async () => {
 					toProps: { opacity: 1, y: 0, scale: 1 },
 					duration: 0.8,
 					delay: index * 0.2 + 0.3, // Stagger after headline
-					ease: "power2.out"
+					ease: "power2.out",
+					toggleActions: "play none none none"
 				});
 			}
 		});
 
 		// Trigger individual animations within cards (numbers, charts)
-		// These will use their card as a trigger and might have slight additional delays.
 		animateStatNumbers();
 		createBarChart();
 		createPieChart();
@@ -351,7 +353,8 @@ onMounted(async () => {
 				toProps: { opacity: 1, y: 0, scale: 1 },
 				duration: 0.8,
 				delay: 0.8, // Delay after cards start animating
-				ease: "elastic.out(1, 0.75)"
+				ease: "elastic.out(1, 0.75)",
+				toggleActions: "play none none none"
 			});
 		}
 	} else {
