@@ -31,7 +31,7 @@ import News from "~/components/Home/News.vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 
 useHead({
-	title: " - 遠岫科技",
+	title: "",
 	meta: [{ name: "description", content: "遠岫科技專注於提供創新的軟體解決方案與專業的技術諮詢服務，探索我們的故事、使命與最新產品。" }]
 });
 

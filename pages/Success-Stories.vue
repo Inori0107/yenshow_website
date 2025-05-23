@@ -293,10 +293,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useScrollAnimation } from "@/composables/useScrollAnimation"; // 引入 useScrollAnimation
 import { useHead } from "#app";
 
-gsap.registerPlugin(ScrollTrigger);
-
 useHead({
-	title: "遠岫科技 - 合作案例",
+	title: "- 合作案例",
 	meta: [{ name: "description", content: "深入探索遠岫科技與各行業夥伴的成功合作案例，了解我們如何以創新技術與專業服務，應對挑戰，共創價值。" }]
 });
 
