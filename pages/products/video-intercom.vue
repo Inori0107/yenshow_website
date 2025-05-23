@@ -2,7 +2,11 @@
 	<div>
 		<!-- 系列介紹 -->
 		<section class="bg-white relative overflow-hidden space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10 xl:space-y-12 pb-4 sm:pb-6 md:pb-8 lg:pb-10 xl:pb-12">
-			<article class="w-1/2 sm:w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3">
+			<article
+				ref="seriesIntroductionArticleRef"
+				style="opacity: 0"
+				class="w-1/2 sm:w-[400px] md:w-2/3 aspect-square absolute right-0 bottom-0 lg:top-0 translate-x-1/3 lg:-translate-y-1/3"
+			>
 				<span class="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					>應用介紹</span
 				>
@@ -14,7 +18,7 @@
 			<!-- content -->
 			<aside class="md:min-h-screen flex flex-col">
 				<!-- title -->
-				<div class="ms-4 sm:ms-6 md:ms-8 lg:ms-12 xl:ms-16 space-y-2 md:space-y-4">
+				<div ref="titleContentRef" style="opacity: 0" class="ms-4 sm:ms-6 md:ms-8 lg:ms-12 xl:ms-16 space-y-2 md:space-y-4">
 					<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl opacity-50 font-bold">可視對講</h1>
 					<p class="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl opacity-30">以雙向視訊溝通與遠端開鎖</p>
 					<p class="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl opacity-30 ms-8 sm:ms-12 md:ms-16 lg:ms-20 xl:ms-24">
@@ -25,9 +29,10 @@
 				<div class="mt-4 sm:mt-6 md:mt-8 lg:mt-10 xl:mt-12">
 					<div v-if="navError" class="text-red-500 p-4">{{ navError }}</div>
 					<NavList
-						v-show="!isLoadingNav && !navError"
+						v-else
 						ref="navListRef"
 						:categories="productCategories"
+						:is-loading="isLoadingNav"
 						@category-selected="handleCategorySelected"
 						@subitem-selected="handleSubItemSelected"
 					/>
@@ -60,9 +65,6 @@
 					class="text-center text-gray-600 py-6 sm:py-8"
 				>
 					<p class="text-sm sm:text-base">請從上方導覽選擇一個項目以查看詳細介紹。</p>
-				</div>
-				<div v-else-if="!isLoadingNav && productCategories.length === 0" class="text-center text-gray-500 py-6 sm:py-8">
-					<p class="text-sm sm:text-base">目前沒有可供選擇的介紹項目。</p>
 				</div>
 			</div>
 		</section>
@@ -104,10 +106,6 @@
 							<ProductList :products="prepareProductsForList(getFilteredProducts(subCategory))" :loading="false" @view-product="handleViewProduct" />
 						</div>
 					</div>
-					<!-- 如果 computedDisplayCategories 為空 -->
-					<div v-if="computedDisplayCategories.length === 0 && !isLoadingProducts" class="text-center py-10 sm:py-12 text-gray-500 text-sm sm:text-base">
-						沒有找到符合條件的分類或產品。
-					</div>
 				</div>
 			</div>
 		</section>
@@ -143,6 +141,8 @@ const navError = ref(null);
 const navListRef = ref(null);
 const activeIntroductionCategoryName = ref(""); // 新增狀態來追蹤當前選擇的介紹內容
 const introductionContainerRef = ref(null); // Added ref for introduction container
+const titleContentRef = ref(null);
+const seriesIntroductionArticleRef = ref(null);
 
 // 介紹內容數據
 const introductionItemsMap = {
@@ -249,16 +249,25 @@ watch(filterValues, (newValue, oldValue) => {}, { deep: true });
 // 監聽導航載入狀態，觸發動畫
 watch(isLoadingNav, (newVal, oldVal) => {
 	if (gsap) {
-		// NavList animation
-		if (!newVal && oldVal === true && navListRef.value) {
+		// NavList animation - Animate only when NavList is actually rendered and not in loading state
+		if (!newVal && oldVal === true && navListRef.value && productCategories.value.length > 0) {
 			nextTick(() => {
 				const targetNavList = navListRef.value.$el || navListRef.value;
 				if (targetNavList && targetNavList.offsetParent !== null) {
 					gsap.from(targetNavList, {
 						x: -50,
 						opacity: 0,
-						duration: 0.8,
+						duration: 1.5,
 						ease: "power3.out"
+					});
+				}
+				// Series Introduction Article animation
+				if (seriesIntroductionArticleRef.value) {
+					gsap.to(seriesIntroductionArticleRef.value, {
+						opacity: 1,
+						duration: 1.5,
+						ease: "power3.out",
+						delay: 0.2 // 與 NavList 動畫稍微錯開或同步
 					});
 				}
 			});
@@ -275,11 +284,32 @@ const prepareProductsForList = (products) => {
 };
 
 onMounted(async () => {
+	const { initScrollPlugins: initGsapScrollPlugins, gsap: gsapInstance } = useScrollAnimation(); // Renamed to avoid conflict
+	await initGsapScrollPlugins();
+
 	isLoadingNav.value = true;
 	isLoadingProducts.value = true;
 	navError.value = null;
 	productsError.value = null;
 	activeIntroductionCategoryName.value = ""; // 初始化
+
+	// Title content animation
+	if (gsapInstance && titleContentRef.value) {
+		gsapInstance.from(titleContentRef.value.children, {
+			opacity: 0,
+			y: 30,
+			stagger: 0.25,
+			duration: 0.7,
+			ease: "power2.out",
+			delay: 0.3 // Small delay after page load
+		});
+		// Animate the title container itself to fade in, as its children are animated from opacity 0
+		gsapInstance.to(titleContentRef.value, {
+			opacity: 1,
+			duration: 0.01, // very short, just to make it visible as children animate
+			delay: 0.3 // align with children animation start
+		});
+	}
 
 	try {
 		const subHierarchy = await hierarchyStore.fetchSubHierarchy("series", SERIES_ID);
