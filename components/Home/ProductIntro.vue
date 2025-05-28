@@ -8,7 +8,7 @@
 				<div class="search-container w-full max-w-[80%] md:max-w-[60%] lg:max-w-[50%] xl:max-w-[45%] 2xl:max-w-[40%] z-10 transition-all duration-300 relative">
 					<div class="text-center space-y-[12px] md:space-y-[24px] mb-[24px] md:mb-[48px]">
 						<h2 class="text-secondary text-[24px] md:text-[36px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px] font-bold">探索產品</h2>
-						<h3 class="text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]">打造科技便捷的生活</h3>
+						<h3 class="text-secondary text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]">打造科技便捷的生活</h3>
 						<p class="text-secondary/80 text-[12px] md:text-[16px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px]">
 							各類產品系統整合，提供多種優質的安全產品和服務，<br />
 							不用複雜的管理軟體，便可創造無限的價值
@@ -176,6 +176,8 @@
 						</div>
 					</div>
 				</div>
+
+				<ButtonCTA label="智慧方案" to="/products" color="white" class="explore-products-button w-fit" />
 			</article>
 			<aside class="flex flex-col justify-center items-center -rotate-6">
 				<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-[120%]">
@@ -210,6 +212,7 @@
 import { ref, onMounted, nextTick, onUnmounted } from "vue";
 import { useScrollAnimation } from "~/composables/useScrollAnimation";
 import { useGlobalSearch } from "~/composables/useGlobalSearch";
+import ButtonCTA from "~/components/common/Button-CTA.vue";
 
 // 注入滾動動畫控制器
 const scrollAnimation = useScrollAnimation();
@@ -339,20 +342,34 @@ const setupMarqueeAnimation = async () => {
 	}
 
 	// 初始設置
-	gsap.set([".marquee-wrapper", ".search-container h2", ".search-container h3", ".search-container p", searchInputWrapperRef.value], {
-		opacity: 0
-	});
+	gsap.set(
+		[
+			".marquee-wrapper",
+			".search-container h2",
+			".search-container h3",
+			".search-container p",
+			searchInputWrapperRef.value,
+			".explore-products-button" // 新增按鈕的 class selector
+		],
+		{
+			autoAlpha: 0
+		}
+	);
 	gsap.set(".marquee-wrapper", {
 		x: (index) => (index % 2 === 0 ? -100 : 100),
 		scale: 0.95
 	});
-	gsap.set([".search-container h2", ".search-container h3", ".search-container p", searchInputWrapperRef.value], { y: 30 });
+	gsap.set(
+		[".search-container h2", ".search-container h3", ".search-container p", searchInputWrapperRef.value, ".explore-products-button"],
+		{ y: -40 } // 從上方開始
+	);
 
 	gsap.set(".marquee-background", {
 		backgroundColor: "rgba(33, 42, 55, 0)"
 	});
 	gsap.set(".search-overlay", {
-		opacity: 0
+		// search-overlay 也需要初始 autoAlpha 0
+		autoAlpha: 0
 	});
 
 	mainTl = gsap.timeline({
@@ -368,38 +385,41 @@ const setupMarqueeAnimation = async () => {
 	mainTl
 		.to(".marquee-background", {
 			backgroundColor: "rgba(33, 42, 55, 1)",
-			duration: 1,
+			duration: 0.8,
 			ease: "power1.inOut"
 		})
 		.to(
 			".search-overlay",
 			{
-				opacity: 1,
-				duration: 1,
+				autoAlpha: 1,
+				duration: 0.8,
 				ease: "power1.inOut"
 			},
-			"-=0.5"
-		);
-
-	document.querySelectorAll(".marquee-wrapper").forEach((row, index) => {
-		mainTl.to(
-			row,
+			"-=0.5" // 與背景動畫部分重疊
+		)
+		.to(
+			gsap.utils.toArray(".marquee-wrapper"),
 			{
-				opacity: 1,
+				autoAlpha: 1,
 				x: 0,
 				scale: 1,
-				duration: 0.8,
-				ease: "power2.out"
+				duration: 0.7,
+				ease: "power2.out",
+				stagger: 0.1 // 每個 marquee-wrapper 之間錯開
 			},
-			">-0.6"
+			">-0.4" // 在 search-overlay 動畫開始後不久
+		)
+		.to(
+			[".search-container h2", ".search-container h3", ".search-container p", searchInputWrapperRef.value, ".explore-products-button"],
+			{
+				autoAlpha: 1,
+				y: 0,
+				duration: 0.5,
+				ease: "power2.out",
+				stagger: 0.3 // 每個元素之間錯開
+			},
+			">-0.3" // 在 marquee-wrapper 動畫開始後不久
 		);
-	});
-
-	mainTl
-		.to(".search-container h2", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.5")
-		.to(".search-container h3", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.4")
-		.to(".search-container p", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.4")
-		.to(searchInputWrapperRef.value, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, ">-0.4");
 };
 
 onMounted(async () => {

@@ -18,9 +18,19 @@
 					class="flex gap-[8px] sm:gap-[12px] md:gap-[16px] lg:gap-[24px] items-center hexagon-row-2 z-10 opacity-0 my-[12px] sm:my-[24px]"
 				>
 					<Hexagon imageSrc="/YSCP/image.png" title="影像" />
-					<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">數據與監控</div>
-					<div class="w-full flex flex-col gap-[4px] items-center text-[12px] md:text-[24px] lg:text-[36px]">遠岫科技</div>
-					<div class="hexagon-title h-[72px] sm:h-[96px] md:h-[169px] lg:h-[225px] text-[10px] sm:text-[12px] md:text-[24px]">安全與管理</div>
+					<div
+						class="hexagon-title h-[96px] sm:h-[122px] md:h-[146px] lg:h-[182px] xl:h-[220px] 2xl:h-[256px] text-[12px] sm:text-[16px] md:text-[20px] lg:text-[24px] xl:text-[28px] 2xl:text-[32px]"
+					>
+						數據與監控
+					</div>
+					<div class="bg-gradient-to-r from-[#dd1c1c] to-[#212a37] bg-clip-text text-transparent font-bold text-[12px] md:text-[24px] lg:text-[36px]">
+						遠岫科技
+					</div>
+					<div
+						class="hexagon-title h-[96px] sm:h-[122px] md:h-[146px] lg:h-[182px] xl:h-[220px] 2xl:h-[256px] text-[12px] sm:text-[16px] md:text-[20px] lg:text-[24px] xl:text-[28px] 2xl:text-[32px]"
+					>
+						安全與管理
+					</div>
 					<Hexagon imageSrc="/YSCP/guarded-entrance.png" title="門禁" />
 				</div>
 
@@ -40,7 +50,7 @@
 				class="relative container min-h-[70vh] md:min-h-screen flex flex-col lg:flex-row justify-center items-center gap-[24px] sm:gap-[36px] lg:gap-[48px] yscp-section opacity-0 px-[16px] sm:px-[24px] py-[48px] sm:py-[72px]"
 			>
 				<!-- 左側內容說明 -->
-				<div ref="yscpText" class="flex flex-col gap-[16px] sm:gap-[24px] lg:gap-[48px] z-10 yscp-text">
+				<div ref="yscpText" class="flex flex-col gap-[12px] md:gap-[24px] z-10 yscp-text">
 					<h3 class="text-[21px] sm:text-[24px] md:text-[36px] lg:text-[48px] product-title">YSCentral Professional</h3>
 					<div class="title-decoration w-[70%] h-[3px] bg-gradient-to-r from-primary to-transparent"></div>
 
@@ -748,9 +758,7 @@ canvas {
 
 .feature-tag-container {
 	display: flex;
-	flex-wrap: wrap;
 	gap: 8px;
-	margin-bottom: 12px;
 }
 
 .feature-tag {
@@ -773,8 +781,7 @@ canvas {
 }
 
 .benefit-section {
-	padding-left: 15px;
-	margin-top: 15px;
+	padding-left: 16px;
 }
 
 .feature-circles {

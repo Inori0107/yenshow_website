@@ -15,7 +15,7 @@
 			<div
 				class="w-[200px] h-[100px] sm:w-[250px] sm:h-[125px] md:w-[300px] md:h-[150px] lg:w-[400px] lg:h-[200px] xl:w-[450px] xl:h-[225px] 2xl:w-[500px] 2xl:h-[250px] transition-transform duration-300"
 			>
-				<img src="/yenshow-logo.png" alt="yenshow-logo" class="w-full h-full object-contain" />
+				<img src="/public/logo/yenshow-logo.png" alt="yenshow-logo" class="w-full h-full object-contain" />
 			</div>
 
 			<!-- 社群媒體連結 -->

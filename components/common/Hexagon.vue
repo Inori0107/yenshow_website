@@ -1,11 +1,7 @@
 <template>
-	<div class="hexagon h-[96px] md:h-[128px] lg:h-[160px] xl:h-[192px] 2xl:h-[224px]">
-		<img
-			:src="imageSrc"
-			:alt="`${title} 圖示`"
-			class="hexagon-content w-[24px] h-[24px] md:w-[50px] md:h-[50px] lg:w-[70px] lg:h-[70px] xl:w-[80px] xl:h-[80px] 2xl:w-[90px] 2xl:h-[90px]"
-		/>
-		<span class="hexagon-content text-[8px] md:text-[16px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px]">{{ title }}</span>
+	<div class="hexagon h-[84px] sm:h-[108px] md:h-[128px] lg:h-[160px] xl:h-[192px] 2xl:h-[224px]">
+		<img :src="imageSrc" :alt="`${title} 圖示`" class="hexagon-content aspect-square w-[24px] sm:w-[32px] md:w-[40px] lg:w-[48px] xl:w-[56px] 2xl:w-[64px]" />
+		<span class="hexagon-content text-[8px] sm:text-[12px] md:text-[16px] lg:text-[20px] xl:text-[24px] 2xl:text-[28px]">{{ title }}</span>
 	</div>
 </template>
 

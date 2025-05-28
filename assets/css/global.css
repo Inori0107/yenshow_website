@@ -93,20 +93,6 @@ html {
 	}
 }
 
-.marquee-container {
-	display: flex;
-	flex-direction: column;
-	padding: 48px;
-	overflow: hidden;
-}
-
-.marquee-left,
-.marquee-right {
-	opacity: 0.3;
-	white-space: nowrap;
-	color: primary;
-}
-
 .trapezoid-short {
 	width: 300px;
 	clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);

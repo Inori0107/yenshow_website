@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onUnmounted } from "vue";
 import gsap from "gsap";
 
 export function useScrollAnimation() {
@@ -61,13 +61,13 @@ export function useScrollAnimation() {
 		const target = document.getElementById(id);
 		if (target && ScrollToPlugin.value) {
 			gsap.to(window, {
-				duration: 1.5,
+				duration: 0.8,
 				scrollTo: {
 					y: target,
 					offsetY: offset,
 					autoKill: false
 				},
-				ease: "power3.inOut",
+				ease: "power1.easeOut",
 				onStart: () => {
 					document.body.style.pointerEvents = "none";
 				},
@@ -78,69 +78,6 @@ export function useScrollAnimation() {
 		} else if (!target) {
 			console.warn(`無法找到目標區塊: #${id}，請確認該元素存在於頁面中`);
 		}
-	};
-
-	// 設置基本滾動動畫
-	const createScrollAnimation = (params) => {
-		const { trigger, animation, start = "top 70%", end = "bottom 20%", toggleActions } = params;
-
-		if (!ScrollTrigger.value) return null;
-
-		return gsap
-			.timeline({
-				scrollTrigger: {
-					trigger,
-					start,
-					end,
-					toggleActions
-				}
-			})
-			.add(animation);
-	};
-
-	// 創建固定區塊
-	const createPinnedSection = (params) => {
-		const {
-			trigger,
-			start = "top 70%",
-			end = "bottom 20%",
-			scrub = false,
-			markers = false,
-			onUpdate,
-			snap,
-			pinElement = true,
-			pinSpacing = true,
-			anticipatePin = 1,
-			mobileScrubFactor = 1.5,
-			disableSnapOnMobile = true,
-			toggleActions
-		} = params;
-
-		if (!ScrollTrigger.value) return null;
-
-		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
-		const finalSnap = isMobile.value && disableSnapOnMobile ? false : snap;
-
-		// 構建 ScrollTrigger 配置
-		const config = {
-			trigger,
-			start,
-			end: end || (() => `+=${window.innerHeight * (typeof scrub === "number" ? scrub : 1)}`),
-			markers,
-			scrub: finalScrub,
-			snap: finalSnap,
-			onUpdate,
-			toggleActions
-		};
-
-		// 只有在 pinElement 為 true 時才應用 pin 相關屬性
-		if (pinElement) {
-			config.pin = true;
-			config.pinSpacing = pinSpacing;
-			config.anticipatePin = anticipatePin;
-		}
-
-		return ScrollTrigger.value.create(config);
 	};
 
 	// 創建字符動畫 - 為字符逐個添加動畫效果
@@ -178,46 +115,6 @@ export function useScrollAnimation() {
 			.fromTo(chars, { y: fromY, opacity: fromOpacity }, { y: toY, opacity: toOpacity, duration, stagger: staggerAmount, ease, delay });
 	};
 
-	// 創建文字動畫 - 為文字塊添加動畫效果
-	const createTextAnimation = (params) => {
-		const {
-			elements,
-			trigger,
-			start = "top 70%",
-			end = "bottom 20%",
-			staggerAmount = 0.2,
-			staggerFrom = "start",
-			fromY = 30,
-			fromOpacity = 0,
-			toY = 0,
-			toOpacity = 1,
-			duration = 1,
-			delay = 0,
-			ease = "power2.out",
-			toggleActions
-		} = params;
-
-		if (!ScrollTrigger.value) return null;
-
-		const textElements = document.querySelectorAll(elements);
-		if (textElements.length === 0) return null;
-
-		return gsap
-			.timeline({
-				scrollTrigger: {
-					trigger,
-					start,
-					end: end || "bottom 20%",
-					toggleActions
-				}
-			})
-			.fromTo(
-				textElements,
-				{ y: fromY, opacity: fromOpacity },
-				{ y: toY, opacity: toOpacity, duration, stagger: { amount: staggerAmount, from: staggerFrom }, ease, delay }
-			);
-	};
-
 	// 創建元素入場動畫 - 針對一般元素的動畫效果
 	const createElementEntrance = (params) => {
 		const {
@@ -234,13 +131,11 @@ export function useScrollAnimation() {
 			duration = 1,
 			delay = 0,
 			ease = "power2.out",
-			toggleActions
+			toggleActions,
+			stagger = 0
 		} = params;
 
-		if (!ScrollTrigger.value) return null;
-
-		const targetElements = document.querySelectorAll(elements);
-		if (targetElements.length === 0) return null;
+		if (!ScrollTrigger.value || !elements) return null;
 
 		return gsap
 			.timeline({
@@ -251,13 +146,19 @@ export function useScrollAnimation() {
 					toggleActions
 				}
 			})
-			.fromTo(targetElements, { y: fromY, opacity: fromOpacity, scale: fromScale }, { y: toY, opacity: toOpacity, scale: toScale, duration, ease, delay });
+			.fromTo(
+				elements,
+				{ y: fromY, opacity: fromOpacity, scale: fromScale },
+				{ y: toY, opacity: toOpacity, scale: toScale, duration, ease, delay, stagger: stagger > 0 ? stagger : undefined }
+			);
 	};
 
 	// 清理所有滾動觸發器
 	const cleanupScrollTriggers = () => {
 		if (ScrollTrigger.value) {
-			ScrollTrigger.value.getAll().forEach((trigger) => trigger.kill());
+			// 使用 ScrollTrigger.revert() 來殺死所有 trigger 並還原 GSAP 設定的樣式
+			// 這對於 SPA 路由轉換更為推薦
+			ScrollTrigger.value.revert();
 		}
 	};
 
@@ -276,14 +177,10 @@ export function useScrollAnimation() {
 			delay = 0,
 			stagger = 0,
 			ease = "power2.out",
-			scrub = false,
-			toggleActions,
-			mobileScrubFactor = 1.5
+			toggleActions
 		} = params;
 
 		if (!elements || !ScrollTrigger.value) return null;
-
-		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
 
 		return gsap.fromTo(
 			elements,
@@ -298,7 +195,6 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end,
-					scrub: finalScrub,
 					toggleActions
 				}
 			}
@@ -307,58 +203,19 @@ export function useScrollAnimation() {
 
 	// 創建時間軸動畫 - 用於更複雜的連續動畫
 	const createTimelineAnimation = (params) => {
-		const { trigger, start = "top 70%", end = "bottom 20%", scrub = false, toggleActions, mobileScrubFactor = 1.5 } = params;
+		const { trigger, start = "top 70%", end = "bottom 20%", toggleActions } = params;
 
 		if (!ScrollTrigger.value) return null;
-
-		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
 
 		return gsap.timeline({
 			scrollTrigger: {
 				trigger,
 				start,
 				end,
-				scrub: finalScrub,
 				toggleActions
 			}
 		});
 	};
-
-	// 基礎視差效果
-	const createParallax = (params) => {
-		const {
-			element,
-			trigger,
-			start = "top 70%",
-			end = "bottom 20%",
-			fromProps = { yPercent: 0 },
-			toProps = { yPercent: 30 },
-			scrub = true,
-			mobileScrubFactor = 1.5
-		} = params;
-
-		if (!element || !ScrollTrigger.value) return null;
-
-		const finalScrub = isMobile.value && typeof scrub === "number" ? scrub * mobileScrubFactor : scrub;
-
-		return gsap.fromTo(
-			element,
-			{ ...fromProps },
-			{
-				...toProps,
-				ease: "none",
-				scrollTrigger: {
-					trigger,
-					start,
-					end,
-					scrub: finalScrub
-				}
-			}
-		);
-	};
-
-	// Lifecycle hooks integrated into initScrollPlugins and onUnmounted
-	// onMounted(async () => { ... }); // Logic moved to initScrollPlugins
 
 	onUnmounted(() => {
 		if (resizeHandler && typeof window !== "undefined") {
@@ -379,14 +236,10 @@ export function useScrollAnimation() {
 
 	// 基本動畫工具
 	const animationTools = {
-		createScrollAnimation,
-		createPinnedSection,
 		createBasicAnimation,
 		createTimelineAnimation,
 		createCharAnimation,
-		createTextAnimation,
-		createElementEntrance,
-		createParallax
+		createElementEntrance
 	};
 
 	return {

@@ -12,7 +12,7 @@
 						v-for="(text, i) in introTexts"
 						:key="i"
 						:ref="(el) => (introTextRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]"
+						class="vertical-text text-[18px] md:text-[24px] lg:text-[36px] xl:text-[40px] 2xl:text-[44px]"
 					>
 						{{ $t(text) }}
 					</p>
@@ -54,7 +54,7 @@
 						v-for="(text, i) in themes.cloud.texts"
 						:key="`cloud-${i}`"
 						:ref="(el) => (cloudDetailParaRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
+						class="vertical-text text-[18px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
 					>
 						{{ $t(text) }}
 					</p>
@@ -64,7 +64,7 @@
 						v-for="(text, i) in themes.mountain.texts"
 						:key="`mountain-${i}`"
 						:ref="(el) => (mountainDetailParaRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
+						class="vertical-text text-[18px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
 					>
 						{{ $t(text) }}
 					</p>
@@ -74,7 +74,7 @@
 						v-for="(text, i) in themes.sky.texts"
 						:key="`sky-${i}`"
 						:ref="(el) => (skyDetailParaRefs[i] = el)"
-						class="vertical-text text-[16px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
+						class="vertical-text text-[18px] md:text-[21px] lg:text-[28px] xl:text-[30px] 2xl:text-[32px] opacity-0"
 					>
 						{{ $t(text) }}
 					</p>

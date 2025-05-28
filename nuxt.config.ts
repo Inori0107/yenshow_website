@@ -13,11 +13,7 @@ export default defineNuxtConfig({
 				{ property: "og:description", content: "遠岫科技專注於提供創新的軟體解決方案與專業的技術諮詢服務。" },
 				{ property: "og:url", content: "https://www.yenshow.com" },
 				{ name: "twitter:card", content: "summary_large_image" }
-			],
-			// 添加平滑滾動效果
-			htmlAttrs: {
-				style: "scroll-behavior: smooth"
-			}
+			]
 		},
 		pageTransition: { name: "page", mode: "out-in" }
 	},

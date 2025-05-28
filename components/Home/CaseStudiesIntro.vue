@@ -24,37 +24,25 @@
 
 				<!-- 關鍵數據指標 -->
 				<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
-					<!-- 卡片一：客戶關鍵效益 -->
-					<div ref="statCard1" class="bg-white/80 px-4 py-6 md:px-6 md:py-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
-						<h3 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-primary/80 mb-6 text-center">
-							客戶關鍵效益
+					<!-- 卡片一：客戶口碑 -->
+					<div ref="statCard1" class="bg-white/80 px-4 py-6 md:px-6 md:py-8 rounded-xl shadow-lg flex flex-col">
+						<h3 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-primary/80 mb-4 text-center">
+							客戶口碑
 						</h3>
-						<div class="space-y-3 md:space-y-6 w-[80%] mx-auto">
-							<div class="flex items-center justify-between">
-								<p class="text-primary/60 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">客戶滿意</p>
-								<p class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-bold text-primary">
-									<span ref="satisfactionRate">0</span>%
-								</p>
-							</div>
-							<div class="flex items-center justify-between">
-								<p class="text-primary/60 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">效率提升</p>
-								<p class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-bold text-primary">
-									+<span ref="efficiencyBoost">0</span>%
-								</p>
-							</div>
-							<div class="flex items-center justify-between">
-								<p class="text-primary/60 text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px]">產品精準</p>
-								<p class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-bold text-primary">
-									<span ref="accuracyRate">0</span>%
-								</p>
+						<div ref="testimonialContainer" class="testimonial-scroll-container flex-grow overflow-hidden relative min-h-[150px] md:min-h-[180px]">
+							<div ref="testimonialList" class="testimonial-list absolute top-0 left-0 w-full">
+								<div v-for="(testimonial, index) in allTestimonials" :key="index" class="testimonial-item py-2 px-1">
+									<p class="text-sm md:text-base text-primary/70 italic">"{{ testimonial.quote }}"</p>
+									<p class="text-xs md:text-sm text-primary/50 text-right mt-1">- {{ testimonial.author }}</p>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- 卡片二：長期合作夥伴趨勢 -->
-					<div ref="statCard2" class="bg-white/80 px-4 py-6 md:px-6 md:py-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+					<!-- 卡片二：熱銷產品趨勢 -->
+					<div ref="statCard2" class="bg-white/80 px-4 py-6 md:px-6 md:py-8 rounded-xl shadow-lg">
 						<h3 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-primary/80 mb-6 text-center">
-							長期合作夥伴增長
+							熱銷產品
 						</h3>
 						<div class="flex items-center justify-center">
 							<svg ref="barChart" class="w-full h-48 md:h-56" viewBox="0 0 280 180"></svg>
@@ -62,13 +50,13 @@
 					</div>
 
 					<!-- 卡片三：多元客戶群體 -->
-					<div ref="statCard3" class="bg-white/80 px-4 py-6 md:px-6 md:py-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+					<div ref="statCard3" class="bg-white/80 px-4 py-6 md:px-6 md:py-8 rounded-xl shadow-lg flex flex-col">
 						<h3 class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] font-semibold text-primary/80 mb-6 text-center">
-							多元客戶群體
+							多元客群
 						</h3>
 						<div class="flex items-center justify-center relative">
 							<svg ref="pieChart" class="w-48 h-48 md:w-56 md:h-56" viewBox="0 0 200 200"></svg>
-							<div ref="pieChartLegend" class="text-xs space-y-1 ml-4">
+							<div ref="pieChartLegend" class="text-xs sm:text-sm space-y-1 ml-4">
 								<!-- Legend will be populated by script -->
 							</div>
 						</div>
@@ -85,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted, inject, computed } from "vue";
 import ButtonCTA from "@/components/common/Button-CTA.vue";
 import gsap from "gsap";
 
@@ -94,31 +82,43 @@ const scrollAnimation = inject("scrollAnimation");
 const caseStudiesIntroSection = ref(null);
 const headline = ref(null);
 const introParagraph1 = ref(null);
-// const introParagraph2 = ref(null); // No longer used, can be removed
-// const introParagraph3 = ref(null); // No longer used, can be removed
-// const processHeadline = ref(null); // No longer used, can be removed
 
 const statCard1 = ref(null);
 const statCard2 = ref(null);
 const statCard3 = ref(null);
 
-const satisfactionRate = ref(null);
-const efficiencyBoost = ref(null);
-const accuracyRate = ref(null);
+const testimonialContainer = ref(null);
+const testimonialList = ref(null);
 
 const barChart = ref(null);
 const pieChart = ref(null);
 const pieChartLegend = ref(null);
 const ctaButtonContainer = ref(null);
 
-// --- Chart Data (Placeholders) ---
-const barChartData = [
-	{ year: "2020", value: 60 },
-	{ year: "2021", value: 80 },
-	{ year: "2022", value: 110 },
-	{ year: "2023", value: 150 },
-	{ year: "2024", value: 190 }
-];
+// --- Testimonial Data ---
+const baseTestimonials = ref([
+	{ quote: "這套系統大幅提升了我們的生產力！", author: "李經理 A公司" },
+	{ quote: "技術支援非常到位，解決問題很迅速。", author: "陳小姐 B科技" },
+	{ quote: "產品的精準度讓我們印象深刻。", author: "王董 C製造" },
+	{ quote: "服務態度親切，合作愉快。", author: "張總 D企業" },
+	{ quote: "解決方案完美契合我們的需求。", author: "林處長 E機構" }
+]);
+
+const allTestimonials = computed(() => {
+	if (baseTestimonials.value.length === 0) return [];
+	// Duplicate content for seamless scrolling effect
+	return [...baseTestimonials.value, ...baseTestimonials.value];
+});
+// --- End Testimonial Data ---
+
+// --- Chart Data ---
+const productSalesData = ref([
+	{ category: "影像監控", sales: 220, unit: "千套", color: "#10B981" },
+	{ category: "門禁管理", sales: 180, unit: "千套", color: "#3B82F6" },
+	{ category: "可視對講", sales: 150, unit: "千套", color: "#F59E0B" },
+	{ category: "安全防護", sales: 120, unit: "千套", color: "#EF4444" },
+	{ category: "其他設備", sales: 90, unit: "千套", color: "#6B7280" }
+]);
 
 const pieChartData = [
 	{ label: "科技業", value: 40, color: "#34D399" }, // Emerald 400
@@ -128,62 +128,52 @@ const pieChartData = [
 ];
 // --- End Chart Data ---
 
-const animateStatNumbers = () => {
-	if (satisfactionRate.value) {
-		gsap.to(satisfactionRate.value, {
-			textContent: 98,
-			duration: 2,
-			ease: "power2.out",
-			snap: { textContent: 1 },
-			delay: 0.8, // Card animation is 0.8s
-			scrollTrigger: { trigger: statCard1.value, start: "top 80%" }
-		});
+const animateTestimonials = () => {
+	if (!testimonialList.value || !testimonialContainer.value || allTestimonials.value.length === 0) return;
+
+	if (testimonialList.value.scrollHeight === 0) {
+		setTimeout(animateTestimonials, 100);
+		return;
 	}
-	if (efficiencyBoost.value) {
-		gsap.to(efficiencyBoost.value, {
-			textContent: 35,
-			duration: 2,
-			ease: "power2.out",
-			snap: { textContent: 1 },
-			delay: 1.0, // 0.8s (card anim) + 0.2s (stagger)
-			scrollTrigger: { trigger: statCard1.value, start: "top 80%" }
-		});
-	}
-	if (accuracyRate.value) {
-		gsap.to(accuracyRate.value, {
-			textContent: 99.7,
-			duration: 2,
-			ease: "power2.out",
-			snap: { textContent: 0.1 },
-			delay: 1.2, // 0.8s (card anim) + 0.4s (stagger)
-			scrollTrigger: { trigger: statCard1.value, start: "top 80%" }
-		});
-	}
+
+	gsap.to(testimonialList.value, {
+		y: () => `-${testimonialList.value.scrollHeight / 2}px`,
+		duration: 20,
+		ease: "none",
+		repeat: -1,
+		scrollTrigger: {
+			trigger: statCard1.value,
+			start: "top 80%",
+			toggleActions: "play pause resume pause"
+		}
+	});
 };
 
 const createBarChart = () => {
 	if (!barChart.value) return;
 	const svg = barChart.value;
+	svg.innerHTML = "";
+	const dataToUse = productSalesData.value;
+
 	const svgWidth = 280;
 	const svgHeight = 180;
 	const barPadding = 15;
-	const chartPadding = { top: 20, right: 20, bottom: 30, left: 30 }; // Adjusted for labels
+	const chartPadding = { top: 20, right: 10, bottom: 40, left: 30 };
 	const chartWidth = svgWidth - chartPadding.left - chartPadding.right;
 	const chartHeight = svgHeight - chartPadding.top - chartPadding.bottom;
 
-	const barWidth = (chartWidth - (barChartData.length - 1) * barPadding) / barChartData.length;
-	const maxValue = Math.max(...barChartData.map((d) => d.value), 0) * 1.2; // Add some headroom
+	const barWidth = (chartWidth - (dataToUse.length - 1) * barPadding) / dataToUse.length;
+	const maxValue = Math.max(...dataToUse.map((d) => d.sales), 0) * 1.2;
 
-	barChartData.forEach((d, i) => {
-		const barHeight = (d.value / maxValue) * chartHeight;
+	dataToUse.forEach((d, i) => {
+		const barHeight = (d.sales / maxValue) * chartHeight;
 		const x = chartPadding.left + i * (barWidth + barPadding);
 		const y = chartPadding.top + chartHeight - barHeight;
 
-		// Bar
 		const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 		gsap.set(rect, {
-			attr: { x, y: chartPadding.top + chartHeight, width: barWidth, height: 0, fill: "#059669" /* bg-primary */, rx: 3, ry: 3 },
-			opacity: 0.7
+			attr: { x, y: chartPadding.top + chartHeight, width: barWidth, height: 0, fill: d.color, rx: 3, ry: 3 },
+			opacity: 0.8
 		});
 		svg.appendChild(rect);
 		gsap.to(rect, {
@@ -191,26 +181,36 @@ const createBarChart = () => {
 			opacity: 1,
 			duration: 1.5,
 			ease: "elastic.out(1, 0.6)",
-			delay: i * 0.15 + 0.5 + 0.8, // Staggered delay + card entry delay
+			delay: i * 0.15 + 0.5 + 0.8,
 			scrollTrigger: { trigger: statCard2.value, start: "top 80%" }
 		});
 
-		// Year Label
-		const yearLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
-		gsap.set(yearLabel, {
-			attr: { x: x + barWidth / 2, y: chartPadding.top + chartHeight + 15, "text-anchor": "middle", fill: "#6B7280", "font-size": "10px" },
-			textContent: d.year,
+		const categoryLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+		gsap.set(categoryLabel, {
+			attr: {
+				x: x + barWidth / 2,
+				y: chartPadding.top + chartHeight + 15,
+				"text-anchor": "middle",
+				fill: "#4B5563",
+				"font-size": "9px"
+			},
+			textContent: d.category,
 			opacity: 0
 		});
-		svg.appendChild(yearLabel);
-		gsap.to(yearLabel, { opacity: 1, delay: i * 0.15 + 0.7 + 0.8, scrollTrigger: { trigger: statCard2.value, start: "top 80%" } });
+		svg.appendChild(categoryLabel);
+		gsap.to(categoryLabel, { opacity: 1, delay: i * 0.15 + 0.7 + 0.8, scrollTrigger: { trigger: statCard2.value, start: "top 80%" } });
 
-		// Value Label (on hover, or always visible if design allows)
-		// For simplicity, let's make it appear with the bar
 		const valueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
 		gsap.set(valueLabel, {
-			attr: { x: x + barWidth / 2, y: y - 5, "text-anchor": "middle", fill: "#059669", "font-size": "10px", "font-weight": "bold" },
-			textContent: d.value,
+			attr: {
+				x: x + barWidth / 2,
+				y: y - 5,
+				"text-anchor": "middle",
+				fill: d.color,
+				"font-size": "10px",
+				"font-weight": "bold"
+			},
+			textContent: `${d.sales}${d.unit ? " " + d.unit : ""}`,
 			opacity: 0
 		});
 		svg.appendChild(valueLabel);
@@ -299,12 +299,11 @@ onMounted(async () => {
 			elements: sectionNode,
 			trigger: sectionNode,
 			start: "top 85%",
-			toProps: { opacity: 1 }, // Fade in section
+			toProps: { opacity: 1 },
 			duration: 0.5,
 			toggleActions: "play none none none"
 		});
 
-		// Animate Headline and Intro Paragraph
 		[headline.value, introParagraph1.value].forEach((el, index) => {
 			if (el) {
 				scrollAnimation.createBasicAnimation({
@@ -321,28 +320,26 @@ onMounted(async () => {
 			}
 		});
 
-		// Animate Stat Cards (as a group first, then individual elements within them)
 		const cards = [statCard1.value, statCard2.value, statCard3.value];
 		cards.forEach((cardEl, index) => {
 			if (cardEl) {
 				scrollAnimation.createBasicAnimation({
 					elements: cardEl,
-					trigger: cardEl, // card itself as trigger
+					trigger: cardEl,
 					start: "top 85%",
 					fromProps: { opacity: 0, y: 50, scale: 0.95 },
 					toProps: { opacity: 1, y: 0, scale: 1 },
 					duration: 0.8,
-					delay: index * 0.2 + 0.3, // Stagger after headline
+					delay: index * 0.2 + 0.3,
 					ease: "power2.out",
 					toggleActions: "play none none none"
 				});
 			}
 		});
 
-		// Trigger individual animations within cards (numbers, charts)
-		animateStatNumbers();
 		createBarChart();
 		createPieChart();
+		animateTestimonials();
 
 		if (ctaButtonContainer.value) {
 			scrollAnimation.createBasicAnimation({
@@ -352,7 +349,7 @@ onMounted(async () => {
 				fromProps: { opacity: 0, y: 20, scale: 0.9 },
 				toProps: { opacity: 1, y: 0, scale: 1 },
 				duration: 0.8,
-				delay: 0.8, // Delay after cards start animating
+				delay: 0.8,
 				ease: "elastic.out(1, 0.75)",
 				toggleActions: "play none none none"
 			});
@@ -381,5 +378,14 @@ onMounted(async () => {
 /* Additional styling for chart elements if needed */
 svg text {
 	font-family: inherit; /* Inherit font from page */
+}
+.testimonial-item {
+	border-bottom: 1px solid rgba(107, 114, 128, 0.1); /* Tailwind gray-400 with alpha */
+	padding-bottom: 0.5rem; /* py-2 in template, this adds to bottom */
+	margin-bottom: 0.5rem; /* Space between items */
+}
+.testimonial-item:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
 }
 </style>

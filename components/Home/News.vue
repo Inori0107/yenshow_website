@@ -10,7 +10,7 @@
 					<div class="flex flex-col gap-[12px] lg:gap-[24px] me-auto">
 						<h3 class="text-[24px] md:text-[36px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px]">{{ $t("news title") }}</h3>
 					</div>
-					<ButtonCTA class="w-fit h-fit" :label="$t('view all')" to="/news"></ButtonCTA>
+					<ButtonCTA class="w-fit h-fit view-all-button" :label="$t('view all')" to="/news"></ButtonCTA>
 				</nav>
 				<!-- Content -->
 				<div class="w-full max-w-[880px] xl:max-w-[960px] 2xl:max-w-[1024px] border-y-2 border-primary divide-y-2 divide-primary">
@@ -34,7 +34,7 @@
 					<div class="flex flex-col gap-[12px] lg:gap-[24px] me-auto">
 						<h3 class="text-[24px] md:text-[36px] lg:text-[64px] xl:text-[72px] 2xl:text-[80px]">{{ $t("problems title") }}</h3>
 					</div>
-					<ButtonCTA class="w-fit h-fit" :label="$t('view all')" to="/faq"></ButtonCTA>
+					<ButtonCTA class="w-fit h-fit view-all-button" :label="$t('view all')" to="/faq"></ButtonCTA>
 				</nav>
 				<!-- Content -->
 				<div class="w-full max-w-[880px] xl:max-w-[960px] 2xl:max-w-[1024px] border-y-2 border-primary divide-y-2 divide-primary">
@@ -49,11 +49,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, onUnmounted } from "vue";
+import { ref } from "vue";
 import ButtonCTA from "~/components/common/Button-CTA.vue";
-
-// 引入滾動動畫控制器
-const scrollAnimation = inject("scrollAnimation");
 
 // 新聞資料 - 未來可從後端 API 獲取
 const newsItems = ref([
@@ -64,81 +61,6 @@ const newsItems = ref([
 
 // 常見問題資料 - 未來可從後端 API 獲取
 const faqItems = ref([{ question: "faq question 1" }, { question: "faq question 2" }, { question: "faq question 3" }]);
-
-let titleAndTextAnimation = null;
-let listItemsAnimation = null;
-let buttonAnimation = null;
-
-// 設置動畫
-onMounted(async () => {
-	// 確保 ScrollTrigger 已初始化
-	await scrollAnimation.initScrollPlugins();
-
-	// 1. 標題與說明文字
-	titleAndTextAnimation = scrollAnimation.createTextAnimation({
-		elements: "article h3, article span:not(.text-nowrap)",
-		trigger: "aside",
-		start: "top 70%",
-		end: "bottom 20%",
-		staggerAmount: 0.2,
-		staggerFrom: "start",
-		fromY: 35,
-		fromOpacity: 0,
-		toY: 0,
-		toOpacity: 1,
-		duration: 1,
-		delay: 0.3,
-		toggleActions: "play none none none"
-	});
-
-	// 2. 文章內容項目 - 逐個顯示
-	listItemsAnimation = scrollAnimation.createTextAnimation({
-		elements: ".border-y-2 > div",
-		trigger: "aside",
-		start: "top 70%",
-		end: "bottom 20%",
-		staggerAmount: 0.25,
-		staggerFrom: "start",
-		fromY: 15,
-		fromOpacity: 0,
-		toY: 0,
-		toOpacity: 1,
-		duration: 0.6,
-		delay: 0.7,
-		ease: "power1.out",
-		toggleActions: "play none none none"
-	});
-
-	// 4. 按鈕元素進場動畫
-	buttonAnimation = scrollAnimation.createElementEntrance({
-		elements: ".view-all-button",
-		trigger: "aside",
-		start: "top 70%",
-		end: "bottom 20%",
-		delay: 0.9,
-		fromY: 20,
-		fromOpacity: 0,
-		fromScale: 0.9,
-		toY: 0,
-		toOpacity: 1,
-		toScale: 1,
-		duration: 0.8,
-		ease: "back.out(1.5)",
-		toggleActions: "play none none none"
-	});
-});
-
-onUnmounted(() => {
-	if (titleAndTextAnimation) {
-		titleAndTextAnimation.kill();
-	}
-	if (listItemsAnimation) {
-		listItemsAnimation.kill();
-	}
-	if (buttonAnimation) {
-		buttonAnimation.kill();
-	}
-});
 </script>
 
 <style scoped>

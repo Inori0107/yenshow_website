@@ -6,7 +6,7 @@
 
 			<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
 			<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10">
-				<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px]" src="/public/yenshow.png" alt="遠岫科技" />
+				<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px]" src="/public/logo/yenshow.png" alt="遠岫科技" />
 			</div>
 
 			<!-- 主標語 -->
