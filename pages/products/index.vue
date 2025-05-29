@@ -59,7 +59,7 @@
 							<img
 								:src="solution.image"
 								:alt="solution.title"
-								class="solution-image cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-400"
+								class="solution-image cursor-pointer"
 								tabindex="0"
 								role="button"
 								:aria-label="`放大檢視 ${solution.title} 圖片`"
@@ -98,79 +98,74 @@
 
 		<!-- Lightbox Modal -->
 		<div
-			v-if="isLightboxOpen && currentSolutionInLightbox"
-			class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4 overflow-y-auto"
+			v-if="isLightboxOpen && currentSolutionForLightbox"
+			class="fixed inset-0 bg-primary/10 z-50 flex items-center justify-center p-4 overflow-y-auto"
 			role="dialog"
 			aria-modal="true"
 			:aria-labelledby="lightboxTitleId"
 			@click.self="closeLightbox"
 			@keydown.esc="closeLightbox"
 		>
-			<div
-				class="lightbox-content-wrapper bg-slate-800 rounded-lg shadow-2xl w-full max-w-4xl md:max-w-5xl lg:max-w-6xl max-h-[95vh] flex flex-col md:flex-row overflow-hidden"
-			>
-				<!-- Close Button (Positioned within the wrapper for better context) -->
+			<div class="lightbox-content-wrapper bg-slate-800 rounded-lg shadow-2xl max-w-6xl w-full flex flex-col md:flex-row max-h-[95vh]">
+				<!-- Close Button -->
 				<button
 					ref="closeModalButtonRef"
 					@click="closeLightbox"
-					class="absolute top-3 right-3 text-gray-300 hover:text-white focus:ring-2 focus:ring-white rounded-full p-1 z-20 bg-slate-700 hover:bg-slate-600 transition-colors"
-					aria-label="關閉產品預覽"
+					class="absolute top-3 right-3 text-white hover:text-sky-300 rounded-full p-1 z-50 bg-slate-700/50 hover:bg-slate-600/70 transition-colors"
+					aria-label="關閉預覽"
 				>
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 sm:w-7 sm:h-7">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 md:w-7 md:h-7">
 						<title>關閉圖示</title>
 						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 					</svg>
 				</button>
 
 				<!-- Left Side: Image -->
-				<div class="lightbox-image-container w-full md:w-1/2 p-4 md:p-6 flex-shrink-0 bg-slate-900 flex items-center justify-center">
-					<img
-						:src="currentSolutionInLightbox.image"
-						:alt="currentSolutionInLightbox.title"
-						class="max-w-full max-h-[40vh] md:max-h-[85vh] object-contain rounded-md shadow-lg"
-					/>
+				<div class="w-full md:w-1/2 p-4 md:p-6 flex justify-center items-center bg-black/30 md:rounded-l-lg">
+					<img :src="lightboxImageSrc" :alt="lightboxAltText" class="max-w-full max-h-[40vh] md:max-h-[85vh] object-contain rounded-md" />
 				</div>
 
 				<!-- Right Side: Details -->
-				<div class="lightbox-details-container w-full md:w-1/2 p-4 md:p-6 flex flex-col text-gray-200 overflow-y-auto custom-scrollbar">
-					<h2 :id="lightboxTitleId" class="text-xl sm:text-2xl md:text-3xl font-bold text-sky-400 mb-3 md:mb-4">{{ currentSolutionInLightbox.title }}</h2>
+				<div class="w-full md:w-1/2 p-4 md:p-6 flex flex-col text-white overflow-y-auto custom-scrollbar-lightbox">
+					<h2 :id="lightboxTitleId" class="text-xl sm:text-2xl md:text-3xl font-bold text-sky-300 mb-3 md:mb-4">{{ currentSolutionForLightbox.title }}</h2>
 
-					<!-- Product Description -->
 					<div class="mb-4 md:mb-6">
-						<h3 class="text-base sm:text-lg font-semibold text-sky-300 mb-1.5">產品方案說明</h3>
-						<p class="text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed">
-							{{ currentSolutionInLightbox.description || "暫無詳細說明。" }}
-						</p>
+						<h3 class="text-lg sm:text-xl font-semibold text-sky-400 mb-1.5 md:mb-2">方案說明</h3>
+						<p class="text-sm sm:text-base text-gray-300 leading-relaxed">{{ currentSolutionForLightbox.description || "暫無詳細說明。" }}</p>
 					</div>
 
-					<!-- Related Products -->
-					<div v-if="currentSolutionInLightbox.relatedProducts && currentSolutionInLightbox.relatedProducts.length > 0" class="mb-4 md:mb-6">
-						<h3 class="text-base sm:text-lg font-semibold text-sky-300 mb-2.5">搭配的產品系列</h3>
+					<div v-if="currentSolutionForLightbox.relatedProducts && currentSolutionForLightbox.relatedProducts.length > 0" class="mb-4 md:mb-6">
+						<h3 class="text-lg sm:text-xl font-semibold text-sky-400 mb-2 md:mb-3">相關產品系列</h3>
 						<div class="space-y-3">
 							<div
-								v-for="(product, pIndex) in currentSolutionInLightbox.relatedProducts"
-								:key="`related-${pIndex}`"
-								class="bg-slate-700/70 hover:bg-slate-700 p-3 rounded-lg shadow-md transition-colors duration-200 border border-slate-600/50"
+								v-for="(product, pIndex) in currentSolutionForLightbox.relatedProducts"
+								:key="pIndex"
+								class="bg-sky-700/40 hover:bg-sky-700/70 p-3 rounded-md shadow-sm transition-colors duration-200 border border-sky-600/50"
 							>
-								<p class="text-xs sm:text-sm font-semibold text-sky-200 mb-0.5">{{ product.series }}</p>
+								<p class="text-sm sm:text-base font-semibold text-sky-200 mb-0.5">{{ product.series }}</p>
 								<p class="text-xs sm:text-sm text-gray-300 mb-1.5 leading-snug">{{ product.description }}</p>
 								<NuxtLink
 									:to="product.link"
-									class="text-xs sm:text-sm text-sky-400 hover:text-sky-300 hover:underline focus:outline-none focus:ring-1 focus:ring-sky-300 rounded-sm inline-flex items-center"
-									@click="closeLightbox"
+									class="text-xs sm:text-sm text-sky-300 hover:text-sky-100 hover:underline rounded-sm inline-flex items-center"
+									target="_blank"
+									rel="noopener noreferrer"
 								>
 									查看系列產品
 									<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											d="M13.803 5.197a.75.75 0 00-1.06 0l-4.5 4.5a.75.75 0 000 1.06l4.5 4.5a.75.75 0 001.06-1.06L9.864 10.5l3.939-3.939a.75.75 0 000-1.061zM16.5 12a.75.75 0 00-.75-.75h-9a.75.75 0 000 1.5h9a.75.75 0 00.75-.75z"
+											transform="rotate(45 12 12)"
+										/>
 									</svg>
 								</NuxtLink>
 							</div>
 						</div>
 					</div>
 
-					<!-- CTA Button -->
 					<div class="mt-auto pt-4">
-						<ButtonCTA label="聯絡我們了解更多" color="white" to="/contact" @click.native="closeLightbox" class="w-full md:w-auto" />
+						<ButtonCTA label="產品諮詢" to="/contact" color="white" class="w-full md:w-auto" />
 					</div>
 				</div>
 			</div>
@@ -226,24 +221,38 @@ const solutions = ref([
 		shortTitle: "物業管理",
 		image: "/solutions/物業管理系統智慧生活.png",
 		description:
-			"遠岫科技的物業管理系統，透過整合先進的物聯網技術和雲端平台，為現代化物業管理提供全方位的智能解決方案。此系統不僅強化了社區安全，提升了管理效率，更致力於為住戶打造便捷、舒適的智慧生活體驗。我們專注於使用者需求，提供客製化的功能模組，確保系統能完美契合不同規模和型態的社區。",
+			"遠岫科技的「物業管理系統智慧生活」方案，整合了先進的社區管理工具與住戶服務平台。透過智能化的中央控制系統，實現了對社區門禁、公告、報修、公共設施預約等多元服務的一站式管理。不僅提升了物業運營效率，更為住戶帶來便捷、安全的現代居住體驗。",
 		relatedProducts: [
-			{ series: "智慧社區主機 YS-M800", description: "整合門禁、對講、監控等功能的核心管理設備。", link: "/products/devices-accessories" },
-			{ series: "雲端管理平台", description: "提供遠程監控、數據分析、住戶服務的整合平台。", link: "/products/software-platforms" },
-			{ series: "行動應用 App", description: "方便住戶進行訪客邀請、費用繳納、公告接收等操作。", link: "/products/software-platforms" }
+			{ series: "可視對講系統", description: "高清影像與語音通話，提升住戶與訪客溝通效率。", link: "/products/video-intercom" },
+			{ series: "門禁管理", description: "多重驗證方式，保障社區出入安全。", link: "/products/access-control" },
+			{ series: "中央監控平台", description: "實時監控社區動態，提升應急處理能力。", link: "/products/surveillance-monitoring" }
 		]
 	},
 	{
 		id: "video-intercom",
 		title: "可視對講系統",
 		shortTitle: "可視對講",
-		image: "/solutions/可視對講系統.png"
+		image: "/solutions/可視對講系統.png",
+		description:
+			"我們提供高品質的可視對講解決方案，結合清晰的音視頻傳輸與多種開門方式。無論是公寓大樓、別墅還是辦公場所，都能透過我們的系統，實現便捷的訪客管理與安全的出入控制，提升整體安全防護水平。",
+		relatedProducts: [
+			{ series: "室內機系列", description: "多款尺寸與功能選擇，滿足不同用戶需求。", link: "/products/video-intercom#indoor-units" },
+			{ series: "門口機系列", description: "堅固耐用，具備人臉辨識、感應卡等多功能選項。", link: "/products/video-intercom#outdoor-stations" },
+			{ series: "管理中心機", description: "集中管理社區內所有對講設備，方便物業操作。", link: "/products/video-intercom#management-software" }
+		]
 	},
 	{
 		id: "fire-alarm",
 		title: "火災預警系統",
 		shortTitle: "火災預警",
-		image: "/solutions/火災預警系統.png"
+		image: "/solutions/火災預警系統.png",
+		description:
+			"遠岫科技的火災預警系統，採用先進的偵煙、偵溫感知技術，能夠快速準確地偵測火災初期跡象。系統可與消防單位連動，並透過APP即時推播警報，為生命財產安全提供多一道保障，適用於各類住宅、商業及工業場所。",
+		relatedProducts: [
+			{ series: "智能煙霧感測器", description: "高靈敏度偵測，減少誤報。", link: "/products/security-protection#fire-safety" },
+			{ series: "溫度異常感測器", description: "監測環境溫度變化，預防火災發生。", link: "/products/security-protection#fire-safety" },
+			{ series: "聯動報警主機", description: "整合所有感測設備，實現統一報警。", link: "/products/security-protection#alarm-systems" }
+		]
 	},
 	{
 		id: "central-monitoring",
@@ -311,34 +320,38 @@ const galleryNavRightRef = ref(null);
 
 // --- Lightbox State and Functions ---
 const isLightboxOpen = ref(false);
-const currentSolutionInLightbox = ref(null);
+const lightboxImageSrc = ref("");
+const lightboxAltText = ref("");
 const closeModalButtonRef = ref(null);
-let triggerElementForLightbox = null;
+let triggerElementForLightbox = null; // To store the element that triggered the modal
+const currentSolutionForLightbox = ref(null); // 用於儲存當前燈箱顯示的解決方案數據
 
-const lightboxTitleId = computed(() =>
-	currentSolutionInLightbox.value ? `lightbox-title-${currentSolutionInLightbox.value.id}` : `lightbox-title-default-${Date.now()}`
-);
+const lightboxTitleId = computed(() => `lightbox-title-${Date.now()}`); // Simple unique ID for ARIA
 
 const openLightbox = (solution, eventTarget) => {
-	currentSolutionInLightbox.value = solution;
+	currentSolutionForLightbox.value = solution; // 儲存整個解決方案對象
+	lightboxImageSrc.value = solution.image;
+	lightboxAltText.value = solution.title || "產品解決方案圖片";
 	isLightboxOpen.value = true;
-	document.body.style.overflow = "hidden";
+	document.body.style.overflow = "hidden"; // Prevent background scrolling
 	triggerElementForLightbox = eventTarget || document.activeElement;
 	nextTick(() => {
 		if (closeModalButtonRef.value) {
-			closeModalButtonRef.value.focus();
+			closeModalButtonRef.value.focus(); // Focus the close button for accessibility
 		}
 	});
 };
 
 const closeLightbox = () => {
 	isLightboxOpen.value = false;
-	document.body.style.overflow = "";
+	document.body.style.overflow = ""; // Restore background scrolling
 	if (triggerElementForLightbox && typeof triggerElementForLightbox.focus === "function") {
-		triggerElementForLightbox.focus();
+		triggerElementForLightbox.focus(); // Return focus to the triggering element
 	}
 	triggerElementForLightbox = null;
-	currentSolutionInLightbox.value = null;
+	lightboxImageSrc.value = "";
+	lightboxAltText.value = "";
+	currentSolutionForLightbox.value = null; // 重置當前解決方案數據
 };
 
 onMounted(async () => {
@@ -402,179 +415,149 @@ onMounted(async () => {
 		});
 	}
 
-	// --- Section 2: Gallery Scroll Animation ---
+	// --- Section 2: Gallery Scroll Animation (Existing Logic) ---
 	if (!galleryContainerToPinRef.value || !scrollContainerRef.value || solutionElements.value.length === 0) {
 		console.error("滾動容器、主容器或解決方案元素未找到");
 	} else {
 		const sections = solutionElements.value.filter((el) => el);
 		if (sections.length > 0) {
-			if (!isMobile.value) {
-				// --- DESKTOP SPECIFIC ---
-				console.log("[Desktop Init] Setting up horizontal scroll and animations.");
-				gsap.to(sections, {
-					xPercent: -100 * (sections.length - 1),
-					ease: "none",
-					scrollTrigger: {
-						id: "horizontalGalleryScroll",
-						trigger: galleryContainerToPinRef.value,
-						pin: galleryContainerToPinRef.value,
-						scrub: 1,
-						start: "top top",
-						end: () => `+=${galleryContainerToPinRef.value.offsetWidth * (sections.length > 1 ? sections.length - 1 : 0)}`,
-						snap:
-							sections.length > 1
-								? {
-										snapTo: 1 / (sections.length - 1),
-										duration: { min: 0.2, max: 0.8 },
-										delay: 0.1,
-										ease: "power1.inOut"
-								  }
-								: false,
-						onUpdate: (self) => {
-							if (sections.length > 1) {
-								const progress = Math.round(self.progress * (sections.length - 1));
-								if (currentSectionIndex.value !== progress) {
-									currentSectionIndex.value = progress;
-								}
-							} else {
-								currentSectionIndex.value = 0;
+			gsap.to(sections, {
+				xPercent: -100 * (sections.length - 1),
+				ease: "none",
+				scrollTrigger: {
+					id: "horizontalGalleryScroll",
+					trigger: galleryContainerToPinRef.value,
+					pin: galleryContainerToPinRef.value,
+					scrub: 1,
+					start: "top top",
+					end: () => `+=${window.innerWidth * (sections.length > 1 ? sections.length - 1 : 0)}`,
+					snap:
+						sections.length > 1
+							? {
+									snapTo: 1 / (sections.length - 1),
+									duration: { min: 0.2, max: 0.8 },
+									delay: 0.1,
+									ease: "power1.inOut"
+							  }
+							: false,
+					onUpdate: (self) => {
+						if (sections.length > 1) {
+							const progress = Math.round(self.progress * (sections.length - 1));
+							if (currentSectionIndex.value !== progress) {
+								currentSectionIndex.value = progress;
 							}
-						},
-						invalidateOnRefresh: true
-					}
-				});
-
-				sections.forEach((section) => {
-					const image = section.querySelector(".solution-image");
-					if (image) {
-						createElementEntrance({
-							elements: image,
-							trigger: section,
-							start: "left 75%",
-							end: "right 25%",
-							horizontal: true,
-							fromOpacity: 0,
-							fromScale: 0.85,
-							toOpacity: 1,
-							toScale: 1,
-							duration: 0.7,
-							toggleActions: "play resume resume reverse"
-						});
-					}
-				});
-
-				if (galleryNavSidesRef.value && galleryNavLeftRef.value && galleryNavRightRef.value) {
-					gsap.set(galleryNavSidesRef.value, { autoAlpha: 1, delay: 0.1 });
-					gsap.from(galleryNavLeftRef.value, {
-						xPercent: -120,
-						autoAlpha: 0,
-						duration: 0.8,
-						ease: "power3.out",
-						scrollTrigger: {
-							trigger: galleryContainerToPinRef.value,
-							start: "top 60%",
-							end: "top 30%",
-							toggleActions: "play none none reverse"
+						} else {
+							currentSectionIndex.value = 0;
 						}
-					});
-					gsap.from(galleryNavRightRef.value, {
-						xPercent: 120,
-						autoAlpha: 0,
+					},
+					invalidateOnRefresh: true,
+					scope: galleryContainerToPinRef.value
+				}
+			});
+
+			sections.forEach((section, index) => {
+				const image = section.querySelector(".solution-image");
+				if (image) {
+					createElementEntrance({
+						elements: image,
+						trigger: section,
+						start: "left 80%",
+						end: "right 20%",
+						fromOpacity: 0,
+						fromScale: 0.8,
+						toOpacity: 1,
+						toScale: 1,
 						duration: 0.8,
-						ease: "power3.out",
-						scrollTrigger: {
-							trigger: galleryContainerToPinRef.value,
-							start: "top 60%",
-							end: "top 30%",
-							toggleActions: "play none none reverse"
-						}
+						toggleActions: "play none none none"
 					});
 				}
-			} else {
-				// --- MOBILE SPECIFIC ---
-				console.log("[Mobile Init] Setting up vertical scroll related animations.");
-				gsap.set(sections, { clearProps: "xPercent,x" });
-				if (galleryContainerToPinRef.value && galleryContainerToPinRef.value.style) gsap.set(galleryContainerToPinRef.value, { clearProps: "cssText" });
+			});
 
-				sections.forEach((section) => {
-					const image = section.querySelector(".solution-image");
-					if (image) {
-						createElementEntrance({
-							elements: image,
-							trigger: section,
-							start: "top 85%",
-							end: "bottom 15%",
-							fromOpacity: 0,
-							fromScale: 0.9,
-							toOpacity: 1,
-							toScale: 1,
-							duration: 0.6,
-							toggleActions: "play none none none"
-						});
+			// --- Gallery Navigation Animation ---
+			if (galleryNavSidesRef.value && galleryNavLeftRef.value && galleryNavRightRef.value) {
+				gsap.to(galleryNavSidesRef.value, {
+					autoAlpha: 1,
+					duration: 0.01, // Make parent visible for children animations
+					scrollTrigger: {
+						trigger: galleryContainerToPinRef.value,
+						start: "top 50%", // Adjust as needed
+						toggleActions: "play none none none"
 					}
 				});
-				if (galleryNavSidesRef.value) {
-					galleryNavSidesRef.value.style.opacity = "1";
-				}
+				gsap.from(galleryNavLeftRef.value, {
+					xPercent: -100,
+					autoAlpha: 0,
+					duration: 0.8,
+					ease: "power3.out",
+					scrollTrigger: {
+						trigger: galleryContainerToPinRef.value,
+						start: "top 50%", // Start when the gallery container is 50% in view
+						toggleActions: "play none none none"
+					}
+				});
+				gsap.from(galleryNavRightRef.value, {
+					xPercent: 100,
+					autoAlpha: 0,
+					duration: 0.8,
+					ease: "power3.out",
+					scrollTrigger: {
+						trigger: galleryContainerToPinRef.value,
+						start: "top 50%", // Start when the gallery container is 50% in view
+						toggleActions: "play none none none"
+					}
+				});
 			}
 		}
-	}
-
-	if (isLightboxOpen.value) {
-		document.body.style.overflow = "";
-		currentSolutionInLightbox.value = null;
 	}
 });
 
 const navigateToSection = (index) => {
-	console.log(`[Navigation] navigateToSection called with index: ${index}`);
+	console.log(`[Mobile Debug] navigateToSection called with index: ${index}`);
 	currentSectionIndex.value = index;
 
-	if (isMobile.value) {
+	// 假設 isMobile 是一個響應式變數，你可以用 window.innerWidth < 768 來更新它
+	// 或者直接在函數內判斷
+	const isMobileLayout = window.innerWidth <= 768;
+
+	if (isMobileLayout) {
 		const targetElement = solutionElements.value[index];
 		if (targetElement) {
-			console.log("[Mobile Navigate] Scrolling to element:", targetElement);
-			let offsetY = 0;
-			const stickyNav = document.querySelector(".gallery-navigation-sides");
-			if (stickyNav && getComputedStyle(stickyNav).position === "sticky") {
-				offsetY = stickyNav.offsetHeight;
-			}
-			console.log(`[Mobile Navigate] Sticky nav height (offsetY): ${offsetY}`);
+			console.log("[Mobile Debug] Mobile layout: Scrolling to element:", targetElement);
+			// targetElement.scrollIntoView({ behavior: 'smooth' }); // 簡單的原生方法
 
+			// 或者使用 GSAP 滾動到元素的 offsetTop
 			gsap.to(window, {
 				scrollTo: {
-					y: targetElement.offsetTop - offsetY,
+					y: targetElement.offsetTop, // 可能需要考慮固定的 header 高度
 					autoKill: true
 				},
-				duration: 0.8,
-				ease: "power2.inOut",
-				onComplete: () => {
-					console.log("[Mobile Navigate] Scroll complete to Y:", targetElement.offsetTop - offsetY);
-				}
+				duration: 0.8, // 調整滾動時間
+				ease: "power2.inOut"
 			});
 		} else {
-			console.error("[Mobile Navigate] Target element not found for index:", index);
+			console.error("[Mobile Debug] Mobile layout: Target element not found for index:", index);
 		}
-		return;
+		return; // 手機版直接返回
 	}
 
-	// --- Desktop Logic ---
+	// --- 以下是桌面版的邏輯 ---
 	if (!ScrollTrigger.value || !gsap || !galleryContainerToPinRef.value) {
-		console.error("[Desktop Navigate] ScrollTrigger, GSAP, or galleryContainerToPinRef not available.");
+		console.error("[Desktop Debug] ScrollTrigger, GSAP, or galleryContainerToPinRef not available.");
 		return;
 	}
 	if (solutions.value.length <= 1) {
-		console.log("[Desktop Navigate] Only one or no solutions, navigation skipped.");
+		console.log("[Desktop Debug] Only one or no solutions, navigation skipped.");
 		return;
 	}
 
 	const stInstance = ScrollTrigger.value.getById("horizontalGalleryScroll");
-	console.log("[Desktop Navigate] ScrollTrigger instance:", stInstance);
+	console.log("[Desktop Debug] stInstance:", stInstance);
 
 	if (stInstance) {
 		const progress = solutions.value.length > 1 ? index / (solutions.value.length - 1) : 0;
+		// 重要: 確保 stInstance.start 和 stInstance.end 是在桌面版 ScrollTrigger 初始化時正確計算的值
 		const targetScrollY = stInstance.start + progress * (stInstance.end - stInstance.start);
-		console.log(`[Desktop Navigate] Calculated progress: ${progress}, targetScrollY: ${targetScrollY}`);
+		console.log(`[Desktop Debug] Calculated progress: ${progress}, targetScrollY: ${targetScrollY}`);
 
 		gsap.to(window, {
 			scrollTo: {
@@ -584,18 +567,19 @@ const navigateToSection = (index) => {
 			duration: 1,
 			ease: "power2.inOut",
 			onComplete: () => {
-				console.log("[Desktop Navigate] Scroll complete. Refreshing ScrollTrigger.");
-				ScrollTrigger.value.refresh();
+				console.log("[Desktop Debug] Scroll complete. Refreshing ScrollTrigger.");
+				ScrollTrigger.value.refresh(); // 桌面版可能仍需要 refresh
 			}
 		});
 	} else {
-		console.warn("[Desktop Navigate] ScrollTrigger instance 'horizontalGalleryScroll' not found.");
+		console.warn("[Desktop Debug] ScrollTrigger instance 'horizontalGalleryScroll' not found for navigation.");
 	}
 };
 
 onUnmounted(() => {
 	cleanupScrollTriggers();
 	if (isLightboxOpen.value) {
+		// Ensure body scroll is restored if component is unmounted while lightbox is open
 		document.body.style.overflow = "";
 	}
 });
@@ -668,7 +652,7 @@ onUnmounted(() => {
 	padding: 0 30px;
 	z-index: 10;
 	pointer-events: none;
-	opacity: 0;
+	opacity: 0; /* Initial opacity for GSAP animation */
 }
 
 .gallery-navigation-left,
@@ -780,31 +764,10 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-	.product-gallery-container {
-		display: block;
-		min-height: auto;
-		overflow: visible;
-	}
-
-	.gallery-scroll-container {
-		display: block;
-		width: 100%;
-		overflow: visible;
-		position: static;
-	}
-
 	.solution-section {
 		padding: 20px;
-		width: 100%;
-		flex-shrink: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		box-sizing: border-box;
-		position: static;
-		height: auto;
-		margin-bottom: 20px;
+		width: 100vw;
+		max-height: 40vh;
 	}
 
 	.solution-content {
@@ -822,21 +785,23 @@ onUnmounted(() => {
 	}
 
 	.gallery-navigation-sides {
-		position: sticky;
-		top: 0;
+		position: static;
 		transform: none;
 		flex-direction: row;
 		padding: 12px;
-		background-color: rgba(10, 20, 30, 0.9);
-		overflow-x: auto;
-		overflow-y: hidden;
-		justify-content: flex-start;
+		background-color: rgba(0, 0, 0, 0.3);
+		overflow-x: hidden;
+		overflow-y: auto;
+		justify-content: center;
 		width: 100%;
-		z-index: 20;
-		gap: 8px;
-		flex-wrap: nowrap;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		top: auto;
+		gap: 12px;
+		flex-wrap: wrap;
 		pointer-events: auto;
-		opacity: 1;
+		opacity: 1; /* Reset opacity for mobile if animation is only for desktop */
 	}
 
 	.gallery-navigation-left::before,
@@ -849,9 +814,9 @@ onUnmounted(() => {
 		flex-direction: row;
 		gap: 12px;
 		display: contents;
-		opacity: 1 !important;
-		visibility: visible !important;
-		transform: none !important;
+		opacity: 1 !important; /* Ensure visibility on mobile */
+		visibility: visible !important; /* Ensure visibility on mobile */
+		transform: none !important; /* Reset any transforms from desktop GSAP */
 	}
 
 	.gallery-navigation-left button,
@@ -865,6 +830,9 @@ onUnmounted(() => {
 		border: 1px solid rgba(100, 116, 139, 0.4);
 		border-radius: 8px;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+		flex-grow: 1;
+		flex-basis: calc(25% - 10px);
+		min-width: calc(25% - 10px);
 		text-align: center;
 		transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
 	}
@@ -889,30 +857,39 @@ onUnmounted(() => {
 }
 
 .solution-image.cursor-pointer {
-	cursor: zoom-in;
+	cursor: zoom-in; /* Indicate the image is clickable for zoom */
 }
 
-/* Lightbox Styles */
-.lightbox-content-wrapper {
-	position: relative;
+/* Custom Scrollbar for Lightbox Content */
+.custom-scrollbar-lightbox::-webkit-scrollbar {
+	width: 8px;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
+.custom-scrollbar-lightbox::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 10px;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-	background: transparent;
+
+.custom-scrollbar-lightbox::-webkit-scrollbar-thumb {
+	background: rgba(100, 116, 139, 0.7); /* slate-500 with opacity */
+	border-radius: 10px;
+	border: 2px solid transparent;
+	background-clip: content-box;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-	background: #475569;
-	border-radius: 3px;
+
+.custom-scrollbar-lightbox::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 116, 139, 1); /* slate-500 */
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-	background: #334155;
-}
-.custom-scrollbar {
+
+.custom-scrollbar-lightbox {
 	scrollbar-width: thin;
-	scrollbar-color: #475569 transparent;
+	scrollbar-color: rgba(100, 116, 139, 0.7) rgba(255, 255, 255, 0.1); /* thumb track for Firefox */
+}
+
+/* Ensure enough space for fixed close button in lightbox on smaller screens */
+@media (max-width: 767px) {
+	.lightbox-content-wrapper {
+		padding-top: 40px; /* Adjust if close button overlaps content */
+	}
 }
 </style>

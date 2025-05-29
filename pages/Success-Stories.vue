@@ -73,8 +73,16 @@
 		<section ref="clarifyingNeedsSectionRef" class="clarifying-needs-section py-16 md:py-24 bg-gray-100">
 			<div class="container mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-center mb-12 md:mb-16">
-					<h2 ref="clarifyingNeedsTitleRef" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 opacity-0">您是否正為以下挑戰煩惱？</h2>
-					<p ref="clarifyingNeedsSubtitleRef" class="text-sm sm:text-base md:text-base lg:text-lg xl:text-xl text-gray-600 max-w-3xl mx-auto opacity-0">
+					<h2
+						ref="clarifyingNeedsTitleRef"
+						class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-gradient-to-r from-[#dd1c1c] to-[#212a37] bg-clip-text mb-4 opacity-0"
+					>
+						您是否正為以下挑戰煩惱？
+					</h2>
+					<p
+						ref="clarifyingNeedsSubtitleRef"
+						class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] text-gray-600 max-w-4xl mx-auto opacity-0"
+					>
 						我們深入了解各行業在導入智慧解決方案時可能遇到的常見問題。<br />看看這些場景是否與您相關，並探索可能的解決之道。
 					</p>
 				</div>
@@ -189,8 +197,16 @@
 			<div class="container mx-auto">
 				<!-- Section Title -->
 				<div class="text-center mb-12 md:mb-16">
-					<h2 ref="buildersCaseStudiesTitleRef" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 opacity-0">深耕台灣 共築理想家園</h2>
-					<p ref="buildersCaseStudiesSubtitleRef" class="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-gray-600 max-w-3xl mx-auto opacity-0">
+					<h2
+						ref="buildersCaseStudiesTitleRef"
+						class="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-gradient-to-r from-green-600 to-green-300 bg-clip-text mb-4 opacity-0"
+					>
+						深耕台灣 共築理想家園
+					</h2>
+					<p
+						ref="buildersCaseStudiesSubtitleRef"
+						class="text-[16px] sm:text-[18px] md:text-[21px] lg:text-[24px] xl:text-[26px] 2xl:text-[28px] text-gray-600 max-w-3xl mx-auto opacity-0"
+					>
 						我們與全台各地的建商緊密合作，從智慧住宅到大型社區，提供全面的弱電整合與智能建築解決方案。
 					</p>
 				</div>
@@ -207,13 +223,13 @@
 							<div class="flex justify-between items-center p-4">
 								<div class="flex flex-col">
 									<h4 class="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-sky-700 mb-0.5">
-										{{ selectedBuilderCase.name }}
-									</h4>
-									<p class="text-xs sm:text-sm md:text-base text-gray-400">
 										{{ selectedBuilderCase.location }}
-									</p>
+									</h4>
+									<p class="text-xs sm:text-sm md:text-base text-gray-600">建案規劃：{{ selectedBuilderCase.households }}</p>
 								</div>
-								<p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-800">集合式住宅建案</p>
+								<p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-800 font-semibold">
+									{{ selectedBuilderCase.projectType }}
+								</p>
 							</div>
 
 							<div class="relative min-h-[160px] sm:min-h-[180px] md:min-h-[200px] lg:min-h-[250px]">
@@ -260,7 +276,7 @@
 						</div>
 					</div>
 
-					<!-- NEW Right Column Wrapper -->
+					<!-- Right Column Wrapper -->
 					<div ref="rightColumnWrapperRef" class="w-full lg:w-1/2 relative opacity-0 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
 						<!-- Map Container (now inside rightColumnWrapperRef) -->
 						<div ref="taiwanMapContainerRef" class="w-full h-full p-4 bg-sky-50 rounded-lg shadow-md flex items-center justify-center relative z-0">
@@ -576,8 +592,9 @@ const rightColumnWrapperRef = ref(null); // New ref for the right column wrapper
 const builderCaseStudies = ref([
 	{
 		id: 1,
-		name: "合總君悅",
 		location: "雲林縣斗南鎮",
+		projectType: "集合式住宅建案",
+		households: "91戶住家、2戶店鋪",
 		projectNeeds: "提升社區門禁系統的安全性、便利性與科技感，吸引潛在住戶，提升建案價值。",
 		solutionOverview: "導入整合人臉辨識的智慧可視對講系統與門禁控制，並搭配集中管理平台，實現全社區及各戶的無卡化人臉辨識通行。",
 		productsUsed: [
@@ -592,8 +609,9 @@ const builderCaseStudies = ref([
 	},
 	{
 		id: 2,
-		name: "小時代 III",
 		location: "台中市沙鹿區",
+		projectType: "集合式住宅建案",
+		households: "129戶住家",
 		projectNeeds: "為大型社區（129戶）提供高效的門禁管理與便捷的住戶通行體驗，以現代化方案取代傳統磁卡。",
 		solutionOverview: "採用全社區可視對講系統，配置10吋室內機及人臉辨識門口機，整合視頻監控與門禁系統，實現無磁卡人臉辨識通行。",
 		productsUsed: [
@@ -607,8 +625,9 @@ const builderCaseStudies = ref([
 	},
 	{
 		id: 3,
-		name: "日光天晴",
 		location: "新竹縣竹北市",
+		projectType: "集合式住宅建案",
+		households: "60戶",
 		projectNeeds: "為60戶電梯大樓建案導入先進的社區門禁解決方案，提升住戶生活品質與建案價值。",
 		solutionOverview: "部署全住戶可視對講系統，核心為7吋室內機，整合人臉辨識技術，實現住戶進出無卡化。整體方案包含視頻監控、門禁控制及集中管理平台。",
 		productsUsed: [
@@ -622,8 +641,9 @@ const builderCaseStudies = ref([
 	},
 	{
 		id: 4,
-		name: "龍山湛3",
 		location: "苗栗縣竹南鎮",
+		projectType: "別墅住宅",
+		households: "28戶住家",
 		projectNeeds: "建構全社區無卡化人臉辨識通行系統，提升住戶進出便利性、安全性及社區整體科技感。",
 		solutionOverview:
 			"採用遠岫全網可視對講系統，核心為7吋室內機YS-6320與4.3吋人臉辨識住戶門口機，並整合視頻監控、傳輸及門禁系統，實現從社區大門到住家門口的全面人臉辨識通行。",
@@ -809,8 +829,8 @@ onMounted(async () => {
 		tlBuilderCases
 			.to(buildersCaseStudiesTitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" })
 			.to(buildersCaseStudiesSubtitleRef.value, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power2.out" }, "-=0.3")
-			.to(rightColumnWrapperRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.3") // Target the new wrapper for animation
-			.to(caseDetailsContainerRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.3");
+			.to(caseDetailsContainerRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.3")
+			.to(rightColumnWrapperRef.value, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.3");
 	}
 });
 
