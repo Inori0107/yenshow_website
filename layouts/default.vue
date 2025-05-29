@@ -25,16 +25,7 @@
 				class="w-[250px] h-[125px] md:w-[300px] md:h-[150px] lg:w-[400px] lg:h-[200px] xl:w-[450px] xl:h-[225px] 2xl:w-[500px] 2xl:h-[250px] transition-transform duration-300"
 			>
 				<!-- <img src="/public/logo/yenshow-logo.png" alt="yenshow-logo" class="w-full h-full object-contain" /> -->
-				<NuxtImg
-					src="/logo/yenshow-logo.png"
-					alt="yenshow-logo"
-					class="w-full h-full object-contain"
-					width="500"
-					height="250"
-					format="webp"
-					loading="lazy"
-					sizes="1000"
-				/>
+				<NuxtImg src="/logo/yenshow-logo.png" alt="yenshow-logo" class="w-full h-full object-contain" format="webp" loading="lazy" sizes="1000" />
 			</div>
 
 			<!-- 社群媒體連結 -->

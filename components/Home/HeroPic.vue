@@ -11,7 +11,6 @@
 					src="/logo/yenshow.png"
 					alt="遠岫科技"
 					class="w-[200px] md:w-[300px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px]"
-					width="600"
 					format="webp"
 					preload
 					sizes="1000"
