@@ -37,7 +37,7 @@
 						</div>
 					</div>
 					<h4
-						class="text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] 2xl:text-[24px] font-semibold mb-6 md:mb-8 text-center"
+						class="text-[16px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[21px] 2xl:text-[24px] font-semibold mb-6 md:mb-8 text-center"
 						style="text-shadow: 0 0 10px rgba(0, 0, 0, 0.5)"
 					>
 						我們相信，這些理念的實踐是每一段成功合作的基石。
@@ -379,7 +379,6 @@
 							</div>
 						</transition>
 					</div>
-					<!-- END of NEW Right Column Wrapper -->
 				</div>
 			</div>
 		</section>
@@ -396,12 +395,7 @@
 		>
 			<h2 v-if="selectedBuilderCase" :id="'builder-case-modal-title-' + selectedBuilderCase.id" class="sr-only">{{ selectedBuilderCase.name }} 案例圖片預覽</h2>
 			<h2 v-else id="lightbox-title" class="sr-only">圖片預覽</h2>
-			<button
-				ref="closeModalButtonRef"
-				@click="closeLightbox"
-				class="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
-				aria-label="關閉圖片預覽"
-			>
+			<button ref="closeModalButtonRef" @click="closeLightbox" class="absolute top-4 right-4 text-white rounded-full p-1" aria-label="關閉圖片預覽">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -411,7 +405,6 @@
 					class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
 					aria-hidden="true"
 				>
-					<title>關閉圖示</title>
 					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 				</svg>
 			</button>

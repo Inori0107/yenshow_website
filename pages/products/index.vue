@@ -63,9 +63,9 @@
 								tabindex="0"
 								role="button"
 								:aria-label="`放大檢視 ${solution.title} 圖片`"
-								@click="openLightbox(solution.image, solution.title, $event.target)"
-								@keydown.enter="openLightbox(solution.image, solution.title, $event.target)"
-								@keydown.space.prevent="openLightbox(solution.image, solution.title, $event.target)"
+								@click="openLightbox(solution, $event.target)"
+								@keydown.enter="openLightbox(solution, $event.target)"
+								@keydown.space.prevent="openLightbox(solution, $event.target)"
 							/>
 						</div>
 					</div>
@@ -98,36 +98,81 @@
 
 		<!-- Lightbox Modal -->
 		<div
-			v-if="isLightboxOpen"
-			class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+			v-if="isLightboxOpen && currentSolutionInLightbox"
+			class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4 overflow-y-auto"
 			role="dialog"
 			aria-modal="true"
 			:aria-labelledby="lightboxTitleId"
 			@click.self="closeLightbox"
 			@keydown.esc="closeLightbox"
 		>
-			<h2 :id="lightboxTitleId" class="sr-only">{{ lightboxAltText }} 預覽</h2>
-			<button
-				ref="closeModalButtonRef"
-				@click="closeLightbox"
-				class="absolute top-4 right-4 text-white focus:ring-2 focus:ring-white rounded-full p-1"
-				aria-label="關閉圖片預覽"
+			<div
+				class="lightbox-content-wrapper bg-slate-800 rounded-lg shadow-2xl w-full max-w-4xl md:max-w-5xl lg:max-w-6xl max-h-[95vh] flex flex-col md:flex-row overflow-hidden"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
-					aria-hidden="true"
+				<!-- Close Button (Positioned within the wrapper for better context) -->
+				<button
+					ref="closeModalButtonRef"
+					@click="closeLightbox"
+					class="absolute top-3 right-3 text-gray-300 hover:text-white focus:ring-2 focus:ring-white rounded-full p-1 z-20 bg-slate-700 hover:bg-slate-600 transition-colors"
+					aria-label="關閉產品預覽"
 				>
-					<title>關閉圖示</title>
-					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-				</svg>
-			</button>
-			<div class="max-w-5xl max-h-[90vh]">
-				<img :src="lightboxImageSrc" :alt="lightboxAltText" class="max-w-full max-h-[90vh] object-contain" />
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 sm:w-7 sm:h-7">
+						<title>關閉圖示</title>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</button>
+
+				<!-- Left Side: Image -->
+				<div class="lightbox-image-container w-full md:w-1/2 p-4 md:p-6 flex-shrink-0 bg-slate-900 flex items-center justify-center">
+					<img
+						:src="currentSolutionInLightbox.image"
+						:alt="currentSolutionInLightbox.title"
+						class="max-w-full max-h-[40vh] md:max-h-[85vh] object-contain rounded-md shadow-lg"
+					/>
+				</div>
+
+				<!-- Right Side: Details -->
+				<div class="lightbox-details-container w-full md:w-1/2 p-4 md:p-6 flex flex-col text-gray-200 overflow-y-auto custom-scrollbar">
+					<h2 :id="lightboxTitleId" class="text-xl sm:text-2xl md:text-3xl font-bold text-sky-400 mb-3 md:mb-4">{{ currentSolutionInLightbox.title }}</h2>
+
+					<!-- Product Description -->
+					<div class="mb-4 md:mb-6">
+						<h3 class="text-base sm:text-lg font-semibold text-sky-300 mb-1.5">產品方案說明</h3>
+						<p class="text-xs sm:text-sm md:text-base text-gray-300 leading-relaxed">
+							{{ currentSolutionInLightbox.description || "暫無詳細說明。" }}
+						</p>
+					</div>
+
+					<!-- Related Products -->
+					<div v-if="currentSolutionInLightbox.relatedProducts && currentSolutionInLightbox.relatedProducts.length > 0" class="mb-4 md:mb-6">
+						<h3 class="text-base sm:text-lg font-semibold text-sky-300 mb-2.5">搭配的產品系列</h3>
+						<div class="space-y-3">
+							<div
+								v-for="(product, pIndex) in currentSolutionInLightbox.relatedProducts"
+								:key="`related-${pIndex}`"
+								class="bg-slate-700/70 hover:bg-slate-700 p-3 rounded-lg shadow-md transition-colors duration-200 border border-slate-600/50"
+							>
+								<p class="text-xs sm:text-sm font-semibold text-sky-200 mb-0.5">{{ product.series }}</p>
+								<p class="text-xs sm:text-sm text-gray-300 mb-1.5 leading-snug">{{ product.description }}</p>
+								<NuxtLink
+									:to="product.link"
+									class="text-xs sm:text-sm text-sky-400 hover:text-sky-300 hover:underline focus:outline-none focus:ring-1 focus:ring-sky-300 rounded-sm inline-flex items-center"
+									@click="closeLightbox"
+								>
+									查看系列產品
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+									</svg>
+								</NuxtLink>
+							</div>
+						</div>
+					</div>
+
+					<!-- CTA Button -->
+					<div class="mt-auto pt-4">
+						<ButtonCTA label="聯絡我們了解更多" color="white" to="/contact" @click.native="closeLightbox" class="w-full md:w-auto" />
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -136,8 +181,21 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 import { useScrollAnimation } from "@/composables/useScrollAnimation";
+import { useHead } from "#app";
+import ButtonCTA from "@/components/common/Button-CTA.vue";
 
-const { initScrollPlugins, createElementEntrance, ScrollTrigger, gsap, cleanupScrollTriggers } = useScrollAnimation();
+// Set page title and meta description
+useHead({
+	title: " - 智慧方案",
+	meta: [
+		{
+			name: "description",
+			content: "探索遠岫科技全方位的智能解決方案，從可視對講、門禁管理到影像監控與安全防護，我們致力於為您的生活與工作空間提供創新技術與卓越品質。"
+		}
+	]
+});
+
+const { initScrollPlugins, createElementEntrance, ScrollTrigger, gsap, cleanupScrollTriggers, isMobile } = useScrollAnimation();
 
 const visionTitleRef = ref(null);
 const coreStrengthRefs = ref([]);
@@ -166,7 +224,14 @@ const solutions = ref([
 		id: "smart-property",
 		title: "物業管理系統智慧生活",
 		shortTitle: "物業管理",
-		image: "/solutions/物業管理系統智慧生活.png"
+		image: "/solutions/物業管理系統智慧生活.png",
+		description:
+			"遠岫科技的物業管理系統，透過整合先進的物聯網技術和雲端平台，為現代化物業管理提供全方位的智能解決方案。此系統不僅強化了社區安全，提升了管理效率，更致力於為住戶打造便捷、舒適的智慧生活體驗。我們專注於使用者需求，提供客製化的功能模組，確保系統能完美契合不同規模和型態的社區。",
+		relatedProducts: [
+			{ series: "智慧社區主機 YS-M800", description: "整合門禁、對講、監控等功能的核心管理設備。", link: "/products/devices-accessories" },
+			{ series: "雲端管理平台", description: "提供遠程監控、數據分析、住戶服務的整合平台。", link: "/products/software-platforms" },
+			{ series: "行動應用 App", description: "方便住戶進行訪客邀請、費用繳納、公告接收等操作。", link: "/products/software-platforms" }
+		]
 	},
 	{
 		id: "video-intercom",
@@ -246,35 +311,34 @@ const galleryNavRightRef = ref(null);
 
 // --- Lightbox State and Functions ---
 const isLightboxOpen = ref(false);
-const lightboxImageSrc = ref("");
-const lightboxAltText = ref("");
+const currentSolutionInLightbox = ref(null);
 const closeModalButtonRef = ref(null);
-let triggerElementForLightbox = null; // To store the element that triggered the modal
+let triggerElementForLightbox = null;
 
-const lightboxTitleId = computed(() => `lightbox-title-${Date.now()}`); // Simple unique ID for ARIA
+const lightboxTitleId = computed(() =>
+	currentSolutionInLightbox.value ? `lightbox-title-${currentSolutionInLightbox.value.id}` : `lightbox-title-default-${Date.now()}`
+);
 
-const openLightbox = (imageSrc, altText, eventTarget) => {
-	lightboxImageSrc.value = imageSrc;
-	lightboxAltText.value = altText || "產品圖片";
+const openLightbox = (solution, eventTarget) => {
+	currentSolutionInLightbox.value = solution;
 	isLightboxOpen.value = true;
-	document.body.style.overflow = "hidden"; // Prevent background scrolling
+	document.body.style.overflow = "hidden";
 	triggerElementForLightbox = eventTarget || document.activeElement;
 	nextTick(() => {
 		if (closeModalButtonRef.value) {
-			closeModalButtonRef.value.focus(); // Focus the close button for accessibility
+			closeModalButtonRef.value.focus();
 		}
 	});
 };
 
 const closeLightbox = () => {
 	isLightboxOpen.value = false;
-	document.body.style.overflow = ""; // Restore background scrolling
+	document.body.style.overflow = "";
 	if (triggerElementForLightbox && typeof triggerElementForLightbox.focus === "function") {
-		triggerElementForLightbox.focus(); // Return focus to the triggering element
+		triggerElementForLightbox.focus();
 	}
 	triggerElementForLightbox = null;
-	lightboxImageSrc.value = "";
-	lightboxAltText.value = "";
+	currentSolutionInLightbox.value = null;
 };
 
 onMounted(async () => {
@@ -338,149 +402,179 @@ onMounted(async () => {
 		});
 	}
 
-	// --- Section 2: Gallery Scroll Animation (Existing Logic) ---
+	// --- Section 2: Gallery Scroll Animation ---
 	if (!galleryContainerToPinRef.value || !scrollContainerRef.value || solutionElements.value.length === 0) {
 		console.error("滾動容器、主容器或解決方案元素未找到");
 	} else {
 		const sections = solutionElements.value.filter((el) => el);
 		if (sections.length > 0) {
-			gsap.to(sections, {
-				xPercent: -100 * (sections.length - 1),
-				ease: "none",
-				scrollTrigger: {
-					id: "horizontalGalleryScroll",
-					trigger: galleryContainerToPinRef.value,
-					pin: galleryContainerToPinRef.value,
-					scrub: 1,
-					start: "top top",
-					end: () => `+=${window.innerWidth * (sections.length > 1 ? sections.length - 1 : 0)}`,
-					snap:
-						sections.length > 1
-							? {
-									snapTo: 1 / (sections.length - 1),
-									duration: { min: 0.2, max: 0.8 },
-									delay: 0.1,
-									ease: "power1.inOut"
-							  }
-							: false,
-					onUpdate: (self) => {
-						if (sections.length > 1) {
-							const progress = Math.round(self.progress * (sections.length - 1));
-							if (currentSectionIndex.value !== progress) {
-								currentSectionIndex.value = progress;
+			if (!isMobile.value) {
+				// --- DESKTOP SPECIFIC ---
+				console.log("[Desktop Init] Setting up horizontal scroll and animations.");
+				gsap.to(sections, {
+					xPercent: -100 * (sections.length - 1),
+					ease: "none",
+					scrollTrigger: {
+						id: "horizontalGalleryScroll",
+						trigger: galleryContainerToPinRef.value,
+						pin: galleryContainerToPinRef.value,
+						scrub: 1,
+						start: "top top",
+						end: () => `+=${galleryContainerToPinRef.value.offsetWidth * (sections.length > 1 ? sections.length - 1 : 0)}`,
+						snap:
+							sections.length > 1
+								? {
+										snapTo: 1 / (sections.length - 1),
+										duration: { min: 0.2, max: 0.8 },
+										delay: 0.1,
+										ease: "power1.inOut"
+								  }
+								: false,
+						onUpdate: (self) => {
+							if (sections.length > 1) {
+								const progress = Math.round(self.progress * (sections.length - 1));
+								if (currentSectionIndex.value !== progress) {
+									currentSectionIndex.value = progress;
+								}
+							} else {
+								currentSectionIndex.value = 0;
 							}
-						} else {
-							currentSectionIndex.value = 0;
-						}
-					},
-					invalidateOnRefresh: true,
-					scope: galleryContainerToPinRef.value
-				}
-			});
+						},
+						invalidateOnRefresh: true
+					}
+				});
 
-			sections.forEach((section, index) => {
-				const image = section.querySelector(".solution-image");
-				if (image) {
-					createElementEntrance({
-						elements: image,
-						trigger: section,
-						start: "left 80%",
-						end: "right 20%",
-						fromOpacity: 0,
-						fromScale: 0.8,
-						toOpacity: 1,
-						toScale: 1,
+				sections.forEach((section) => {
+					const image = section.querySelector(".solution-image");
+					if (image) {
+						createElementEntrance({
+							elements: image,
+							trigger: section,
+							start: "left 75%",
+							end: "right 25%",
+							horizontal: true,
+							fromOpacity: 0,
+							fromScale: 0.85,
+							toOpacity: 1,
+							toScale: 1,
+							duration: 0.7,
+							toggleActions: "play resume resume reverse"
+						});
+					}
+				});
+
+				if (galleryNavSidesRef.value && galleryNavLeftRef.value && galleryNavRightRef.value) {
+					gsap.set(galleryNavSidesRef.value, { autoAlpha: 1, delay: 0.1 });
+					gsap.from(galleryNavLeftRef.value, {
+						xPercent: -120,
+						autoAlpha: 0,
 						duration: 0.8,
-						toggleActions: "play none none none"
+						ease: "power3.out",
+						scrollTrigger: {
+							trigger: galleryContainerToPinRef.value,
+							start: "top 60%",
+							end: "top 30%",
+							toggleActions: "play none none reverse"
+						}
+					});
+					gsap.from(galleryNavRightRef.value, {
+						xPercent: 120,
+						autoAlpha: 0,
+						duration: 0.8,
+						ease: "power3.out",
+						scrollTrigger: {
+							trigger: galleryContainerToPinRef.value,
+							start: "top 60%",
+							end: "top 30%",
+							toggleActions: "play none none reverse"
+						}
 					});
 				}
-			});
+			} else {
+				// --- MOBILE SPECIFIC ---
+				console.log("[Mobile Init] Setting up vertical scroll related animations.");
+				gsap.set(sections, { clearProps: "xPercent,x" });
+				if (galleryContainerToPinRef.value && galleryContainerToPinRef.value.style) gsap.set(galleryContainerToPinRef.value, { clearProps: "cssText" });
 
-			// --- Gallery Navigation Animation ---
-			if (galleryNavSidesRef.value && galleryNavLeftRef.value && galleryNavRightRef.value) {
-				gsap.to(galleryNavSidesRef.value, {
-					autoAlpha: 1,
-					duration: 0.01, // Make parent visible for children animations
-					scrollTrigger: {
-						trigger: galleryContainerToPinRef.value,
-						start: "top 50%", // Adjust as needed
-						toggleActions: "play none none none"
+				sections.forEach((section) => {
+					const image = section.querySelector(".solution-image");
+					if (image) {
+						createElementEntrance({
+							elements: image,
+							trigger: section,
+							start: "top 85%",
+							end: "bottom 15%",
+							fromOpacity: 0,
+							fromScale: 0.9,
+							toOpacity: 1,
+							toScale: 1,
+							duration: 0.6,
+							toggleActions: "play none none none"
+						});
 					}
 				});
-				gsap.from(galleryNavLeftRef.value, {
-					xPercent: -100,
-					autoAlpha: 0,
-					duration: 0.8,
-					ease: "power3.out",
-					scrollTrigger: {
-						trigger: galleryContainerToPinRef.value,
-						start: "top 50%", // Start when the gallery container is 50% in view
-						toggleActions: "play none none none"
-					}
-				});
-				gsap.from(galleryNavRightRef.value, {
-					xPercent: 100,
-					autoAlpha: 0,
-					duration: 0.8,
-					ease: "power3.out",
-					scrollTrigger: {
-						trigger: galleryContainerToPinRef.value,
-						start: "top 50%", // Start when the gallery container is 50% in view
-						toggleActions: "play none none none"
-					}
-				});
+				if (galleryNavSidesRef.value) {
+					galleryNavSidesRef.value.style.opacity = "1";
+				}
 			}
 		}
+	}
+
+	if (isLightboxOpen.value) {
+		document.body.style.overflow = "";
+		currentSolutionInLightbox.value = null;
 	}
 });
 
 const navigateToSection = (index) => {
-	console.log(`[Mobile Debug] navigateToSection called with index: ${index}`);
+	console.log(`[Navigation] navigateToSection called with index: ${index}`);
 	currentSectionIndex.value = index;
 
-	// 假設 isMobile 是一個響應式變數，你可以用 window.innerWidth < 768 來更新它
-	// 或者直接在函數內判斷
-	const isMobileLayout = window.innerWidth <= 768;
-
-	if (isMobileLayout) {
+	if (isMobile.value) {
 		const targetElement = solutionElements.value[index];
 		if (targetElement) {
-			console.log("[Mobile Debug] Mobile layout: Scrolling to element:", targetElement);
-			// targetElement.scrollIntoView({ behavior: 'smooth' }); // 簡單的原生方法
+			console.log("[Mobile Navigate] Scrolling to element:", targetElement);
+			let offsetY = 0;
+			const stickyNav = document.querySelector(".gallery-navigation-sides");
+			if (stickyNav && getComputedStyle(stickyNav).position === "sticky") {
+				offsetY = stickyNav.offsetHeight;
+			}
+			console.log(`[Mobile Navigate] Sticky nav height (offsetY): ${offsetY}`);
 
-			// 或者使用 GSAP 滾動到元素的 offsetTop
 			gsap.to(window, {
 				scrollTo: {
-					y: targetElement.offsetTop, // 可能需要考慮固定的 header 高度
+					y: targetElement.offsetTop - offsetY,
 					autoKill: true
 				},
-				duration: 0.8, // 調整滾動時間
-				ease: "power2.inOut"
+				duration: 0.8,
+				ease: "power2.inOut",
+				onComplete: () => {
+					console.log("[Mobile Navigate] Scroll complete to Y:", targetElement.offsetTop - offsetY);
+				}
 			});
 		} else {
-			console.error("[Mobile Debug] Mobile layout: Target element not found for index:", index);
+			console.error("[Mobile Navigate] Target element not found for index:", index);
 		}
-		return; // 手機版直接返回
+		return;
 	}
 
-	// --- 以下是桌面版的邏輯 ---
+	// --- Desktop Logic ---
 	if (!ScrollTrigger.value || !gsap || !galleryContainerToPinRef.value) {
-		console.error("[Desktop Debug] ScrollTrigger, GSAP, or galleryContainerToPinRef not available.");
+		console.error("[Desktop Navigate] ScrollTrigger, GSAP, or galleryContainerToPinRef not available.");
 		return;
 	}
 	if (solutions.value.length <= 1) {
-		console.log("[Desktop Debug] Only one or no solutions, navigation skipped.");
+		console.log("[Desktop Navigate] Only one or no solutions, navigation skipped.");
 		return;
 	}
 
 	const stInstance = ScrollTrigger.value.getById("horizontalGalleryScroll");
-	console.log("[Desktop Debug] stInstance:", stInstance);
+	console.log("[Desktop Navigate] ScrollTrigger instance:", stInstance);
 
 	if (stInstance) {
 		const progress = solutions.value.length > 1 ? index / (solutions.value.length - 1) : 0;
-		// 重要: 確保 stInstance.start 和 stInstance.end 是在桌面版 ScrollTrigger 初始化時正確計算的值
 		const targetScrollY = stInstance.start + progress * (stInstance.end - stInstance.start);
-		console.log(`[Desktop Debug] Calculated progress: ${progress}, targetScrollY: ${targetScrollY}`);
+		console.log(`[Desktop Navigate] Calculated progress: ${progress}, targetScrollY: ${targetScrollY}`);
 
 		gsap.to(window, {
 			scrollTo: {
@@ -490,19 +584,18 @@ const navigateToSection = (index) => {
 			duration: 1,
 			ease: "power2.inOut",
 			onComplete: () => {
-				console.log("[Desktop Debug] Scroll complete. Refreshing ScrollTrigger.");
-				ScrollTrigger.value.refresh(); // 桌面版可能仍需要 refresh
+				console.log("[Desktop Navigate] Scroll complete. Refreshing ScrollTrigger.");
+				ScrollTrigger.value.refresh();
 			}
 		});
 	} else {
-		console.warn("[Desktop Debug] ScrollTrigger instance 'horizontalGalleryScroll' not found for navigation.");
+		console.warn("[Desktop Navigate] ScrollTrigger instance 'horizontalGalleryScroll' not found.");
 	}
 };
 
 onUnmounted(() => {
 	cleanupScrollTriggers();
 	if (isLightboxOpen.value) {
-		// Ensure body scroll is restored if component is unmounted while lightbox is open
 		document.body.style.overflow = "";
 	}
 });
@@ -575,7 +668,7 @@ onUnmounted(() => {
 	padding: 0 30px;
 	z-index: 10;
 	pointer-events: none;
-	opacity: 0; /* Initial opacity for GSAP animation */
+	opacity: 0;
 }
 
 .gallery-navigation-left,
@@ -687,10 +780,31 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+	.product-gallery-container {
+		display: block;
+		min-height: auto;
+		overflow: visible;
+	}
+
+	.gallery-scroll-container {
+		display: block;
+		width: 100%;
+		overflow: visible;
+		position: static;
+	}
+
 	.solution-section {
 		padding: 20px;
-		width: 100vw;
-		max-height: 40vh;
+		width: 100%;
+		flex-shrink: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		position: static;
+		height: auto;
+		margin-bottom: 20px;
 	}
 
 	.solution-content {
@@ -708,23 +822,21 @@ onUnmounted(() => {
 	}
 
 	.gallery-navigation-sides {
-		position: static;
+		position: sticky;
+		top: 0;
 		transform: none;
 		flex-direction: row;
 		padding: 12px;
-		background-color: rgba(0, 0, 0, 0.3);
-		overflow-x: hidden;
-		overflow-y: auto;
-		justify-content: center;
+		background-color: rgba(10, 20, 30, 0.9);
+		overflow-x: auto;
+		overflow-y: hidden;
+		justify-content: flex-start;
 		width: 100%;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		top: auto;
-		gap: 12px;
-		flex-wrap: wrap;
+		z-index: 20;
+		gap: 8px;
+		flex-wrap: nowrap;
 		pointer-events: auto;
-		opacity: 1; /* Reset opacity for mobile if animation is only for desktop */
+		opacity: 1;
 	}
 
 	.gallery-navigation-left::before,
@@ -737,9 +849,9 @@ onUnmounted(() => {
 		flex-direction: row;
 		gap: 12px;
 		display: contents;
-		opacity: 1 !important; /* Ensure visibility on mobile */
-		visibility: visible !important; /* Ensure visibility on mobile */
-		transform: none !important; /* Reset any transforms from desktop GSAP */
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
 	}
 
 	.gallery-navigation-left button,
@@ -753,9 +865,6 @@ onUnmounted(() => {
 		border: 1px solid rgba(100, 116, 139, 0.4);
 		border-radius: 8px;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-		flex-grow: 1;
-		flex-basis: calc(25% - 10px);
-		min-width: calc(25% - 10px);
 		text-align: center;
 		transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
 	}
@@ -780,6 +889,30 @@ onUnmounted(() => {
 }
 
 .solution-image.cursor-pointer {
-	cursor: zoom-in; /* Indicate the image is clickable for zoom */
+	cursor: zoom-in;
+}
+
+/* Lightbox Styles */
+.lightbox-content-wrapper {
+	position: relative;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: #475569;
+	border-radius: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: #334155;
+}
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: #475569 transparent;
 }
 </style>

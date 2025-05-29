@@ -122,6 +122,7 @@ export function useScrollAnimation() {
 			trigger,
 			start = "top 70%",
 			end = "bottom 20%",
+			horizontal = false,
 			fromY = 30,
 			fromOpacity = 0,
 			fromScale = 1,
@@ -143,7 +144,9 @@ export function useScrollAnimation() {
 					trigger,
 					start,
 					end: end || "bottom 20%",
-					toggleActions
+					toggleActions,
+					horizontal: horizontal,
+					containerAnimation: horizontal ? trigger.closest(".gallery-scroll-container")?.scrollTrigger : undefined
 				}
 			})
 			.fromTo(
