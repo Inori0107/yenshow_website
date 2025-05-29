@@ -183,21 +183,31 @@
 				<div v-for="(row, rowIndex) in rows" :key="rowIndex" class="marquee-wrapper w-[120%]">
 					<div class="marquee" :class="rowIndex % 2 === 0 ? '' : 'marquee--reverse'">
 						<div class="marquee__group">
-							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[8px] sm:py-[12px]">
-								<img
-									class="w-[200px] h-[150px] sm:w-[300px] sm:h-[225px] lg:w-[400px] lg:h-[300px] xl:w-[450px] xl:h-[337.5px] 2xl:w-[500px] 2xl:h-[375px]"
+							<div v-for="(image, imgIndex) in getRowImages(rowIndex - 1)" :key="`row-${rowIndex}-img-${imgIndex}`" class="marquee__item">
+								<nuxt-img
 									:src="image"
-									alt=""
+									alt="Location image"
+									class="w-[200px] h-[150px] sm:w-[300px] sm:h-[225px] lg:w-[400px] lg:h-[300px] xl:w-[400px] xl:h-[300px] object-cover rounded-lg shadow-md"
+									width="400"
+									height="300"
+									format="webp"
+									loading="lazy"
+									sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
 								/>
 							</div>
 						</div>
 
 						<div aria-hidden="true" class="marquee__group">
-							<div v-for="(image, index) in getRowImages(rowIndex)" :key="index" class="marquee__item py-[8px] sm:py-[12px]">
-								<img
-									class="w-[200px] h-[150px] sm:w-[300px] sm:h-[225px] lg:w-[400px] lg:h-[300px] xl:w-[450px] xl:h-[337.5px] 2xl:w-[500px] 2xl:h-[375px]"
+							<div v-for="(image, imgIndex) in getRowImages(rowIndex - 1)" :key="`row-${rowIndex}-dup-img-${imgIndex}`" class="marquee__item">
+								<nuxt-img
 									:src="image"
-									alt=""
+									alt="Location image"
+									class="w-[200px] h-[150px] sm:w-[300px] sm:h-[225px] lg:w-[400px] lg:h-[300px] xl:w-[400px] xl:h-[300px] object-cover rounded-lg shadow-md"
+									width="400"
+									height="300"
+									format="webp"
+									loading="lazy"
+									sizes="(max-width: 640px) 200px, (max-width: 1024px) 300px, 400px"
 								/>
 							</div>
 						</div>

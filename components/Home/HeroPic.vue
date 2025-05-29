@@ -6,7 +6,15 @@
 
 			<!-- Logo 進場動畫 - 移動設備隱藏，平板和桌面顯示 -->
 			<div ref="logoContainer" class="flex justify-center items-center opacity-0 z-10">
-				<img ref="logo" class="w-[200px] md:w-[300px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px]" src="/public/logo/yenshow.png" alt="遠岫科技" />
+				<nuxt-img
+					ref="logo"
+					src="/logo/yenshow.png"
+					alt="遠岫科技"
+					class="w-[200px] md:w-[300px] lg:w-[500px] xl:w-[550px] 2xl:w-[600px]"
+					format="webp"
+					preload
+					sizes="1000"
+				/>
 			</div>
 
 			<!-- 主標語 -->

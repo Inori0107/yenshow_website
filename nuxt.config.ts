@@ -18,7 +18,17 @@ export default defineNuxtConfig({
 		pageTransition: { name: "page", mode: "out-in" }
 	},
 	css: ["~/assets/css/global.css"],
-	modules: ["@nuxtjs/tailwindcss", "@nuxtjs/i18n", "@nuxtjs/google-fonts", "@pinia/nuxt", "@nuxtjs/sitemap", "@nuxtjs/device", "@nuxt/image"],
+	modules: [
+		"@nuxtjs/tailwindcss",
+		"@nuxtjs/i18n",
+		"@nuxtjs/google-fonts",
+		"@pinia/nuxt",
+		"@nuxtjs/sitemap",
+		"@nuxtjs/device",
+		"@nuxt/image",
+		"nuxt-gtag",
+		"@nuxtjs/robots"
+	],
 	i18n: {
 		locales: [
 			{ code: "zh", iso: "zh-TW", name: "繁體中文", file: "zh.json" },
@@ -70,5 +80,11 @@ export default defineNuxtConfig({
 				include: ["/products/**"]
 			}
 		}
+	},
+	gtag: {
+		id: process.env.NUXT_PUBLIC_GTAG_ID || "G-XXXXXXXXXX" // 請替換為您的 GA4 ID
+	},
+	robots: {
+		sitemap: "/sitemap.xml"
 	}
 });

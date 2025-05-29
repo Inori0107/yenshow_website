@@ -1,5 +1,14 @@
 <template>
-	<div class="parallax-bg"></div>
+	<!-- <div class="parallax-bg"></div> -->
+	<NuxtImg
+		preload
+		format="webp"
+		src="/heroPic.jpg"
+		alt="Hero background image"
+		class="parallax-bg-img"
+		sizes="1000"
+		:modifiers="{ breakpoint: 768, src: '/heroPic-sm.png' }"
+	/>
 	<!-- Main -->
 	<main>
 		<slot />
@@ -166,25 +175,13 @@ const linkCTA = ref([
 
 <style scoped>
 /* 預設使用大圖 */
-.parallax-bg {
+.parallax-bg-img {
 	z-index: -1;
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100vh;
-	background: url("/heroPic.jpg") no-repeat center center/cover;
-}
-
-/* 在螢幕寬度小於 768px 時，使用小圖 */
-@media (max-width: 768px) {
-	.parallax-bg {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100vh;
-		background: url("/heroPic-sm.png") no-repeat center center/cover;
-	}
+	object-fit: cover;
 }
 </style>
